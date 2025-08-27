@@ -1,0 +1,78 @@
+<!-- ヘッダー -->
+<header class="header">
+    <div class="header-content">
+        <a href="../mypage" class="logo">KNOWLEDGE CAST</a>
+        <div class="user-menu">
+            <div class="user-info">
+                <span>👤 田中 太郎さん</span>
+            </div>
+            <a href="../login" class="logout-btn">ログアウト</a>
+        </div>
+    </div>
+</header>
+
+<style>
+/* ヘッダースタイル */
+.header {
+    background: white;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 16px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: 70px;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #666;
+}
+
+.logout-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    background: #c82333;
+}
+
+@media (max-width: 480px) {
+    .header-content {
+        padding: 0 15px;
+    }
+}
+</style>

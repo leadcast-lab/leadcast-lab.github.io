@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問合せ | LEADCAST Sponsor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .contact-intro {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #1976d2;
+        }
+
+        .contact-intro h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1565c0;
+            margin-bottom: 12px;
+        }
+
+        .contact-intro p {
+            color: #1976d2;
+            line-height: 1.7;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #dc3545;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-section {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-note {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #1565c0;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .contact-method {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-method:hover {
+            border-color: #1976d2;
+            transform: translateY(-2px);
+        }
+
+        .contact-method-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .contact-method h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .contact-method p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .contact-method a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        .contact-method a:hover {
+            text-decoration: underline;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .contact-intro {
+                padding: 20px;
+            }
+
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">📞 お問合せ</h1>
+
+            <div class="contact-intro">
+                <h2>スポンサー様専用サポート</h2>
+                <p>
+                    LEADCASTスポンサー様向けの専用サポートです。キャンペーンの効果測定、専門家とのマッチング、
+                    プラットフォームの活用方法など、お気軽にご相談ください。専任の担当者がサポートいたします。
+                </p>
+            </div>
+
+            <!-- お問合せフォーム -->
+            <div class="content-section">
+                <form id="contactForm">
+                    <div class="form-note">
+                        <strong>🎯 スポンサー様専用：</strong> 緊急のキャンペーン対応が必要な場合は、専用ホットライン（03-1234-9999）をご利用ください。
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="companyName" class="form-label">会社名<span class="required">*</span></label>
+                            <input type="text" id="companyName" name="companyName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="department" class="form-label">部署名</label>
+                            <input type="text" id="department" name="department" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">担当者姓<span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">担当者名<span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="email" class="form-label">メールアドレス<span class="required">*</span></label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">電話番号<span class="required">*</span></label>
+                            <input type="tel" id="phone" name="phone" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category" class="form-label">お問合せ種別<span class="required">*</span></label>
+                        <select id="category" name="category" class="form-select" required>
+                            <option value="">選択してください</option>
+                            <option value="campaign">キャンペーン・案件について</option>
+                            <option value="expert-matching">専門家マッチングについて</option>
+                            <option value="analytics">効果測定・分析について</option>
+                            <option value="billing">請求・支払いについて</option>
+                            <option value="contract">契約・プランについて</option>
+                            <option value="technical">技術的な問題</option>
+                            <option value="partnership">パートナーシップについて</option>
+                            <option value="other">その他</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="urgency" class="form-label">緊急度</label>
+                        <select id="urgency" name="urgency" class="form-select">
+                            <option value="low">低（1週間以内）</option>
+                            <option value="medium">中（3日以内）</option>
+                            <option value="high">高（24時間以内）</option>
+                            <option value="urgent">緊急（即日対応希望）</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject" class="form-label">件名<span class="required">*</span></label>
+                        <input type="text" id="subject" name="subject" class="form-input" placeholder="お問合せの概要を入力してください" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">詳細内容<span class="required">*</span></label>
+                        <textarea id="message" name="message" class="form-textarea" placeholder="お問合せの詳細、現在の状況、希望する解決策等をご記入ください..." required></textarea>
+                    </div>
+
+                    <div class="submit-section">
+                        <button type="submit" class="submit-btn">
+                            📤 送信する
+                        </button>
+                        <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                            送信後、確認メールをお送りします。緊急度に応じて対応いたします。
+                        </p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- その他の連絡方法 -->
+            <div class="content-section">
+                <h2 style="margin-bottom: 20px; color: #333;">スポンサー様専用サポート</h2>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="contact-method-icon">🔥</div>
+                        <h3>緊急ホットライン</h3>
+                        <p>
+                            <a href="tel:03-1234-9999">03-1234-9999</a><br>
+                            24時間365日対応<br>
+                            キャンペーン緊急対応
+                        </p>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-method-icon">👤</div>
+                        <h3>専任担当者</h3>
+                        <p>
+                            <a href="tel:03-1234-5678">03-1234-5678</a><br>
+                            平日 9:00-19:00<br>
+                            戦略コンサルティング
+                        </p>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-method-icon">💬</div>
+                        <h3>VIPチャット</h3>
+                        <p>
+                            専用チャットサポート<br>
+                            平日 8:00-22:00<br>
+                            <a href="#">VIPチャットを開始</a>
+                        </p>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-method-icon">📧</div>
+                        <h3>専用メール</h3>
+                        <p>
+                            <a href="mailto:sponsor@leadcast.com">sponsor@leadcast.com</a><br>
+                            優先対応<br>
+                            2時間以内に返信
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // コンポーネントの読み込み
+        function loadComponents() {
+            // ヘッダーコンポーネントの読み込み
+            fetch('./components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.body.insertAdjacentHTML('afterbegin', data);
+                });
+
+            // サイドバーコンポーネントの読み込み
+            fetch('./components/sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.body.insertAdjacentHTML('afterbegin', data);
+                });
+        }
+
+        // フォーム送信処理
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            const urgency = document.getElementById('urgency').value;
+            
+            // 送信中の表示
+            submitBtn.innerHTML = '📤 送信中...';
+            submitBtn.disabled = true;
+            
+            // 送信処理のシミュレーション
+            setTimeout(() => {
+                let responseTime = '2時間以内';
+                if (urgency === 'urgent') responseTime = '30分以内';
+                else if (urgency === 'high') responseTime = '2時間以内';
+                else if (urgency === 'medium') responseTime = '24時間以内';
+                else responseTime = '48時間以内';
+                
+                alert(`スポンサー様専用サポートにお問合せを受け付けました。\n確認メールをお送りしましたのでご確認ください。\n緊急度に応じて${responseTime}にご返信いたします。`);
+                
+                // フォームをリセット
+                document.getElementById('contactForm').reset();
+                
+                // ボタンを元に戻す
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // フォーム入力のリアルタイムバリデーション
+        document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(input => {
+            input.addEventListener('blur', (e) => {
+                if (e.target.hasAttribute('required') && !e.target.value.trim()) {
+                    e.target.style.borderColor = '#dc3545';
+                } else {
+                    e.target.style.borderColor = '#e0e0e0';
+                }
+            });
+
+            input.addEventListener('input', (e) => {
+                if (e.target.style.borderColor === 'rgb(220, 53, 69)' && e.target.value.trim()) {
+                    e.target.style.borderColor = '#e0e0e0';
+                }
+            });
+        });
+
+        // ページ読み込み時にコンポーネントを読み込む
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+</body>
+</html>

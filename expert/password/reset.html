@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パスワードリセット | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .knowledge-cast-logo {
+            color: #333;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        .knowledge-cast-logo .highlight {
+            background-color: #000;
+            color: white;
+            padding: 2px 8px;
+            margin-right: 0;
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .header {
+            background: #000;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .back-link {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .back-link a {
+            color: #007acc;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid #007acc;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            background-color: #007acc;
+            color: white;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .step.active {
+            color: #000;
+            font-weight: 600;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .step.active .step-number {
+            background: #000;
+            color: white;
+        }
+
+        .info-box {
+            background: #f0f8ff;
+            border: 1px solid #007acc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #007acc;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box p {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #dc3545;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 12px;
+        }
+
+        .date-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+            cursor: pointer;
+        }
+
+        .date-select:focus {
+            outline: none;
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #000;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #333;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .security-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 25px;
+        }
+
+        .security-notice h4 {
+            color: #856404;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .security-notice p {
+            color: #856404;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .help-links {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .help-links p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .help-links a {
+            color: #007acc;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 10px;
+        }
+
+        .help-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 28px;
+                letter-spacing: 4px;
+                margin-bottom: 30px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 6px;
+                margin-right: 0;
+                width: 50px;
+                height: 18px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .step-indicator {
+                gap: 15px;
+            }
+
+            .date-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .knowledge-cast-logo {
+                font-size: 24px;
+                letter-spacing: 3px;
+                margin-bottom: 25px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 4px;
+                margin-right: 0;
+                width: 40px;
+                height: 16px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .step-indicator {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .knowledge-cast-logo {
+                font-size: 42px;
+                letter-spacing: 8px;
+                margin-bottom: 50px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 3px 10px;
+                margin-right: 0;
+                width: 70px;
+                height: 24px;
+            }
+
+            .form-container {
+                padding: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="knowledge-cast-logo">
+            KNOWLEDGE<br>
+            <span class="highlight"></span>CAST
+        </div>
+
+        <div class="main-container">
+            <div class="header">
+                <h1>パスワードリセット</h1>
+                <p>本人確認のため、以下の情報をご入力ください</p>
+            </div>
+
+            <div class="form-container">
+                <div class="back-link">
+                    <a href="../login">
+                        ← ログイン画面に戻る
+                    </a>
+                </div>
+
+                <div class="step-indicator">
+                    <div class="step active">
+                        <div class="step-number">1</div>
+                        <span>本人確認</span>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <span>メール送信</span>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <span>パスワード設定</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>🔒 安全なパスワードリセット</h3>
+                    <p>
+                        セキュリティ保護のため、ご登録時の情報での本人確認が必要です。
+                        確認後、パスワードリセット用のリンクをメールでお送りします。
+                    </p>
+                </div>
+
+                <form id="resetForm">
+                    <div class="form-group">
+                        <label for="email" class="form-label">メールアドレス<span class="required">*</span></label>
+                        <input type="email" id="email" name="email" class="form-input" required>
+                        <div class="form-help">ご登録時のメールアドレスを入力してください</div>
+                        <div class="error-message" id="emailError">正しいメールアドレスを入力してください</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birthdate" class="form-label">生年月日<span class="required">*</span></label>
+                        <div class="date-grid">
+                            <select id="birthYear" name="birthYear" class="date-select" required>
+                                <option value="">年を選択</option>
+                            </select>
+                            <select id="birthMonth" name="birthMonth" class="date-select" required>
+                                <option value="">月</option>
+                                <option value="1">1月</option>
+                                <option value="2">2月</option>
+                                <option value="3">3月</option>
+                                <option value="4">4月</option>
+                                <option value="5">5月</option>
+                                <option value="6">6月</option>
+                                <option value="7">7月</option>
+                                <option value="8">8月</option>
+                                <option value="9">9月</option>
+                                <option value="10">10月</option>
+                                <option value="11">11月</option>
+                                <option value="12">12月</option>
+                            </select>
+                            <select id="birthDay" name="birthDay" class="date-select" required>
+                                <option value="">日</option>
+                            </select>
+                        </div>
+                        <div class="form-help">ご登録時の生年月日を選択してください</div>
+                        <div class="error-message" id="birthdateError">生年月日を正しく選択してください</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        📧 リセットメールを送信
+                    </button>
+
+                    <div class="security-notice">
+                        <h4>🛡️ セキュリティについて</h4>
+                        <p>
+                            • リセットリンクの有効期限は24時間です<br>
+                            • リンクは1回のみ使用可能です<br>
+                            • 不正なアクセスを検知した場合は管理者に通知されます
+                        </p>
+                    </div>
+
+                    <div class="help-links">
+                        <p>お困りの場合はサポートまでお問い合わせください</p>
+                        <a href="../contact">お問い合わせ</a>
+                        <a href="tel:03-1234-5678">電話サポート</a>
+                        <a href="mailto:support@knowledgecast.com">メールサポート</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 年の選択肢を生成
+        function generateYearOptions() {
+            const yearSelect = document.getElementById('birthYear');
+            const currentYear = new Date().getFullYear();
+            const startYear = currentYear - 80;
+            const endYear = currentYear - 13; // 13歳以上
+
+            for (let year = endYear; year >= startYear; year--) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year + '年';
+                yearSelect.appendChild(option);
+            }
+        }
+
+        // 日の選択肢を生成
+        function generateDayOptions() {
+            const daySelect = document.getElementById('birthDay');
+            const month = parseInt(document.getElementById('birthMonth').value);
+            const year = parseInt(document.getElementById('birthYear').value);
+
+            // 既存の日の選択肢をクリア（最初のoptionは残す）
+            while (daySelect.children.length > 1) {
+                daySelect.removeChild(daySelect.lastChild);
+            }
+
+            if (!month) return;
+
+            // その月の日数を計算
+            let daysInMonth = 31;
+            if (month === 2) {
+                // うるう年の判定
+                if (year && ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0)) {
+                    daysInMonth = 29;
+                } else {
+                    daysInMonth = 28;
+                }
+            } else if ([4, 6, 9, 11].includes(month)) {
+                daysInMonth = 30;
+            }
+
+            // 日の選択肢を追加
+            for (let day = 1; day <= daysInMonth; day++) {
+                const option = document.createElement('option');
+                option.value = day;
+                option.textContent = day + '日';
+                daySelect.appendChild(option);
+            }
+        }
+
+        // 入力値の検証
+        function validateForm() {
+            const email = document.getElementById('email');
+            const birthYear = document.getElementById('birthYear');
+            const birthMonth = document.getElementById('birthMonth');
+            const birthDay = document.getElementById('birthDay');
+            const submitBtn = document.getElementById('submitBtn');
+
+            let isValid = true;
+
+            // メールアドレスの検証
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                email.classList.add('error');
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            } else {
+                email.classList.remove('error');
+                document.getElementById('emailError').style.display = 'none';
+            }
+
+            // 生年月日の検証
+            if (!birthYear.value || !birthMonth.value || !birthDay.value) {
+                [birthYear, birthMonth, birthDay].forEach(select => {
+                    if (!select.value) select.classList.add('error');
+                });
+                document.getElementById('birthdateError').style.display = 'block';
+                isValid = false;
+            } else {
+                [birthYear, birthMonth, birthDay].forEach(select => {
+                    select.classList.remove('error');
+                });
+                document.getElementById('birthdateError').style.display = 'none';
+            }
+
+            submitBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        // フォーム送信処理
+        document.getElementById('resetForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!validateForm()) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+
+            // 送信中の表示
+            submitBtn.innerHTML = '📧 送信中...';
+            submitBtn.disabled = true;
+
+            // 送信処理のシミュレーション
+            setTimeout(() => {
+                alert('パスワードリセット用のメールを送信しました。\n\nメールボックスをご確認いただき、記載されたリンクからパスワードの再設定を行ってください。\n\n※メールが届かない場合は、迷惑メールフォルダもご確認ください。');
+
+                // 成功時はメール送信完了画面へ（実際の実装では画面遷移）
+                // window.location.href = './reset-sent';
+
+                // デモ用にボタンを元に戻す
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+
+        // リアルタイム入力検証
+        document.getElementById('email').addEventListener('input', validateForm);
+        document.getElementById('birthYear').addEventListener('change', () => {
+            generateDayOptions();
+            validateForm();
+        });
+        document.getElementById('birthMonth').addEventListener('change', () => {
+            generateDayOptions();
+            validateForm();
+        });
+        document.getElementById('birthDay').addEventListener('change', validateForm);
+
+        // フォーカス時のエラー状態クリア
+        document.querySelectorAll('.form-input, .date-select').forEach(input => {
+            input.addEventListener('focus', (e) => {
+                e.target.classList.remove('error');
+            });
+        });
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            generateYearOptions();
+            validateForm();
+        });
+    </script>
+</body>
+</html>

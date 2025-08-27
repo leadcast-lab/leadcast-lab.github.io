@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ヘッダーとサイドバーはコンポーネントファイルで定義 */
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* プロフィールセクション */
+        .user-profile {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .profile-info h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .profile-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .edit-button {
+            background: #000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-button:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        /* セクションタイトル */
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* レビューセクション */
+        .review-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .company-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .review-meta {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .star-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin: 12px 0;
+        }
+
+        .star {
+            color: #ffc107;
+            font-size: 16px;
+        }
+
+        .rating-text {
+            margin-left: 8px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid #000;
+        }
+
+        /* 履歴テーブル */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 16px 12px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .history-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .history-table td {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .history-table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-waiting {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .status-completed {
+            background: #d1edff;
+            color: #0c63e4;
+            border: 1px solid #85c1e9;
+        }
+
+        /* 報酬サマリー */
+        .reward-summary {
+            background: linear-gradient(135deg, #000 0%, #333 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reward-summary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        .reward-title {
+            font-size: 16px;
+            margin-bottom: 12px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .reward-amount {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .reward-period {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .reward-change {
+            font-size: 14px;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .profile-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .user-profile {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .history-table {
+                font-size: 12px;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 12px 8px;
+            }
+
+            .reward-amount {
+                font-size: 28px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .header-content {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .profile-details {
+                gap: 12px;
+            }
+
+            .profile-detail-item {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">マイページ</h1>
+
+            <!-- 登録情報セクション -->
+            <section class="content-section">
+                <div class="user-profile">
+                    <div class="profile-info">
+                        <h2>登録情報</h2>
+                        <div class="profile-details">
+                            <div class="profile-detail-item">
+                                <span>👤 氏名：田中 太郎</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span>📧 メールアドレス：tanaka@example.com</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span>📞 電話番号：050-1234-5678</span>
+                            </div>
+                            <div class="profile-detail-item">
+                                <span>💼 専門分野：マーケティング, セールス</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="edit-button">
+                        ✏️ 編集
+                    </button>
+                </div>
+            </section>
+
+            <!-- 案件レビューセクション -->
+            <section class="content-section">
+                <h2 class="section-title">📝 案件レビュー</h2>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="company-name">株式会社テックソリューション</div>
+                        <div class="review-meta">お客様のマーケティング担当者</div>
+                    </div>
+                    <div class="star-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="rating-text">5.0</span>
+                    </div>
+                    <p class="review-text">
+                        お客様の案件やコンサルいただき、すごく勉強になりました。また、参考になる「アクションプランの作成例」等、チーム全体で有効活用させていただいています。
+                    </p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="company-name">株式会社イノベーション</div>
+                        <div class="review-meta">お客様の営業部長</div>
+                    </div>
+                    <div class="star-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="rating-text">5.0</span>
+                    </div>
+                    <p class="review-text">
+                        セールス戦略について詳しく教えていただき、実際に売上向上につながりました。具体的な事例を交えた説明で非常に分かりやすかったです。
+                    </p>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="company-name">株式会社グロースパートナーズ</div>
+                        <div class="review-meta">お客様の事業開発担当者</div>
+                    </div>
+                    <div class="star-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="rating-text">5.0</span>
+                    </div>
+                    <p class="review-text">
+                        マーケティング戦略の立案から実行まで、段階的にサポートしていただきました。おかげで新規顧客の獲得数が大幅に改善されました。
+                    </p>
+                </div>
+            </section>
+
+            <!-- 案件履歴セクション -->
+            <section class="content-section">
+                <h2 class="section-title">📋 案件履歴</h2>
+                
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>日付</th>
+                            <th>スポンサー</th>
+                            <th>動画タイトル</th>
+                            <th>金額</th>
+                            <th>ステータス</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024/01/15</td>
+                            <td>株式会社テックソリューション</td>
+                            <td>効果的なリード獲得方法</td>
+                            <td>¥5,000</td>
+                            <td><span class="status-badge status-waiting">申請中</span></td>
+                        </tr>
+                        <tr>
+                            <td>2024/01/12</td>
+                            <td>株式会社イノベーション</td>
+                            <td>セールス戦略実践講座</td>
+                            <td>¥7,500</td>
+                            <td><span class="status-badge status-completed">完了</span></td>
+                        </tr>
+                        <tr>
+                            <td>2024/01/10</td>
+                            <td>株式会社テックソリューション</td>
+                            <td>デジタルマーケティング戦略</td>
+                            <td>¥5,000</td>
+                            <td><span class="status-badge status-completed">完了</span></td>
+                        </tr>
+                        <tr>
+                            <td>2024/01/08</td>
+                            <td>株式会社グロースパートナーズ</td>
+                            <td>マーケティング戦略立案</td>
+                            <td>¥6,000</td>
+                            <td><span class="status-badge status-completed">完了</span></td>
+                        </tr>
+                        <tr>
+                            <td>2024/01/05</td>
+                            <td>株式会社テックソリューション</td>
+                            <td>セールススキル向上講座</td>
+                            <td>¥5,000</td>
+                            <td><span class="status-badge status-completed">完了</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- 総合報酬額セクション -->
+            <section class="content-section">
+                <div class="reward-summary">
+                    <div class="reward-title">総合報酬額</div>
+                    <div class="reward-amount">¥ 28,500</div>
+                    <div class="reward-period">今月の獲得金額</div>
+                    <div class="reward-change">前月比 +35% 📈</div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // 編集ボタンのクリックイベント
+        document.querySelector('.edit-button').addEventListener('click', () => {
+            alert('プロフィール編集機能は準備中です。');
+        });
+
+        // レビューカードのホバーエフェクト
+        document.querySelectorAll('.review-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // テーブル行のホバーエフェクト
+        document.querySelectorAll('.history-table tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                alert('案件詳細画面は準備中です。');
+            });
+        });
+
+        // レスポンシブメニュー（必要に応じて追加）
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.transform = sidebar.style.transform === 'translateX(0px)' ? 'translateX(-100%)' : 'translateX(0px)';
+        }
+
+        // コンポーネントの読み込み
+        function loadComponents() {
+            // ヘッダーコンポーネントの読み込み
+            fetch('./components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.body.insertAdjacentHTML('afterbegin', data);
+                });
+
+            // サイドバーコンポーネントの読み込み
+            fetch('./components/sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.body.insertAdjacentHTML('afterbegin', data);
+                });
+        }
+
+        // ページ読み込み時にコンポーネントを読み込む
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+</body>
+</html>

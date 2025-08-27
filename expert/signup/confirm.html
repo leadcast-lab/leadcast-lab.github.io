@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録 - 登録内容確認 | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .knowledge-cast-logo {
+            color: #333;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        .knowledge-cast-logo .highlight {
+            background-color: #000;
+            color: white;
+            padding: 2px 8px;
+            margin-right: 0;
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .header {
+            background: #000;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .back-link {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .back-link a {
+            color: #007acc;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border: 1px solid #007acc;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            background-color: #007acc;
+            color: white;
+        }
+
+        .section {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-number {
+            background: #000;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .confirm-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .confirm-label {
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .confirm-value {
+            padding: 12px 16px;
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .confirm-value.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .responsibilities-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .responsibility-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #007acc;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-primary {
+            background-color: #000;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #333;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f9f9f9;
+            border-color: #007acc;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .terms {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #000;
+        }
+
+        .terms p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .terms a {
+            color: #007acc;
+            text-decoration: none;
+        }
+
+        .terms a:hover {
+            text-decoration: underline;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 800px) {
+            .confirm-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 28px;
+                letter-spacing: 4px;
+                margin-bottom: 30px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 6px;
+                margin-right: 0;
+                width: 50px;
+                height: 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .main-container {
+                border-radius: 8px;
+            }
+
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .form-container {
+                padding: 15px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 24px;
+                letter-spacing: 3px;
+                margin-bottom: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .knowledge-cast-logo {
+                font-size: 20px;
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 4px;
+                margin-right: 0;
+                width: 40px;
+                height: 16px;
+            }
+
+            .section {
+                padding: 20px 15px;
+            }
+
+            .confirm-value {
+                padding: 10px 12px;
+                font-size: 15px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .knowledge-cast-logo {
+                font-size: 42px;
+                letter-spacing: 8px;
+                margin-bottom: 50px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 3px 10px;
+                margin-right: 0;
+                width: 70px;
+                height: 24px;
+            }
+
+            .form-container {
+                padding: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="knowledge-cast-logo">
+            KNOWLEDGE<br>
+            <span class="highlight"></span>CAST
+        </div>
+
+        <div class="main-container">
+            <div class="header">
+                <h1>登録内容確認</h1>
+                <p>以下の内容で登録してよろしいですか？</p>
+            </div>
+
+            <div class="form-container">
+                <div class="back-link">
+                    <a href="./input.html">
+                        ← 修正する
+                    </a>
+                </div>
+
+                <form id="confirmForm" action="/expert/signup/complete" method="post">
+                    <!-- 個人情報セクション -->
+                    <div class="section">
+                        <div class="section-header">
+                            <div class="section-number">1</div>
+                            <div class="section-title">個人情報</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">お名前</div>
+                            <div class="confirm-value" id="displayFullName">山田 太郎</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">電話番号</div>
+                            <div class="confirm-value" id="displayPhone">090-1234-5678</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">個人メールアドレス</div>
+                            <div class="confirm-value" id="displayEmail">yamada@example.com</div>
+                        </div>
+                    </div>
+
+                    <!-- 会社情報セクション -->
+                    <div class="section">
+                        <div class="section-header">
+                            <div class="section-number">2</div>
+                            <div class="section-title">会社情報</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">会社名</div>
+                            <div class="confirm-value" id="displayCompanyName">山田商事株式会社</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">部署名</div>
+                            <div class="confirm-value" id="displayDepartment">経理部</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">役職</div>
+                            <div class="confirm-value" id="displayPosition">課長</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">電話番号</div>
+                            <div class="confirm-value" id="displayCompanyPhone">03-1234-5678</div>
+                        </div>
+
+                        <div class="confirm-row">
+                            <div class="confirm-label">担当業務</div>
+                            <div class="confirm-value">
+                                <div class="responsibilities-list" id="displayResponsibilities">
+                                    <span class="responsibility-tag">経理</span>
+                                    <span class="responsibility-tag">購買</span>
+                                    <span class="responsibility-tag">給与計算</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="terms">
+                        <p>
+                            登録することで、<a href="/terms" target="_blank">利用規約</a>および<a href="/privacy" target="_blank">プライバシーポリシー</a>に同意したものとみなされます。
+                        </p>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn btn-secondary" onclick="goBack()">
+                            修正する
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            この内容で登録する
+                        </button>
+                    </div>
+
+                    <!-- 隠しフィールド（実際のデータを保持） -->
+                    <input type="hidden" id="hiddenLastName" name="lastName" value="">
+                    <input type="hidden" id="hiddenFirstName" name="firstName" value="">
+                    <input type="hidden" id="hiddenPhone" name="phone" value="">
+                    <input type="hidden" id="hiddenEmail" name="email" value="">
+                    <input type="hidden" id="hiddenCompanyName" name="companyName" value="">
+                    <input type="hidden" id="hiddenDepartment" name="department" value="">
+                    <input type="hidden" id="hiddenPosition" name="position" value="">
+                    <input type="hidden" id="hiddenCompanyPhone" name="companyPhone" value="">
+                    <input type="hidden" id="hiddenResponsibilities" name="responsibilities" value="">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URLパラメータまたはセッションストレージからデータを取得
+        function loadFormData() {
+            // 実際の実装では、前のページからのデータを取得
+            // ここではサンプルデータを使用
+            const data = {
+                lastName: getUrlParam('lastName') || '山田',
+                firstName: getUrlParam('firstName') || '太郎',
+                phone: getUrlParam('phone') || '090-1234-5678',
+                email: getUrlParam('email') || 'yamada@example.com',
+                companyName: getUrlParam('companyName') || '山田商事株式会社',
+                department: getUrlParam('department') || '経理部',
+                position: getUrlParam('position') || '課長',
+                companyPhone: getUrlParam('companyPhone') || '03-1234-5678',
+                responsibilities: getUrlParam('responsibilities') || '経理,購買,給与計算'
+            };
+
+            return data;
+        }
+
+        // URLパラメータを取得する関数
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // データを表示する関数
+        function displayData() {
+            const data = loadFormData();
+
+            // 表示用データの設定
+            document.getElementById('displayFullName').textContent = `${data.lastName} ${data.firstName}`;
+            document.getElementById('displayPhone').textContent = data.phone || '未入力';
+            document.getElementById('displayEmail').textContent = data.email;
+            document.getElementById('displayCompanyName').textContent = data.companyName;
+            document.getElementById('displayDepartment').textContent = data.department;
+            document.getElementById('displayPosition').textContent = data.position || '未入力';
+            document.getElementById('displayCompanyPhone').textContent = data.companyPhone;
+
+            // 担当業務の表示
+            const responsibilitiesContainer = document.getElementById('displayResponsibilities');
+            if (data.responsibilities) {
+                const responsibilities = data.responsibilities.split(',');
+                responsibilitiesContainer.innerHTML = '';
+                responsibilities.forEach(responsibility => {
+                    if (responsibility.trim()) {
+                        const tag = document.createElement('span');
+                        tag.className = 'responsibility-tag';
+                        tag.textContent = responsibility.trim();
+                        responsibilitiesContainer.appendChild(tag);
+                    }
+                });
+            }
+
+            // 隠しフィールドに値を設定
+            document.getElementById('hiddenLastName').value = data.lastName;
+            document.getElementById('hiddenFirstName').value = data.firstName;
+            document.getElementById('hiddenPhone').value = data.phone;
+            document.getElementById('hiddenEmail').value = data.email;
+            document.getElementById('hiddenCompanyName').value = data.companyName;
+            document.getElementById('hiddenDepartment').value = data.department;
+            document.getElementById('hiddenPosition').value = data.position;
+            document.getElementById('hiddenCompanyPhone').value = data.companyPhone;
+            document.getElementById('hiddenResponsibilities').value = data.responsibilities;
+
+            // 空の値の表示調整
+            document.querySelectorAll('.confirm-value').forEach(element => {
+                if (element.textContent === '未入力' || element.textContent.trim() === '') {
+                    element.classList.add('empty');
+                    if (element.textContent.trim() === '') {
+                        element.textContent = '未入力';
+                    }
+                }
+            });
+        }
+
+        // 戻るボタンの処理
+        function goBack() {
+            const data = loadFormData();
+            const params = new URLSearchParams();
+
+            // データをURLパラメータに追加
+            Object.keys(data).forEach(key => {
+                if (data[key]) {
+                    params.append(key, data[key]);
+                }
+            });
+
+            // 入力画面に戻る
+            window.location.href = `./input.html?${params.toString()}`;
+        }
+
+        // フォーム送信処理
+        document.getElementById('confirmForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // 登録完了の処理
+            alert('会員登録が完了しました！\nありがとうございます。完了ページへ移動します。');
+
+            // 完了ページへリダイレクト
+            window.location.href = './thanks.html';
+        });
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            displayData();
+        });
+    </script>
+</body>
+</html>

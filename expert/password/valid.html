@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>パスワード変更 | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .knowledge-cast-logo {
+            color: #333;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        .knowledge-cast-logo .highlight {
+            background-color: #000;
+            color: white;
+            padding: 2px 8px;
+            margin-right: 0;
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .header {
+            background: #000;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .step.completed {
+            color: #28a745;
+        }
+
+        .step.active {
+            color: #000;
+            font-weight: 600;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+
+        .step.active .step-number {
+            background: #000;
+            color: white;
+        }
+
+        .info-box {
+            background: #f0f8ff;
+            border: 1px solid #007acc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h3 {
+            color: #007acc;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box p {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #dc3545;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        .form-input.success {
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .verification-code-group {
+            position: relative;
+        }
+
+        .code-timer {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 12px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .resend-link {
+            color: #007acc;
+            text-decoration: none;
+            font-size: 12px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .resend-link.disabled {
+            color: #ccc;
+            pointer-events: none;
+        }
+
+        .password-requirements {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 8px;
+        }
+
+        .password-requirements h4 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .requirement-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .requirement-item {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .requirement-item.valid {
+            color: #28a745;
+        }
+
+        .requirement-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #000;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #333;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .security-notice {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 25px;
+        }
+
+        .security-notice h4 {
+            color: #856404;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .security-notice p {
+            color: #856404;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .help-links {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .help-links p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .help-links a {
+            color: #007acc;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 0 10px;
+        }
+
+        .help-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .form-container {
+                padding: 25px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 28px;
+                letter-spacing: 4px;
+                margin-bottom: 30px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 6px;
+                margin-right: 0;
+                width: 50px;
+                height: 18px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .step-indicator {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .knowledge-cast-logo {
+                font-size: 24px;
+                letter-spacing: 3px;
+                margin-bottom: 25px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 4px;
+                margin-right: 0;
+                width: 40px;
+                height: 16px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .step-indicator {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .knowledge-cast-logo {
+                font-size: 42px;
+                letter-spacing: 8px;
+                margin-bottom: 50px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 3px 10px;
+                margin-right: 0;
+                width: 70px;
+                height: 24px;
+            }
+
+            .form-container {
+                padding: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="knowledge-cast-logo">
+            KNOWLEDGE<br>
+            <span class="highlight"></span>CAST
+        </div>
+
+        <div class="main-container">
+            <div class="header">
+                <h1>新しいパスワードの設定</h1>
+                <p>確認コードを入力して、新しいパスワードを設定してください</p>
+            </div>
+
+            <div class="form-container">
+                <div class="step-indicator">
+                    <div class="step completed">
+                        <div class="step-number">✓</div>
+                        <span>本人確認</span>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-number">✓</div>
+                        <span>メール送信</span>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">3</div>
+                        <span>パスワード設定</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>📧 メール確認</h3>
+                    <p>
+                        ご登録のメールアドレスに確認コードを送信しました。
+                        メールに記載された6桁の確認コードを入力して、新しいパスワードを設定してください。
+                    </p>
+                </div>
+
+                <form id="passwordResetForm">
+                    <div class="form-group">
+                        <label for="verificationCode" class="form-label">確認コード<span class="required">*</span></label>
+                        <div class="verification-code-group">
+                            <input type="text" id="verificationCode" name="verificationCode" class="form-input" maxlength="6" placeholder="123456" required>
+                            <div class="code-timer" id="codeTimer">5:00</div>
+                        </div>
+                        <div class="form-help">メールに記載された6桁の数字を入力してください</div>
+                        <div class="error-message" id="codeError">確認コードが正しくありません</div>
+                        <a href="#" class="resend-link" id="resendLink">確認コードを再送信</a>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPassword" class="form-label">新しいパスワード<span class="required">*</span></label>
+                        <input type="password" id="newPassword" name="newPassword" class="form-input" required>
+                        <div class="error-message" id="passwordError">パスワードの要件を満たしていません</div>
+                        
+                        <div class="password-requirements">
+                            <h4>パスワードの要件</h4>
+                            <ul class="requirement-list">
+                                <li class="requirement-item" id="lengthReq">
+                                    <span class="requirement-icon">○</span>
+                                    8文字以上
+                                </li>
+                                <li class="requirement-item" id="upperReq">
+                                    <span class="requirement-icon">○</span>
+                                    大文字を含む
+                                </li>
+                                <li class="requirement-item" id="lowerReq">
+                                    <span class="requirement-icon">○</span>
+                                    小文字を含む
+                                </li>
+                                <li class="requirement-item" id="numberReq">
+                                    <span class="requirement-icon">○</span>
+                                    数字を含む
+                                </li>
+                                <li class="requirement-item" id="specialReq">
+                                    <span class="requirement-icon">○</span>
+                                    特殊文字を含む (!@#$%^&*)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">パスワード確認<span class="required">*</span></label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" required>
+                        <div class="form-help">確認のため同じパスワードを入力してください</div>
+                        <div class="error-message" id="confirmError">パスワードが一致しません</div>
+                        <div class="success-message" id="confirmSuccess">パスワードが一致しています</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                        🔐 パスワードを変更する
+                    </button>
+
+                    <div class="security-notice">
+                        <h4>🛡️ セキュリティについて</h4>
+                        <p>
+                            • 変更後は新しいパスワードで再ログインが必要です<br>
+                            • すべてのデバイスからログアウトされます<br>
+                            • 変更通知メールをお送りします
+                        </p>
+                    </div>
+
+                    <div class="help-links">
+                        <p>メールが届かない場合やお困りの際は</p>
+                        <a href="../contact.html">お問い合わせ</a>
+                        <a href="tel:03-1234-5678">電話サポート</a>
+                        <a href="mailto:support@knowledgecast.com">メールサポート</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timeRemaining = 300; // 5分
+        let timerInterval;
+
+        // タイマー開始
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                document.getElementById('codeTimer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('codeTimer').textContent = '期限切れ';
+                    document.getElementById('resendLink').classList.remove('disabled');
+                }
+            }, 1000);
+        }
+
+        // パスワード要件チェック
+        function checkPasswordRequirements(password) {
+            const requirements = {
+                length: password.length >= 8,
+                upper: /[A-Z]/.test(password),
+                lower: /[a-z]/.test(password),
+                number: /\d/.test(password),
+                special: /[!@#$%^&*]/.test(password)
+            };
+
+            // 各要件の表示更新
+            Object.keys(requirements).forEach(req => {
+                const element = document.getElementById(req + 'Req');
+                const icon = element.querySelector('.requirement-icon');
+                if (requirements[req]) {
+                    element.classList.add('valid');
+                    icon.textContent = '✓';
+                } else {
+                    element.classList.remove('valid');
+                    icon.textContent = '○';
+                }
+            });
+
+            return Object.values(requirements).every(req => req);
+        }
+
+        // フォーム検証
+        function validateForm() {
+            const code = document.getElementById('verificationCode');
+            const password = document.getElementById('newPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const submitBtn = document.getElementById('submitBtn');
+
+            let isValid = true;
+
+            // 確認コードの検証（6桁の数字）
+            const codeRegex = /^\d{6}$/;
+            if (!codeRegex.test(code.value)) {
+                if (code.value.length > 0) {
+                    code.classList.add('error');
+                    document.getElementById('codeError').style.display = 'block';
+                }
+                isValid = false;
+            } else {
+                code.classList.remove('error');
+                code.classList.add('success');
+                document.getElementById('codeError').style.display = 'none';
+            }
+
+            // パスワードの検証
+            const passwordValid = checkPasswordRequirements(password.value);
+            if (password.value.length > 0 && !passwordValid) {
+                password.classList.add('error');
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            } else if (passwordValid) {
+                password.classList.remove('error');
+                password.classList.add('success');
+                document.getElementById('passwordError').style.display = 'none';
+            }
+
+            // パスワード確認の検証
+            if (confirmPassword.value.length > 0) {
+                if (password.value !== confirmPassword.value) {
+                    confirmPassword.classList.add('error');
+                    document.getElementById('confirmError').style.display = 'block';
+                    document.getElementById('confirmSuccess').style.display = 'none';
+                    isValid = false;
+                } else {
+                    confirmPassword.classList.remove('error');
+                    confirmPassword.classList.add('success');
+                    document.getElementById('confirmError').style.display = 'none';
+                    document.getElementById('confirmSuccess').style.display = 'block';
+                }
+            }
+
+            submitBtn.disabled = !isValid || !code.value || !password.value || !confirmPassword.value;
+        }
+
+        // 確認コード再送信
+        document.getElementById('resendLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (e.target.classList.contains('disabled')) return;
+
+            alert('確認コードを再送信しました。\n新しいコードをご確認ください。');
+            timeRemaining = 300; // タイマーリセット
+            e.target.classList.add('disabled');
+            startTimer();
+        });
+
+        // フォーム送信処理
+        document.getElementById('passwordResetForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if (!validateForm()) return;
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+
+            // 送信中の表示
+            submitBtn.innerHTML = '🔐 変更中...';
+            submitBtn.disabled = true;
+
+            // 送信処理のシミュレーション
+            setTimeout(() => {
+                alert('パスワードの変更が完了しました！\n\n新しいパスワードでログインしてください。\nセキュリティのため、すべてのデバイスからログアウトされました。');
+
+                // 成功時はログイン画面へリダイレクト
+                window.location.href = '../login.html';
+            }, 2000);
+        });
+
+        // リアルタイム入力検証
+        document.getElementById('verificationCode').addEventListener('input', (e) => {
+            // 数字のみ入力可能
+            e.target.value = e.target.value.replace(/[^\d]/g, '');
+            validateForm();
+        });
+
+        document.getElementById('newPassword').addEventListener('input', validateForm);
+        document.getElementById('confirmPassword').addEventListener('input', validateForm);
+
+        // フォーカス時のエラー状態クリア
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', (e) => {
+                e.target.classList.remove('error');
+            });
+        });
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            startTimer();
+            validateForm();
+
+            // デモ用の確認コード自動入力（実際の実装では削除）
+            // document.getElementById('verificationCode').value = '123456';
+        });
+    </script>
+</body>
+</html>

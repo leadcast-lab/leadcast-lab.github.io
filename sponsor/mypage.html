@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ - LEADCAST Expert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .company-name {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+        }
+
+        /* サイドバースタイル */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background-color: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-item,
+        .sidebar-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            color: #333;
+            text-decoration: none;
+            border: none;
+            background: none;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-toggle:hover {
+            background-color: #f5f5f5;
+        }
+
+        .sidebar-item.active {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .sidebar-icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 0;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .view-all-link {
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        /* お知らせセクション */
+        .notification-list {
+            padding: 0;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            border-bottom: 1px solid #f0f0f0;
+            gap: 15px;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .status-unread {
+            background-color: #1976d2;
+            color: white;
+        }
+
+        .status-read {
+            background-color: #333;
+            color: white;
+        }
+
+        .notification-date {
+            color: #666;
+            font-size: 14px;
+            min-width: 80px;
+        }
+
+        .notification-title {
+            color: #333;
+            font-size: 14px;
+            flex: 1;
+        }
+
+        /* プロジェクトセクション */
+        .project-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .project-table th,
+        .project-table td {
+            padding: 15px 30px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .project-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .project-table td {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .project-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .status-progress {
+            background-color: #1976d2;
+            color: white;
+        }
+
+        .status-completed {
+            background-color: #333;
+            color: white;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn:hover {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .header-nav {
+                display: none;
+            }
+
+            .company-name {
+                display: none;
+            }
+
+            .sidebar {
+                transform: translateX(-250px);
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
+            }
+
+            .section-header {
+                padding: 15px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .notification-item {
+                padding: 12px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .notification-date {
+                min-width: auto;
+            }
+
+            .project-table {
+                font-size: 12px;
+            }
+
+            .project-table th,
+            .project-table td {
+                padding: 10px 15px;
+            }
+
+            .project-table .company-col,
+            .project-table .date-col {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 20px;
+                cursor: pointer;
+                padding: 8px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px 10px;
+            }
+
+            .logo-text {
+                font-size: 16px;
+                letter-spacing: 1px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .project-table th,
+            .project-table td {
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <div id="header-container"></div>
+
+    <!-- サイドバー -->
+    <div id="sidebar-container"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content" id="mainContent">
+        <!-- お知らせセクション -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">お知らせ</h2>
+                <a href="#" class="view-all-link">一覧</a>
+            </div>
+            <div class="notification-list">
+                <div class="notification-item">
+                    <span class="notification-status status-unread">未読</span>
+                    <span class="notification-date">2025/08/15</span>
+                    <span class="notification-title">株式会社SalesMarkerからの特別オファー</span>
+                </div>
+                <div class="notification-item">
+                    <span class="notification-status status-read">既読</span>
+                    <span class="notification-date">2025/08/12</span>
+                    <span class="notification-title">報酬の振り込み完了</span>
+                </div>
+                <div class="notification-item">
+                    <span class="notification-status status-unread">未読</span>
+                    <span class="notification-date">2025/08/01</span>
+                    <span class="notification-title">サイトリニューアル</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- プロジェクトセクション -->
+        <section class="content-section">
+            <div class="section-header">
+                <h2 class="section-title">プロジェクト</h2>
+                <a href="#" class="view-all-link">一覧</a>
+            </div>
+            <table class="project-table">
+                <thead>
+                    <tr>
+                        <th>ステータス</th>
+                        <th class="company-col">企業名</th>
+                        <th>タイトル</th>
+                        <th class="date-col">最終閲覧日</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="project-status status-progress">進行中</span></td>
+                        <td class="company-col">株式会社MUSUBU</td>
+                        <td>リストSaaS「Musubu」について</td>
+                        <td class="date-col">2025/08/12</td>
+                        <td><button class="delete-btn" onclick="deleteProject(1)">🗑️</button></td>
+                    </tr>
+                    <tr>
+                        <td><span class="project-status status-completed">完了</span></td>
+                        <td class="company-col">株式会社SalesMarker</td>
+                        <td>インテントセールス「SalesMaker」について</td>
+                        <td class="date-col">2025/08/01</td>
+                        <td><button class="delete-btn" onclick="deleteProject(2)">🗑️</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        // 部品のHTMLを読み込み
+        async function loadComponents() {
+            try {
+                // ヘッダーを読み込み
+                const headerResponse = await fetch('./components/header.html');
+                const headerHTML = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHTML;
+
+                // サイドバーを読み込み
+                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarHTML = await sidebarResponse.text();
+                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
+            } catch (error) {
+                console.error('コンポーネントの読み込みエラー:', error);
+                // フォールバック: 直接HTMLを挿入
+                loadFallbackComponents();
+            }
+        }
+
+        // フォールバック用のコンポーネント読み込み
+        function loadFallbackComponents() {
+            // ヘッダー
+            document.getElementById('header-container').innerHTML = `
+                <header class="header">
+                    <div class="header-left">
+                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+                        <div class="logo-text">LEADCAST</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <span class="company-name">株式会社トヨタ自動車 様</span>
+                        </div>
+                        <nav class="header-nav">
+                            <a href="#" class="nav-item" onclick="showDashboard()">
+                                <span class="nav-icon">📊</span>
+                                <span class="nav-text">ダッシュボード</span>
+                            </a>
+                            <a href="#" class="nav-item" onclick="showProjectSearch()">
+                                <span class="nav-icon">🔍</span>
+                                <span class="nav-text">プロジェクト検索</span>
+                            </a>
+                            <a href="#" class="nav-item" onclick="showSettings()">
+                                <span class="nav-icon">⚙️</span>
+                                <span class="nav-text">設定</span>
+                            </a>
+                            <a href="#" class="nav-item active">
+                                <span class="nav-icon">👤</span>
+                                <span class="nav-text">マイページ</span>
+                            </a>
+                        </nav>
+                    </div>
+                </header>
+            `;
+
+            // サイドバー
+            document.getElementById('sidebar-container').innerHTML = `
+                <aside class="sidebar" id="sidebar">
+                    <nav class="sidebar-nav">
+                        <a href="#" class="sidebar-item" onclick="showDashboard()">
+                            <span class="sidebar-icon">📊</span>
+                            <span class="sidebar-text">ダッシュボード</span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showProjectSearch()">
+                            <span class="sidebar-icon">🔍</span>
+                            <span class="sidebar-text">プロジェクト検索</span>
+                        </a>
+                        <a href="#" class="sidebar-item active">
+                            <span class="sidebar-icon">👤</span>
+                            <span class="sidebar-text">マイページ</span>
+                        </a>
+                        <button class="sidebar-toggle" onclick="toggleSidebar()">
+                            <span class="sidebar-icon">☰</span>
+                            <span class="sidebar-text">折りたたむ</span>
+                        </button>
+                    </nav>
+                </aside>
+            `;
+        }
+
+        // サイドバーの開閉
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
+        }
+
+        // モバイル用サイドバー開閉
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        // ナビゲーション関数
+        function showDashboard() {
+            alert('ダッシュボード画面への遷移（実装予定）');
+        }
+
+        function showProjectSearch() {
+            alert('プロジェクト検索画面への遷移（実装予定）');
+        }
+
+        function showSettings() {
+            alert('設定画面への遷移（実装予定）');
+        }
+
+        // プロジェクト削除
+        function deleteProject(id) {
+            if (confirm('このプロジェクトを削除しますか？')) {
+                alert(`プロジェクト${id}を削除しました（実装予定）`);
+            }
+        }
+
+        // ページ読み込み時の処理
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents();
+
+            // モバイルでのサイドバー外クリック時の閉じる処理
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth <= 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    const menuBtn = document.querySelector('.mobile-menu-btn');
+
+                    if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                        sidebar.classList.remove('mobile-open');
+                    }
+                }
+            });
+
+            // ウィンドウリサイズ時の処理
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    const sidebar = document.getElementById('sidebar');
+                    sidebar.classList.remove('mobile-open');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

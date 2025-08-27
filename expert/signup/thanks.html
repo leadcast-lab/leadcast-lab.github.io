@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会員登録完了 | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .knowledge-cast-logo {
+            color: #333;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            line-height: 1.3;
+        }
+
+        .knowledge-cast-logo .highlight {
+            background-color: #000;
+            color: white;
+            padding: 2px 8px;
+            margin-right: 0;
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #000 0%, #333 100%);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .success-icon::before {
+            content: "✓";
+            color: #4CAF50;
+            font-size: 48px;
+            font-weight: bold;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            opacity: 0.95;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-left: 5px solid #000;
+        }
+
+        .welcome-message h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        .welcome-message p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .next-steps {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .next-steps h3::before {
+            content: "📋";
+            font-size: 24px;
+        }
+
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #007acc;
+        }
+
+        .step-number {
+            background: #007acc;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .step-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .contact-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .contact-info h4 {
+            color: #856404;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-info h4::before {
+            content: "📞";
+            font-size: 18px;
+        }
+
+        .contact-info p {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .contact-info a {
+            color: #007acc;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 16px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: #000;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f9f9f9;
+            border-color: #007acc;
+            color: #007acc;
+        }
+
+        .social-links {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .social-links h4 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .social-btn:hover {
+            background-color: #f0f0f0;
+            border-color: #007acc;
+            color: #007acc;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 800px) {
+            .content {
+                padding: 30px 20px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 28px;
+                letter-spacing: 4px;
+                margin-bottom: 30px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 6px;
+                margin-right: 0;
+                width: 50px;
+                height: 18px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+
+            .welcome-message {
+                padding: 20px;
+            }
+
+            .next-steps {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .main-container {
+                border-radius: 8px;
+            }
+
+            .header {
+                padding: 40px 15px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .content {
+                padding: 20px 15px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 24px;
+                letter-spacing: 3px;
+                margin-bottom: 25px;
+            }
+
+            .success-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .success-icon::before {
+                font-size: 36px;
+            }
+
+            .social-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .social-btn {
+                width: 100%;
+                max-width: 200px;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .knowledge-cast-logo {
+                font-size: 20px;
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 4px;
+                margin-right: 0;
+                width: 40px;
+                height: 16px;
+            }
+
+            .welcome-message {
+                padding: 15px;
+            }
+
+            .next-steps {
+                padding: 15px;
+            }
+
+            .steps-list li {
+                padding: 12px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .knowledge-cast-logo {
+                font-size: 42px;
+                letter-spacing: 8px;
+                margin-bottom: 50px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 3px 10px;
+                margin-right: 0;
+                width: 70px;
+                height: 24px;
+            }
+
+            .content {
+                padding: 60px 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="knowledge-cast-logo">
+            KNOWLEDGE<br>
+            <span class="highlight"></span>CAST
+        </div>
+
+        <div class="main-container">
+            <div class="header">
+                <div class="success-icon"></div>
+                <h1>会員登録が完了しました！</h1>
+                <p>KNOWLEDGE CASTへご登録いただき、誠にありがとうございます。<br>専門知識の共有と学習の新しい世界へようこそ！</p>
+            </div>
+
+            <div class="content">
+                <div class="welcome-message">
+                    <h2>ご登録ありがとうございます</h2>
+                    <p>
+                        あなたの専門知識と経験を活かして、多くの学習者に価値ある情報を提供していただけることを心より楽しみにしております。
+                    </p>
+                    <p>
+                        KNOWLEDGE CASTでは、あなたの知識が誰かの成長の糧となり、新しいつながりや機会を生み出すお手伝いをいたします。
+                    </p>
+                </div>
+
+                <div class="next-steps">
+                    <h3>次のステップ</h3>
+                    <ul class="steps-list">
+                        <li>
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">プロフィールの充実</div>
+                                <div class="step-description">マイページからプロフィール情報を充実させて、より多くの学習者にアピールしましょう</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">初回キャストの作成</div>
+                                <div class="step-description">あなたの専門分野での最初のナレッジキャストを作成してみましょう</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">コミュニティへの参加</div>
+                                <div class="step-description">他の専門家とのネットワーキングやディスカッションに参加しましょう</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">収益化の設定</div>
+                                <div class="step-description">プレミアムコンテンツや個別相談の料金設定を行いましょう</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="contact-info">
+                    <h4>ご質問やサポートが必要な場合</h4>
+                    <p>
+                        何かご不明な点がございましたら、お気軽にサポートチームまでお問い合わせください。<br>
+                        📧 Email: <a href="mailto:support@knowledgecast.com">support@knowledgecast.com</a><br>
+                        📞 電話: 03-1234-5678（平日 9:00-18:00）
+                    </p>
+                </div>
+
+                <div class="button-group">
+                    <a href="../mypage.html" class="btn btn-primary">
+                        🏠 マイページへ
+                    </a>
+                    <a href="../login.html" class="btn btn-secondary">
+                        � ログインページへ
+                    </a>
+                </div>
+
+                <div class="social-links">
+                    <h4>KNOWLEDGE CASTをフォロー</h4>
+                    <div class="social-buttons">
+                        <a href="#" class="social-btn">
+                            📘 Facebook
+                        </a>
+                        <a href="#" class="social-btn">
+                            🐦 Twitter
+                        </a>
+                        <a href="#" class="social-btn">
+                            💼 LinkedIn
+                        </a>
+                        <a href="#" class="social-btn">
+                            📺 YouTube
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ページ読み込み時のアニメーション
+        document.addEventListener('DOMContentLoaded', () => {
+            // 成功アイコンのアニメーション
+            const successIcon = document.querySelector('.success-icon');
+            setTimeout(() => {
+                successIcon.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    successIcon.style.transform = 'scale(1)';
+                }, 200);
+            }, 500);
+
+            // ステップのアニメーション
+            const steps = document.querySelectorAll('.steps-list li');
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    step.style.opacity = '0';
+                    step.style.transform = 'translateY(20px)';
+                    step.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        step.style.opacity = '1';
+                        step.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 150);
+            });
+        });
+
+        // ボタンクリック時の効果
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // クリック効果
+                btn.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    btn.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>

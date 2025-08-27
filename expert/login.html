@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert ログイン - KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .knowledge-cast-logo {
+            color: #333;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            margin-bottom: 60px;
+            line-height: 1.3;
+        }
+
+        .knowledge-cast-logo .highlight {
+            background-color: #000;
+            color: white;
+            padding: 2px 8px;
+            margin-right: 0;
+            display: inline-block;
+            width: 60px;
+            height: 20px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #007acc;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #999;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+
+        .btn-primary:hover {
+            background-color: #333;
+            transform: translateY(-1px);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin: 16px 0 24px;
+        }
+
+        .forgot-password a {
+            color: #007acc;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+
+        .divider span {
+            padding: 0 20px;
+        }
+
+        .btn-google {
+            width: 100%;
+            padding: 16px;
+            background-color: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+
+        .btn-google:hover {
+            background-color: #f8f9fa;
+            border-color: #ccc;
+            transform: translateY(-1px);
+        }
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #007acc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            color: #007acc;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 16px;
+            border: 1px solid #007acc;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .back-link:hover {
+            background-color: #007acc;
+            color: white;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 30px 25px;
+                margin: 0 10px 20px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 28px;
+                letter-spacing: 4px;
+                margin-bottom: 40px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 6px;
+                margin-right: 0;
+                width: 50px;
+                height: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .form-container {
+                padding: 25px 20px;
+                margin: 0 5px 15px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 24px;
+                letter-spacing: 3px;
+                margin-bottom: 35px;
+            }
+
+            .input-field,
+            .btn-primary,
+            .btn-google {
+                padding: 14px 16px;
+                font-size: 15px;
+            }
+
+            .btn-primary,
+            .btn-google {
+                font-weight: 500;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .form-container {
+                padding: 20px 15px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 20px;
+                letter-spacing: 2px;
+                margin-bottom: 30px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 1px 4px;
+                margin-right: 0;
+                width: 40px;
+                height: 16px;
+            }
+
+            .input-field,
+            .btn-primary,
+            .btn-google {
+                padding: 12px 14px;
+                font-size: 14px;
+            }
+        }
+
+        /* タブレット対応 */
+        @media (min-width: 768px) {
+            body {
+                padding: 40px;
+            }
+
+            .container {
+                max-width: 520px;
+            }
+
+            .knowledge-cast-logo {
+                font-size: 42px;
+                letter-spacing: 8px;
+                margin-bottom: 70px;
+            }
+
+            .knowledge-cast-logo .highlight {
+                padding: 3px 10px;
+                margin-right: 0;
+                width: 70px;
+                height: 24px;
+            }
+
+            .form-container {
+                padding: 50px;
+            }
+
+            .input-field,
+            .btn-primary,
+            .btn-google {
+                padding: 18px 24px;
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="knowledge-cast-logo">
+            KNOWLEDGE<br>
+            <span class="highlight"></span>CAST
+        </div>
+
+        <div class="form-container">
+            <form id="loginForm">
+                <div class="form-group">
+                    <input
+                        type="email"
+                        class="input-field"
+                        placeholder="メールアドレスを入力してください"
+                        id="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <input
+                        type="password"
+                        class="input-field"
+                        placeholder="パスワードを入力してください"
+                        id="password"
+                    >
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    ログイン
+                </button>
+            </form>
+
+            <div class="forgot-password">
+                <a href="./password/reset">パスワードを忘れた方はこちら</a>
+            </div>
+
+            <div class="divider">
+                <span>または</span>
+            </div>
+
+            <button class="btn-google" onclick="loginWithGoogle()">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Google アカウントでログイン
+            </button>
+
+            <div class="register-link">
+                アカウントをお持ちでない方は <a href="./signup/input">新規登録</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // フォーム送信処理
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // if (email && password) {
+            //     // ログイン成功時の処理（実際の実装では認証処理を行う）
+            //     alert('ログインしました。マイページに移動します。');
+            //     window.location.href = './mypage'; // ログイン成功時はマイページへ
+            // }
+            window.location.href = './mypage'; // ログイン成功時はマイページへ
+        });
+
+        // Googleログイン処理
+        function loginWithGoogle() {
+            alert('Google アカウントでのログイン機能は実装中です。');
+        }
+    </script>
+</body>
+</html>
