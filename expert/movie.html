@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学習動画 | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+        }
+
+        /* サイドバースタイル */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background-color: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-item {
+            color: #666;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .sidebar-item.active {
+            background-color: #007acc;
+            color: white;
+        }
+
+        .sidebar-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: #666;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* カテゴリタブ */
+        .category-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .category-tab {
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            color: #666;
+        }
+
+        .category-tab.active {
+            background: #007acc;
+            color: white;
+        }
+
+        .category-tab:hover:not(.active) {
+            background: #f0f8ff;
+            color: #007acc;
+        }
+
+        /* 動画セクション */
+        .video-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        /* 動画カード */
+        .video-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .video-info {
+            padding: 16px;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-instructor {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .video-views {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .video-date {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .video-level {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .level-beginner {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .level-intermediate {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .level-advanced {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        /* 検索・フィルター */
+        .search-filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+            min-width: 120px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #007acc;
+        }
+
+        /* プレイリスト */
+        .playlist-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .playlist-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .playlist-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .playlist-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .playlist-info p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-250px);
+                transition: transform 0.3s ease;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .category-tabs {
+                padding: 8px;
+            }
+
+            .category-tab {
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+
+            .video-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+
+            .search-filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <div id="header-container"></div>
+
+    <!-- サイドバー -->
+    <div id="sidebar-container"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content" id="mainContent">
+        <!-- ページヘッダー -->
+        <div class="page-header">
+            <h1 class="page-title">🎬 学習動画</h1>
+            <p class="page-subtitle">専門分野別の学習動画で知識とスキルを向上させましょう</p>
+        </div>
+
+        <!-- 検索・フィルターバー -->
+        <div class="search-filter-bar">
+            <input type="text" class="search-input" placeholder="動画を検索..." id="searchInput">
+            <select class="filter-select" id="levelFilter">
+                <option value="">すべてのレベル</option>
+                <option value="beginner">初級</option>
+                <option value="intermediate">中級</option>
+                <option value="advanced">上級</option>
+            </select>
+            <select class="filter-select" id="sortFilter">
+                <option value="newest">新着順</option>
+                <option value="popular">人気順</option>
+                <option value="duration">再生時間順</option>
+            </select>
+        </div>
+
+        <!-- カテゴリタブ -->
+        <div class="category-tabs">
+            <button class="category-tab active" onclick="showCategory('all')">すべて</button>
+            <button class="category-tab" onclick="showCategory('business')">ビジネス</button>
+            <button class="category-tab" onclick="showCategory('technology')">テクノロジー</button>
+            <button class="category-tab" onclick="showCategory('marketing')">マーケティング</button>
+            <button class="category-tab" onclick="showCategory('finance')">金融</button>
+            <button class="category-tab" onclick="showCategory('leadership')">リーダーシップ</button>
+            <button class="category-tab" onclick="showCategory('design')">デザイン</button>
+        </div>
+
+        <!-- 注目のプレイリスト -->
+        <div class="playlist-section">
+            <div class="playlist-header">
+                <div class="playlist-icon">📚</div>
+                <div class="playlist-info">
+                    <h3>今週の注目プレイリスト: AI活用入門</h3>
+                    <p>12動画 • 合計3時間45分 • 視聴者数: 2,450人</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 新着動画 -->
+        <div class="video-section" id="newest">
+            <h2 class="section-title">🆕 新着動画</h2>
+            <div class="video-grid">
+                <div class="video-card" onclick="playVideo('video1')">
+                    <div class="video-thumbnail">
+                        🎯
+                        <div class="video-duration">15:30</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">効果的なプレゼンテーション術 - 聴衆を惹きつける方法</h3>
+                        <div class="video-instructor">田中 太郎 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 1,234 回視聴</div>
+                            <div class="video-date">📅 2日前</div>
+                            <span class="video-level level-intermediate">中級</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('video2')">
+                    <div class="video-thumbnail">
+                        🤖
+                        <div class="video-duration">22:15</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">ChatGPTを活用したビジネス自動化の実践</h3>
+                        <div class="video-instructor">佐藤 花子 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 2,856 回視聴</div>
+                            <div class="video-date">📅 3日前</div>
+                            <span class="video-level level-beginner">初級</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('video3')">
+                    <div class="video-thumbnail">
+                        📊
+                        <div class="video-duration">18:45</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">データ分析による意思決定の改善手法</h3>
+                        <div class="video-instructor">山田 次郎 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 1,567 回視聴</div>
+                            <div class="video-date">📅 1週間前</div>
+                            <span class="video-level level-advanced">上級</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('video4')">
+                    <div class="video-thumbnail">
+                        💰
+                        <div class="video-duration">25:20</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">スタートアップ資金調達の成功戦略</h3>
+                        <div class="video-instructor">鈴木 美咲 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 3,421 回視聴</div>
+                            <div class="video-date">📅 1週間前</div>
+                            <span class="video-level level-intermediate">中級</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 人気動画 -->
+        <div class="video-section" id="popular">
+            <h2 class="section-title">🔥 人気動画</h2>
+            <div class="video-grid">
+                <div class="video-card" onclick="playVideo('popular1')">
+                    <div class="video-thumbnail">
+                        🎨
+                        <div class="video-duration">32:10</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">UI/UXデザインの基礎から実践まで</h3>
+                        <div class="video-instructor">伊藤 雅子 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 15,678 回視聴</div>
+                            <div class="video-date">📅 2週間前</div>
+                            <span class="video-level level-beginner">初級</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('popular2')">
+                    <div class="video-thumbnail">
+                        📈
+                        <div class="video-duration">28:35</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">デジタルマーケティング戦略の立て方</h3>
+                        <div class="video-instructor">高橋 健太 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 12,345 回視聴</div>
+                            <div class="video-date">📅 3週間前</div>
+                            <span class="video-level level-intermediate">中級</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('popular3')">
+                    <div class="video-thumbnail">
+                        👥
+                        <div class="video-duration">35:50</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">チームマネジメントとリーダーシップの極意</h3>
+                        <div class="video-instructor">小林 理恵 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 18,923 回視聴</div>
+                            <div class="video-date">📅 1ヶ月前</div>
+                            <span class="video-level level-advanced">上級</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('popular4')">
+                    <div class="video-thumbnail">
+                        🔧
+                        <div class="video-duration">42:15</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">Python入門 - データサイエンスへの第一歩</h3>
+                        <div class="video-instructor">中村 拓也 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 25,678 回視聴</div>
+                            <div class="video-date">📅 1ヶ月前</div>
+                            <span class="video-level level-beginner">初級</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ビジネス動画 -->
+        <div class="video-section" id="business" style="display: none;">
+            <h2 class="section-title">💼 ビジネス</h2>
+            <div class="video-grid">
+                <div class="video-card" onclick="playVideo('business1')">
+                    <div class="video-thumbnail">
+                        📋
+                        <div class="video-duration">20:45</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">効率的な会議運営とファシリテーション</h3>
+                        <div class="video-instructor">渡辺 翔太 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 8,567 回視聴</div>
+                            <div class="video-date">📅 5日前</div>
+                            <span class="video-level level-intermediate">中級</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card" onclick="playVideo('business2')">
+                    <div class="video-thumbnail">
+                        📝
+                        <div class="video-duration">16:30</div>
+                    </div>
+                    <div class="video-info">
+                        <h3 class="video-title">ビジネス文書作成のプロフェッショナル技術</h3>
+                        <div class="video-instructor">松本 香織 講師</div>
+                        <div class="video-meta">
+                            <div class="video-views">👁 6,234 回視聴</div>
+                            <div class="video-date">📅 1週間前</div>
+                            <span class="video-level level-beginner">初級</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 部品のHTMLを読み込み
+        async function loadComponents() {
+            try {
+                // ヘッダーを読み込み
+                const headerResponse = await fetch('./components/header.html');
+                const headerHTML = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHTML;
+
+                // サイドバーを読み込み
+                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarHTML = await sidebarResponse.text();
+                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
+
+                // 動画ページがアクティブになるようにサイドバーを更新
+                updateSidebarActive();
+            } catch (error) {
+                console.error('コンポーネントの読み込みエラー:', error);
+                // フォールバック: 直接HTMLを挿入
+                loadFallbackComponents();
+            }
+        }
+
+        // フォールバック用のコンポーネント読み込み
+        function loadFallbackComponents() {
+            // ヘッダー
+            document.getElementById('header-container').innerHTML = `
+                <header class="header">
+                    <div class="header-left">
+                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+                        <div class="logo-text">KNOWLEDGE CAST</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <span class="user-name">田中 太郎さん</span>
+                        </div>
+                        <nav class="header-nav">
+                            <a href="#" class="nav-item" onclick="showDashboard()">
+                                <span class="nav-icon">📊</span>
+                                <span class="nav-text">ダッシュボード</span>
+                            </a>
+                            <a href="#" class="nav-item" onclick="showProjectSearch()">
+                                <span class="nav-icon">🔍</span>
+                                <span class="nav-text">案件検索</span>
+                            </a>
+                            <a href="./movie.html" class="nav-item active">
+                                <span class="nav-icon">🎬</span>
+                                <span class="nav-text">学習動画</span>
+                            </a>
+                            <a href="./mypage.html" class="nav-item">
+                                <span class="nav-icon">👤</span>
+                                <span class="nav-text">マイページ</span>
+                            </a>
+                            <a href="./login.html" class="nav-item logout-btn">
+                                <span class="nav-icon">🚪</span>
+                                <span class="nav-text">ログアウト</span>
+                            </a>
+                        </nav>
+                    </div>
+                </header>
+            `;
+
+            // サイドバー
+            document.getElementById('sidebar-container').innerHTML = `
+                <aside class="sidebar" id="sidebar">
+                    <nav class="sidebar-nav">
+                        <a href="./mypage.html" class="sidebar-item">
+                            <span class="sidebar-icon">🏠</span>
+                            <span class="sidebar-text">マイページ</span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showDashboard()">
+                            <span class="sidebar-icon">📊</span>
+                            <span class="sidebar-text">ダッシュボード</span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showProjectSearch()">
+                            <span class="sidebar-icon">🔍</span>
+                            <span class="sidebar-text">案件検索</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">📝</span>
+                            <span class="sidebar-text">案件管理</span>
+                        </a>
+                        <a href="./movie.html" class="sidebar-item active">
+                            <span class="sidebar-icon">🎬</span>
+                            <span class="sidebar-text">学習動画</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">📈</span>
+                            <span class="sidebar-text">レポート</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">⚙️</span>
+                            <span class="sidebar-text">設定</span>
+                        </a>
+                        <a href="./contact.html" class="sidebar-item">
+                            <span class="sidebar-icon">📞</span>
+                            <span class="sidebar-text">お問合せ</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">❓</span>
+                            <span class="sidebar-text">ヘルプ</span>
+                        </a>
+                        <button class="sidebar-toggle" onclick="toggleSidebar()">
+                            <span class="sidebar-icon">☰</span>
+                            <span class="sidebar-text">折りたたむ</span>
+                        </button>
+                    </nav>
+                </aside>
+            `;
+        }
+
+        // サイドバーの開閉
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
+        }
+
+        // サイドバーのアクティブ状態を更新
+        function updateSidebarActive() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.href && item.href.includes('movie.html')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // モバイルサイドバートグル
+        function toggleMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                const isHidden = sidebar.style.transform === 'translateX(-100%)';
+                sidebar.style.transform = isHidden ? 'translateX(0px)' : 'translateX(-100%)';
+            }
+        }
+
+        // カテゴリ表示切り替え
+        function showCategory(category) {
+            // タブのアクティブ状態を更新
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // セクションの表示/非表示を切り替え
+            const sections = document.querySelectorAll('.video-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            if (category === 'all') {
+                sections.forEach(section => {
+                    section.style.display = 'block';
+                });
+            } else {
+                const targetSection = document.getElementById(category);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                } else {
+                    // カテゴリに応じたセクションがない場合は新着と人気を表示
+                    document.getElementById('newest').style.display = 'block';
+                    document.getElementById('popular').style.display = 'block';
+                }
+            }
+        }
+
+        // 動画再生
+        function playVideo(videoId) {
+            // movieDetail.htmlに遷移
+            window.location.href = `./movieDetail.html?video=${videoId}`;
+        }
+
+        // 検索機能
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const levelFilter = document.getElementById('levelFilter');
+            const sortFilter = document.getElementById('sortFilter');
+
+            searchInput.addEventListener('input', performSearch);
+            levelFilter.addEventListener('change', performSearch);
+            sortFilter.addEventListener('change', performSearch);
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const levelFilter = document.getElementById('levelFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            console.log('検索実行:', { searchTerm, levelFilter, sortFilter });
+            
+            // 実際の実装では、ここで動画のフィルタリングとソートを行います
+            // 現在はコンソールログのみ
+        }
+
+        // ダミー関数
+        function showDashboard() {
+            alert('ダッシュボード画面に移動します。');
+        }
+
+        function showProjectSearch() {
+            alert('案件検索画面に移動します。');
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents();
+            setupSearch();
+        });
+
+        // ウィンドウリサイズ対応
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth > 1024 && sidebar) {
+                sidebar.style.transform = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動画詳細 | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+        }
+
+        /* サイドバースタイル */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background-color: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-item {
+            color: #666;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .sidebar-item.active {
+            background-color: #007acc;
+            color: white;
+        }
+
+        .sidebar-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            min-height: calc(100vh - 60px);
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 0;
+        }
+
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* 動画セクション */
+        .video-section {
+            flex: 2;
+            min-width: 0;
+        }
+
+        .video-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 64px;
+            position: relative;
+        }
+
+        .play-button {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-button:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        .video-info {
+            padding: 25px;
+        }
+
+        .video-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .video-description {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .description-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .description-text {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        /* 学習目標 */
+        .learning-objectives {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+
+        .objectives-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .objectives-list {
+            list-style: none;
+        }
+
+        .objectives-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .objectives-list li:before {
+            content: "✓";
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        /* フィードバックセクション */
+        .feedback-section {
+            flex: 1;
+            min-width: 400px;
+        }
+
+        .feedback-form {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #007acc;
+        }
+
+        .radio-option label {
+            font-size: 14px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #007acc;
+        }
+
+        .checkbox-option label {
+            font-size: 14px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px 20px;
+            background: #007acc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background: #005999;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-250px);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content-wrapper {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .feedback-section {
+                min-width: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 15px;
+                gap: 20px;
+            }
+
+            .video-player {
+                height: 250px;
+                font-size: 48px;
+            }
+
+            .video-title {
+                font-size: 20px;
+            }
+
+            .video-meta {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-info {
+                padding: 20px;
+            }
+
+            .feedback-form {
+                padding: 20px;
+            }
+
+            .video-player {
+                height: 200px;
+                font-size: 32px;
+            }
+
+            .play-button {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <div id="header-container"></div>
+
+    <!-- サイドバー -->
+    <div id="sidebar-container"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content" id="mainContent">
+        <div class="content-wrapper">
+            <!-- 動画セクション -->
+            <div class="video-section">
+                <!-- 動画プレイヤー -->
+                <div class="video-container">
+                    <div class="video-player" id="videoPlayer">
+                        🎬
+                        <button class="play-button" onclick="playVideo()">▶</button>
+                    </div>
+                    <div class="video-info">
+                        <h1 class="video-title">効果的なプレゼンテーション術 - 聴衆を惹きつける方法</h1>
+                        <div class="video-meta">
+                            <div class="meta-item">
+                                <span>👤</span>
+                                <span>田中 太郎 講師</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>⏱️</span>
+                                <span>15分30秒</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>👁️</span>
+                                <span>1,234回視聴</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>📅</span>
+                                <span>2024年8月27日</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="level-badge level-intermediate">中級</span>
+                            </div>
+                        </div>
+                        <div class="video-description">
+                            <div class="description-title">📖 動画の概要</div>
+                            <div class="description-text">
+                                この動画では、効果的なプレゼンテーションを行うための具体的な技術とコツを学びます。聴衆の注意を引きつけ、メッセージを明確に伝える方法から、緊張をコントロールする方法まで、実践的な内容を豊富な事例とともに解説します。ビジネスシーンでのプレゼンテーション力向上を目指す方に最適な内容です。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 学習目標 -->
+                <div class="learning-objectives">
+                    <h3 class="objectives-title">🎯 学習目標</h3>
+                    <ul class="objectives-list">
+                        <li>効果的なプレゼンテーション構成の作り方を理解する</li>
+                        <li>聴衆の関心を引きつけるオープニング技術を習得する</li>
+                        <li>視覚的な資料の効果的な活用方法を学ぶ</li>
+                        <li>緊張をコントロールし、自信を持って発表する方法を身につける</li>
+                        <li>質疑応答セッションでの適切な対応方法を理解する</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- フィードバックセクション -->
+            <div class="feedback-section">
+                <form class="feedback-form" onsubmit="submitFeedback(event)">
+                    <h2 class="form-title">📝 学習フィードバック</h2>
+
+                    <!-- 質問1: 理解度 -->
+                    <div class="form-group">
+                        <label class="form-label">1. この動画の内容をどの程度理解できましたか？</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="understanding1" name="understanding" value="完全に理解">
+                                <label for="understanding1">完全に理解できた</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="understanding2" name="understanding" value="ほぼ理解">
+                                <label for="understanding2">ほぼ理解できた</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="understanding3" name="understanding" value="部分的理解">
+                                <label for="understanding3">部分的に理解できた</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="understanding4" name="understanding" value="理解困難">
+                                <label for="understanding4">理解が困難だった</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 質問2: 満足度 -->
+                    <div class="form-group">
+                        <label class="form-label">2. この動画の満足度を教えてください</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="satisfaction1" name="satisfaction" value="非常に満足">
+                                <label for="satisfaction1">⭐⭐⭐⭐⭐ 非常に満足</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="satisfaction2" name="satisfaction" value="満足">
+                                <label for="satisfaction2">⭐⭐⭐⭐ 満足</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="satisfaction3" name="satisfaction" value="普通">
+                                <label for="satisfaction3">⭐⭐⭐ 普通</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="satisfaction4" name="satisfaction" value="不満">
+                                <label for="satisfaction4">⭐⭐ 不満</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="satisfaction5" name="satisfaction" value="非常に不満">
+                                <label for="satisfaction5">⭐ 非常に不満</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 質問3: 学習者の経験レベル -->
+                    <div class="form-group">
+                        <label class="form-label" for="experience">3. プレゼンテーションの経験年数を教えてください</label>
+                        <input type="text" id="experience" name="experience" class="form-input" placeholder="例: 3年">
+                    </div>
+
+                    <!-- 質問4: 最も有用だった内容 -->
+                    <div class="form-group">
+                        <label class="form-label">4. 最も有用だった内容はどれですか？（複数選択可）</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="useful1" name="useful" value="プレゼンテーション構成">
+                                <label for="useful1">プレゼンテーション構成の作り方</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="useful2" name="useful" value="オープニング技術">
+                                <label for="useful2">オープニング技術</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="useful3" name="useful" value="視覚資料活用">
+                                <label for="useful3">視覚資料の活用方法</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="useful4" name="useful" value="緊張コントロール">
+                                <label for="useful4">緊張のコントロール方法</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="useful5" name="useful" value="質疑応答">
+                                <label for="useful5">質疑応答の対応方法</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 質問5: 実践度 -->
+                    <div class="form-group">
+                        <label class="form-label">5. 学んだ内容を実践で活用する予定はありますか？</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="practice1" name="practice" value="すぐに活用">
+                                <label for="practice1">すぐに活用する予定</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="practice2" name="practice" value="近いうちに活用">
+                                <label for="practice2">近いうちに活用する予定</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="practice3" name="practice" value="機会があれば活用">
+                                <label for="practice3">機会があれば活用したい</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="practice4" name="practice" value="活用予定なし">
+                                <label for="practice4">活用予定はない</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 質問6: 改善点 -->
+                    <div class="form-group">
+                        <label class="form-label" for="improvement">6. この動画の改善すべき点があれば教えてください</label>
+                        <textarea id="improvement" name="improvement" class="form-textarea" placeholder="改善点や要望をご記入ください..."></textarea>
+                    </div>
+
+                    <!-- 質問7: 推奨度 -->
+                    <div class="form-group">
+                        <label class="form-label">7. この動画を同僚や友人に推奨しますか？</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="recommend1" name="recommend" value="強く推奨">
+                                <label for="recommend1">強く推奨する</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="recommend2" name="recommend" value="推奨">
+                                <label for="recommend2">推奨する</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="recommend3" name="recommend" value="どちらでもない">
+                                <label for="recommend3">どちらでもない</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="recommend4" name="recommend" value="推奨しない">
+                                <label for="recommend4">推奨しない</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 質問8: 追加コメント -->
+                    <div class="form-group">
+                        <label class="form-label" for="comments">8. その他ご意見・ご感想があればお聞かせください</label>
+                        <textarea id="comments" name="comments" class="form-textarea" placeholder="自由にご記入ください..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-button">フィードバックを送信</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 部品のHTMLを読み込み
+        async function loadComponents() {
+            try {
+                // ヘッダーを読み込み
+                const headerResponse = await fetch('./components/header.html');
+                const headerHTML = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHTML;
+
+                // サイドバーを読み込み
+                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarHTML = await sidebarResponse.text();
+                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
+
+                // 動画詳細ページがアクティブになるようにサイドバーを更新
+                updateSidebarActive();
+            } catch (error) {
+                console.error('コンポーネントの読み込みエラー:', error);
+                // フォールバック: 直接HTMLを挿入
+                loadFallbackComponents();
+            }
+        }
+
+        // フォールバック用のコンポーネント読み込み
+        function loadFallbackComponents() {
+            // ヘッダー
+            document.getElementById('header-container').innerHTML = `
+                <header class="header">
+                    <div class="header-left">
+                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+                        <div class="logo-text">KNOWLEDGE CAST</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <span class="user-name">田中 太郎さん</span>
+                        </div>
+                        <nav class="header-nav">
+                            <a href="#" class="nav-item" onclick="showDashboard()">
+                                <span class="nav-icon">📊</span>
+                                <span class="nav-text">ダッシュボード</span>
+                            </a>
+                            <a href="#" class="nav-item" onclick="showProjectSearch()">
+                                <span class="nav-icon">🔍</span>
+                                <span class="nav-text">案件検索</span>
+                            </a>
+                            <a href="./movie.html" class="nav-item active">
+                                <span class="nav-icon">🎬</span>
+                                <span class="nav-text">学習動画</span>
+                            </a>
+                            <a href="./mypage.html" class="nav-item">
+                                <span class="nav-icon">👤</span>
+                                <span class="nav-text">マイページ</span>
+                            </a>
+                            <a href="./login.html" class="nav-item logout-btn">
+                                <span class="nav-icon">🚪</span>
+                                <span class="nav-text">ログアウト</span>
+                            </a>
+                        </nav>
+                    </div>
+                </header>
+            `;
+
+            // サイドバー
+            document.getElementById('sidebar-container').innerHTML = `
+                <aside class="sidebar" id="sidebar">
+                    <nav class="sidebar-nav">
+                        <a href="./mypage.html" class="sidebar-item">
+                            <span class="sidebar-icon">🏠</span>
+                            <span class="sidebar-text">マイページ</span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showDashboard()">
+                            <span class="sidebar-icon">📊</span>
+                            <span class="sidebar-text">ダッシュボード</span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showProjectSearch()">
+                            <span class="sidebar-icon">🔍</span>
+                            <span class="sidebar-text">案件検索</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">📝</span>
+                            <span class="sidebar-text">案件管理</span>
+                        </a>
+                        <a href="./movie.html" class="sidebar-item active">
+                            <span class="sidebar-icon">🎬</span>
+                            <span class="sidebar-text">学習動画</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">📈</span>
+                            <span class="sidebar-text">レポート</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">⚙️</span>
+                            <span class="sidebar-text">設定</span>
+                        </a>
+                        <a href="./contact.html" class="sidebar-item">
+                            <span class="sidebar-icon">📞</span>
+                            <span class="sidebar-text">お問合せ</span>
+                        </a>
+                        <a href="#" class="sidebar-item">
+                            <span class="sidebar-icon">❓</span>
+                            <span class="sidebar-text">ヘルプ</span>
+                        </a>
+                        <button class="sidebar-toggle" onclick="toggleSidebar()">
+                            <span class="sidebar-icon">☰</span>
+                            <span class="sidebar-text">折りたたむ</span>
+                        </button>
+                    </nav>
+                </aside>
+            `;
+        }
+
+        // サイドバーの開閉
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
+        }
+
+        // サイドバーのアクティブ状態を更新
+        function updateSidebarActive() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.href && (item.href.includes('movie.html') || item.href.includes('movieDetail.html'))) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // モバイルサイドバートグル
+        function toggleMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                const isHidden = sidebar.style.transform === 'translateX(-100%)';
+                sidebar.style.transform = isHidden ? 'translateX(0px)' : 'translateX(-100%)';
+            }
+        }
+
+        // 動画再生
+        function playVideo() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const playButton = videoPlayer.querySelector('.play-button');
+            
+            // 実際の実装では、ここで動画プレイヤーを初期化します
+            playButton.innerHTML = '⏸️';
+            playButton.onclick = pauseVideo;
+            
+            // シミュレーション: 背景色を変更して再生状態を示す
+            videoPlayer.style.background = 'linear-gradient(135deg, #43a047 0%, #388e3c 100%)';
+            
+            alert('動画を再生します。\n\n実際の実装では、ここで動画プレイヤー（YouTube、Vimeo等）が起動します。');
+        }
+
+        // 動画一時停止
+        function pauseVideo() {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const playButton = videoPlayer.querySelector('.play-button');
+            
+            playButton.innerHTML = '▶';
+            playButton.onclick = playVideo;
+            
+            videoPlayer.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        }
+
+        // フィードバック送信
+        function submitFeedback(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const feedback = {};
+            
+            // フォームデータを収集
+            for (let [key, value] of formData.entries()) {
+                if (feedback[key]) {
+                    // 複数選択の場合は配列にする
+                    if (Array.isArray(feedback[key])) {
+                        feedback[key].push(value);
+                    } else {
+                        feedback[key] = [feedback[key], value];
+                    }
+                } else {
+                    feedback[key] = value;
+                }
+            }
+            
+            console.log('フィードバックデータ:', feedback);
+            
+            // 送信成功のメッセージを表示
+            alert('フィードバックを送信しました。\nご協力ありがとうございました！\n\n実際の実装では、サーバーにデータが送信されます。');
+            
+            // フォームをリセット
+            event.target.reset();
+        }
+
+        // ダミー関数
+        function showDashboard() {
+            alert('ダッシュボード画面に移動します。');
+        }
+
+        function showProjectSearch() {
+            alert('案件検索画面に移動します。');
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents();
+        });
+
+        // ウィンドウリサイズ対応
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth > 1024 && sidebar) {
+                sidebar.style.transform = '';
+            }
+        });
+    </script>
+</body>
+</html>

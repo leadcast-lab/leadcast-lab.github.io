@@ -13,17 +13,154 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-            background-color: #f8f8f8;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ヘッダースタイル */
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .company-name {
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-icon {
+            font-size: 16px;
+        }
+
+        /* サイドバースタイル */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 60px);
+            background-color: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 20px 0;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .sidebar-item {
+            color: #666;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f0f0f0;
             color: #333;
-            line-height: 1.6;
+        }
+
+        .sidebar-item.active {
+            background-color: #007acc;
+            color: white;
+        }
+
+        .sidebar-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: #666;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: #f0f0f0;
+            color: #333;
         }
 
         /* メインコンテンツ */
         .main-content {
             margin-left: 250px;
-            margin-top: 70px;
+            margin-top: 60px;
             padding: 40px;
-            min-height: calc(100vh - 70px);
+            min-height: calc(100vh - 60px);
+            transition: margin-left 0.3s ease, width 0.3s ease;
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 0;
+            width: 100%;
         }
 
         .container {
@@ -246,6 +383,19 @@
             }
         }
 
+        /* レスポンシブ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-250px);
+                transition: transform 0.3s ease;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 padding: 20px;
@@ -285,8 +435,14 @@
     </style>
 </head>
 <body>
+    <!-- ヘッダー -->
+    <div id="header-container"></div>
+
+    <!-- サイドバー -->
+    <div id="sidebar-container"></div>
+
     <!-- メインコンテンツ -->
-    <main class="main-content">
+    <main class="main-content" id="mainContent">
         <div class="container">
             <h1 class="page-title">📞 お問合せ</h1>
 
@@ -430,21 +586,131 @@
     </main>
 
     <script>
-        // コンポーネントの読み込み
-        function loadComponents() {
-            // ヘッダーコンポーネントの読み込み
-            fetch('./components/header.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.body.insertAdjacentHTML('afterbegin', data);
-                });
+        // 部品のHTMLを読み込み
+        async function loadComponents() {
+            try {
+                // ヘッダーを読み込み
+                const headerResponse = await fetch('./components/header.html');
+                const headerHTML = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHTML;
 
-            // サイドバーコンポーネントの読み込み
-            fetch('./components/sidebar.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.body.insertAdjacentHTML('afterbegin', data);
-                });
+                // サイドバーを読み込み
+                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarHTML = await sidebarResponse.text();
+                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
+
+                // お問合せページがアクティブになるようにサイドバーを更新
+                updateSidebarActive();
+            } catch (error) {
+                console.error('コンポーネントの読み込みエラー:', error);
+                // フォールバック: 直接HTMLを挿入
+                loadFallbackComponents();
+            }
+        }
+
+        // フォールバック用のコンポーネント読み込み
+        function loadFallbackComponents() {
+            // ヘッダー
+            document.getElementById('header-container').innerHTML = `
+                <header class="header">
+                    <div class="header-left">
+                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
+                        <div class="logo-text">LEADCAST</div>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-info">
+                            <span class="company-name">株式会社トヨタ自動車 様</span>
+                        </div>
+                        <nav class="header-nav">
+                            <a href="#" class="nav-item" onclick="showDashboard()">
+                                <span class="nav-icon">📊</span>
+                                <span class="nav-text">ダッシュボード</span>
+                            </a>
+                            <a href="#" class="nav-item" onclick="showProjectSearch()">
+                                <span class="nav-icon">🔍</span>
+                                <span class="nav-text">プロジェクト検索</span>
+                            </a>
+                            <a href="#" class="nav-item" onclick="showSettings()">
+                                <span class="nav-icon">⚙️</span>
+                                <span class="nav-text">設定</span>
+                            </a>
+                            <a href="./invoice.html" class="nav-item">
+                                <span class="nav-icon">💰</span>
+                                <span class="nav-text">請求</span>
+                            </a>
+                            <a href="./mypage.html" class="nav-item">
+                                <span class="nav-icon">👤</span>
+                                <span class="nav-text">マイページ</span>
+                            </a>
+                        </nav>
+                    </div>
+                </header>
+            `;
+
+            // サイドバー
+            document.getElementById('sidebar-container').innerHTML = `
+                <aside class="sidebar" id="sidebar">
+                    <nav class="sidebar-nav">
+                        <a href="#" class="sidebar-item" onclick="showDashboard()">
+                            <span class="sidebar-icon">📊</span>
+                            <span class="sidebar-text">ダッシュボード</span>
+                        </a>
+                        <a href="#" class="sidebar-item" onclick="showProjectSearch()">
+                            <span class="sidebar-icon">🔍</span>
+                            <span class="sidebar-text">プロジェクト検索</span>
+                        </a>
+                        <a href="./mypage.html" class="sidebar-item">
+                            <span class="sidebar-icon">👤</span>
+                            <span class="sidebar-text">マイページ</span>
+                        </a>
+                        <a href="./invoice.html" class="sidebar-item">
+                            <span class="sidebar-icon">💰</span>
+                            <span class="sidebar-text">請求</span>
+                        </a>
+                        <a href="./contact.html" class="sidebar-item active">
+                            <span class="sidebar-icon">📞</span>
+                            <span class="sidebar-text">お問合せ</span>
+                        </a>
+                        <a href="./login.html" class="sidebar-item logout-btn">
+                            <span class="sidebar-icon">🚪</span>
+                            <span class="sidebar-text">ログアウト</span>
+                        </a>
+                        <button class="sidebar-toggle" onclick="toggleSidebar()">
+                            <span class="sidebar-icon">☰</span>
+                            <span class="sidebar-text">折りたたむ</span>
+                        </button>
+                    </nav>
+                </aside>
+            `;
+        }
+
+        // サイドバーの開閉
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('sidebar-collapsed');
+        }
+
+        // サイドバーのアクティブ状態を更新
+        function updateSidebarActive() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.href && item.href.includes('contact.html')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // モバイルサイドバートグル (ヘッダーボタン用)
+        function toggleMobileSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                const isHidden = sidebar.style.transform === 'translateX(-100%)';
+                sidebar.style.transform = isHidden ? 'translateX(0px)' : 'translateX(-100%)';
+            }
         }
 
         // フォーム送信処理
@@ -495,8 +761,18 @@
             });
         });
 
-        // ページ読み込み時にコンポーネントを読み込む
-        document.addEventListener('DOMContentLoaded', loadComponents);
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents();
+        });
+
+        // ウィンドウリサイズ対応
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth > 1024 && sidebar) {
+                sidebar.style.transform = '';
+            }
+        });
     </script>
 </body>
 </html>
