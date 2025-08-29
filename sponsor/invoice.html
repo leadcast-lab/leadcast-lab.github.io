@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>請求管理 | LEADCAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        /* ヘッダー */
+        .header {
+            background: #2c3e50;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        /* レイアウト */
+        .layout {
+            display: flex;
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* サイドバー */
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid #e0e6ed;
+            position: fixed;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
+
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+
+        /* 統計カード */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #3498db;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-change {
+            font-size: 14px;
+            color: #27ae60;
+        }
+
+        /* 請求一覧 */
+        .invoice-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .section-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e0e6ed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        /* テーブル */
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice-table th,
+        .invoice-table td {
+            text-align: left;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .invoice-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .invoice-table td {
+            font-size: 14px;
+            color: #34495e;
+        }
+
+        .invoice-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* ステータスバッジ */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-overdue {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* アクションボタン */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        /* ページネーション */
+        .pagination {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e0e6ed;
+        }
+
+        .pagination-info {
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #e0e6ed;
+            background: white;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .page-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        /* レスポンシブ */
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 15px;
+            }
+
+            .page-header {
+                padding: 20px;
+            }
+
+            .invoice-table {
+                font-size: 12px;
+            }
+
+            .invoice-table th,
+            .invoice-table td {
+                padding: 10px 8px;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー部分はJavaScriptで動的に読み込まれます -->
+    <div id="header-container"></div>
+
+    <div class="layout">
+        <!-- サイドバー部分はJavaScriptで動的に読み込まれます -->
+        <div id="sidebar-container"></div>
+
+        <main class="main-content">
+            <!-- ページヘッダー -->
+            <div class="page-header">
+                <h1 class="page-title">請求管理</h1>
+                <p class="page-subtitle">過去の請求履歴と支払い状況を管理できます</p>
+            </div>
+
+            <!-- 統計カード -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">今月の請求金額</div>
+                    <div class="stat-value">¥2,450,000</div>
+                    <div class="stat-change">+12.5% 前月比</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">未払い請求</div>
+                    <div class="stat-value">¥850,000</div>
+                    <div class="stat-change">3件</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">年間総支払額</div>
+                    <div class="stat-value">¥18,600,000</div>
+                    <div class="stat-change">+8.3% 前年比</div>
+                </div>
+            </div>
+
+            <!-- 請求一覧 -->
+            <div class="invoice-section">
+                <div class="section-header">
+                    <h2 class="section-title">請求履歴</h2>
+                    <div class="filter-controls">
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">すべてのステータス</option>
+                            <option value="paid">支払済み</option>
+                            <option value="pending">支払待ち</option>
+                            <option value="overdue">延滞</option>
+                        </select>
+                        <select class="filter-select" id="yearFilter">
+                            <option value="">すべての年</option>
+                            <option value="2025">2025年</option>
+                            <option value="2024">2024年</option>
+                            <option value="2023">2023年</option>
+                        </select>
+                    </div>
+                </div>
+
+                <table class="invoice-table">
+                    <thead>
+                        <tr>
+                            <th>請求番号</th>
+                            <th>請求日</th>
+                            <th>支払期限</th>
+                            <th>金額</th>
+                            <th>ステータス</th>
+                            <th>プロジェクト</th>
+                            <th>アクション</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invoiceTableBody">
+                        <tr>
+                            <td>INV-2025-001</td>
+                            <td>2025/08/01</td>
+                            <td>2025/08/31</td>
+                            <td>¥850,000</td>
+                            <td><span class="status-badge status-paid">支払済み</span></td>
+                            <td>新商品マーケティング戦略</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2025-001')">📄 詳細</a>
+                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2025-001')">📥 DL</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-2025-002</td>
+                            <td>2025/07/15</td>
+                            <td>2025/08/15</td>
+                            <td>¥1,200,000</td>
+                            <td><span class="status-badge status-pending">支払待ち</span></td>
+                            <td>AI技術導入コンサルティング</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2025-002')">📄 詳細</a>
+                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2025-002')">📥 DL</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-2025-003</td>
+                            <td>2025/06/30</td>
+                            <td>2025/07/30</td>
+                            <td>¥750,000</td>
+                            <td><span class="status-badge status-overdue">延滞</span></td>
+                            <td>デジタル変革戦略策定</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2025-003')">📄 詳細</a>
+                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2025-003')">📥 DL</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-2024-045</td>
+                            <td>2024/12/15</td>
+                            <td>2025/01/15</td>
+                            <td>¥2,100,000</td>
+                            <td><span class="status-badge status-paid">支払済み</span></td>
+                            <td>年末営業戦略レビュー</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2024-045')">📄 詳細</a>
+                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2024-045')">📥 DL</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>INV-2024-044</td>
+                            <td>2024/11/20</td>
+                            <td>2024/12/20</td>
+                            <td>¥950,000</td>
+                            <td><span class="status-badge status-paid">支払済み</span></td>
+                            <td>競合分析レポート作成</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2024-044')">📄 詳細</a>
+                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2024-044')">📥 DL</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="pagination">
+                    <div class="pagination-info">
+                        全 23件中 1-5件を表示
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="page-btn">‹ 前へ</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">4</button>
+                        <button class="page-btn">5</button>
+                        <button class="page-btn">次へ ›</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // ヘッダーとサイドバーを動的に読み込み
+        async function loadComponents() {
+            try {
+                const headerResponse = await fetch('./components/header.html');
+                const headerContent = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerContent;
+
+                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarContent = await sidebarResponse.text();
+                document.getElementById('sidebar-container').innerHTML = sidebarContent;
+
+                // 請求ページがアクティブになるようにサイドバーを更新
+                updateSidebarActive();
+            } catch (error) {
+                console.error('コンポーネントの読み込みに失敗しました:', error);
+            }
+        }
+
+        // サイドバーのアクティブ状態を更新
+        function updateSidebarActive() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.href && item.href.includes('invoice.html')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // 請求書詳細表示
+        function viewInvoice(invoiceId) {
+            alert(`請求書 ${invoiceId} の詳細を表示します。\n\n実際の実装では詳細モーダルまたは詳細ページが開きます。`);
+        }
+
+        // 請求書ダウンロード
+        function downloadInvoice(invoiceId) {
+            alert(`請求書 ${invoiceId} をダウンロードします。\n\n実際の実装ではPDFファイルがダウンロードされます。`);
+        }
+
+        // フィルター機能
+        function setupFilters() {
+            const statusFilter = document.getElementById('statusFilter');
+            const yearFilter = document.getElementById('yearFilter');
+
+            statusFilter.addEventListener('change', applyFilters);
+            yearFilter.addEventListener('change', applyFilters);
+        }
+
+        function applyFilters() {
+            const statusValue = document.getElementById('statusFilter').value;
+            const yearValue = document.getElementById('yearFilter').value;
+            
+            // 実際の実装では、ここでテーブルの行をフィルタリングする処理を行います
+            console.log('フィルター適用:', { status: statusValue, year: yearValue });
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponents();
+            setupFilters();
+        });
+
+        // レスポンシブメニュートグル
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                const isHidden = sidebar.style.transform === 'translateX(0px)' || sidebar.style.transform === '';
+                sidebar.style.transform = isHidden ? 'translateX(-100%)' : 'translateX(0px)';
+            }
+        }
+
+        // ウィンドウリサイズ対応
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth > 1024 && sidebar) {
+                sidebar.style.transform = '';
+            }
+        });
+    </script>
+</body>
+</html>
