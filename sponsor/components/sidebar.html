@@ -1,27 +1,31 @@
-<!-- サイドバー部品 -->
+<!-- サイドバー -->
 <aside class="sidebar" id="sidebar">
     <nav class="sidebar-nav">
-        <a href="#" class="sidebar-item" onclick="showDashboard()">
-            <span class="sidebar-icon">📊</span>
-            <span class="sidebar-text">ダッシュボード</span>
+        <a href="./" class="sidebar-item" onclick="showHome()">
+            <span class="sidebar-icon">🏠</span>
+            <span class="sidebar-text">ホーム</span>
         </a>
-        <a href="#" class="sidebar-item" onclick="showProjectSearch()">
-            <span class="sidebar-icon">🔍</span>
-            <span class="sidebar-text">プロジェクト検索</span>
-        </a>
-        <a href="#" class="sidebar-item active">
+        <a href="./mypage" class="sidebar-item">
             <span class="sidebar-icon">👤</span>
             <span class="sidebar-text">マイページ</span>
         </a>
-        <a href="./invoice.html" class="sidebar-item">
+        <a href="./users" class="sidebar-item">
+            <span class="sidebar-icon">👥</span>
+            <span class="sidebar-text">ユーザ管理</span>
+        </a>
+        <a href="#" class="sidebar-item" onclick="showChat()">
+            <span class="sidebar-icon">💬</span>
+            <span class="sidebar-text">チャット</span>
+        </a>
+        <a href="./invoice" class="sidebar-item">
             <span class="sidebar-icon">💰</span>
             <span class="sidebar-text">請求</span>
         </a>
-        <a href="./contact.html" class="sidebar-item">
+        <a href="./contact" class="sidebar-item">
             <span class="sidebar-icon">📞</span>
             <span class="sidebar-text">お問合せ</span>
         </a>
-        <a href="./login.html" class="sidebar-item logout-btn">
+        <a href="./login" class="sidebar-item logout-item">
             <span class="sidebar-icon">🚪</span>
             <span class="sidebar-text">ログアウト</span>
         </a>
@@ -31,3 +35,160 @@
         </button>
     </nav>
 </aside>
+
+<style>
+/* サイドバースタイル */
+.sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 70px);
+    background: white;
+    border-right: 1px solid #e0e0e0;
+    padding: 20px 0;
+    z-index: 999;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    transform: translateX(0); /* 明示的に表示位置を指定 */
+}
+
+.sidebar.collapsed {
+    transform: translateX(-200px);
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #666;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar-item:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.sidebar-item.active {
+    background: #007acc;
+    color: white;
+}
+
+.sidebar-item.logout-item {
+    margin-top: 10px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+    color: #dc3545;
+}
+
+.sidebar-item.logout-item:hover {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.sidebar-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-text {
+    flex: 1;
+}
+
+.sidebar-toggle {
+    margin-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.sidebar-toggle:hover {
+    background: #f5f5f5;
+}
+
+/* メインコンテンツの調整 */
+.main-content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.sidebar-collapsed {
+    margin-left: 50px;
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+</style>
+
+<script>
+// サイドバー制御関数
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.querySelector('.main-content');
+    
+    if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('sidebar-collapsed');
+    }
+}
+
+function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('mobile-open');
+    }
+}
+
+// アクティブ状態の更新
+function updateSidebarActive() {
+    const currentPath = window.location.pathname;
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    
+    sidebarItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.href && currentPath.includes(item.href.split('/').pop())) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// プレースホルダー関数（実際の実装は各ページで行う）
+function showHome() {
+    console.log('ホームを表示');
+}
+
+function showChat() {
+    console.log('チャットを表示');
+}
+
+// ページ読み込み時にアクティブ状態を更新
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(updateSidebarActive, 100);
+});
+</script>

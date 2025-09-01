@@ -600,97 +600,12 @@
                 document.getElementById('sidebar-container').innerHTML = sidebarHTML;
 
                 // お問合せページがアクティブになるようにサイドバーを更新
-                updateSidebarActive();
+                setTimeout(() => {
+                    updateSidebarActive();
+                }, 100);
             } catch (error) {
                 console.error('コンポーネントの読み込みエラー:', error);
-                // フォールバック: 直接HTMLを挿入
-                loadFallbackComponents();
             }
-        }
-
-        // フォールバック用のコンポーネント読み込み
-        function loadFallbackComponents() {
-            // ヘッダー
-            document.getElementById('header-container').innerHTML = `
-                <header class="header">
-                    <div class="header-left">
-                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
-                        <div class="logo-text">LEADCAST</div>
-                    </div>
-                    <div class="header-right">
-                        <div class="user-info">
-                            <span class="company-name">株式会社トヨタ自動車 様</span>
-                        </div>
-                        <nav class="header-nav">
-                            <a href="#" class="nav-item" onclick="showDashboard()">
-                                <span class="nav-icon">📊</span>
-                                <span class="nav-text">ダッシュボード</span>
-                            </a>
-                            <a href="#" class="nav-item" onclick="showProjectSearch()">
-                                <span class="nav-icon">🔍</span>
-                                <span class="nav-text">プロジェクト検索</span>
-                            </a>
-                            <a href="#" class="nav-item" onclick="showSettings()">
-                                <span class="nav-icon">⚙️</span>
-                                <span class="nav-text">設定</span>
-                            </a>
-                            <a href="./invoice.html" class="nav-item">
-                                <span class="nav-icon">💰</span>
-                                <span class="nav-text">請求</span>
-                            </a>
-                            <a href="./mypage.html" class="nav-item">
-                                <span class="nav-icon">👤</span>
-                                <span class="nav-text">マイページ</span>
-                            </a>
-                        </nav>
-                    </div>
-                </header>
-            `;
-
-            // サイドバー
-            document.getElementById('sidebar-container').innerHTML = `
-                <aside class="sidebar" id="sidebar">
-                    <nav class="sidebar-nav">
-                        <a href="#" class="sidebar-item" onclick="showDashboard()">
-                            <span class="sidebar-icon">📊</span>
-                            <span class="sidebar-text">ダッシュボード</span>
-                        </a>
-                        <a href="#" class="sidebar-item" onclick="showProjectSearch()">
-                            <span class="sidebar-icon">🔍</span>
-                            <span class="sidebar-text">プロジェクト検索</span>
-                        </a>
-                        <a href="./mypage.html" class="sidebar-item">
-                            <span class="sidebar-icon">👤</span>
-                            <span class="sidebar-text">マイページ</span>
-                        </a>
-                        <a href="./invoice.html" class="sidebar-item">
-                            <span class="sidebar-icon">💰</span>
-                            <span class="sidebar-text">請求</span>
-                        </a>
-                        <a href="./contact.html" class="sidebar-item active">
-                            <span class="sidebar-icon">📞</span>
-                            <span class="sidebar-text">お問合せ</span>
-                        </a>
-                        <a href="./login.html" class="sidebar-item logout-btn">
-                            <span class="sidebar-icon">🚪</span>
-                            <span class="sidebar-text">ログアウト</span>
-                        </a>
-                        <button class="sidebar-toggle" onclick="toggleSidebar()">
-                            <span class="sidebar-icon">☰</span>
-                            <span class="sidebar-text">折りたたむ</span>
-                        </button>
-                    </nav>
-                </aside>
-            `;
-        }
-
-        // サイドバーの開閉
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('sidebar-collapsed');
         }
 
         // サイドバーのアクティブ状態を更新
@@ -702,15 +617,6 @@
                     item.classList.add('active');
                 }
             });
-        }
-
-        // モバイルサイドバートグル (ヘッダーボタン用)
-        function toggleMobileSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                const isHidden = sidebar.style.transform === 'translateX(-100%)';
-                sidebar.style.transform = isHidden ? 'translateX(0px)' : 'translateX(-100%)';
-            }
         }
 
         // フォーム送信処理
@@ -764,14 +670,6 @@
         // ページ読み込み時の初期化
         document.addEventListener('DOMContentLoaded', function() {
             loadComponents();
-        });
-
-        // ウィンドウリサイズ対応
-        window.addEventListener('resize', function() {
-            const sidebar = document.querySelector('.sidebar');
-            if (window.innerWidth > 1024 && sidebar) {
-                sidebar.style.transform = '';
-            }
         });
     </script>
 </body>

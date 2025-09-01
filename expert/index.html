@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ホーム | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ヘッダーとサイドバーはコンポーネントファイルで定義 */
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 40px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .index-text {
+            font-size: 24px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .index-text {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .index-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <div id="header-container"></div>
+
+    <!-- サイドバー -->
+    <div id="sidebar-container"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title">ホーム</h1>
+
+            <div class="content-section">
+                <div class="index-text">indexだよー</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // コンポーネントの読み込み
+        async function loadComponents() {
+            try {
+                // ヘッダーを読み込み
+                const headerResponse = await fetch('./components/header.html');
+                const headerHTML = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHTML;
+
+                // サイドバーを読み込み
+                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarHTML = await sidebarResponse.text();
+                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
+                
+                // ホームがアクティブになるようにサイドバーを更新
+                setTimeout(() => {
+                    updateSidebarActive();
+                }, 100);
+            } catch (error) {
+                console.error('コンポーネントの読み込みエラー:', error);
+            }
+        }
+
+        // サイドバーのアクティブ状態を更新
+        function updateSidebarActive() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                // index.htmlの場合はホームメニューをアクティブにする
+                if (item.href && (item.href.endsWith('/expert/') || item.href.includes('/expert/index.html'))) {
+                    item.classList.add('active');
+                } else if (item.onclick && item.onclick.toString().includes('showDashboard')) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // レスポンシブメニュー（必要に応じて追加）
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) {
+                sidebar.style.transform = sidebar.style.transform === 'translateX(0px)' ? 'translateX(-100%)' : 'translateX(0px)';
+            }
+        }
+
+        // ページ読み込み時にコンポーネントを読み込む
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+</body>
+</html>

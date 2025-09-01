@@ -338,7 +338,11 @@
     </style>
 </head>
 <body>
+    <!-- ヘッダー -->
+    <div id="header-container"></div>
 
+    <!-- サイドバー -->
+    <div id="sidebar-container"></div>
 
     <!-- メインコンテンツ -->
     <main class="main-content">
@@ -527,20 +531,37 @@
         }
 
         // コンポーネントの読み込み
-        function loadComponents() {
-            // ヘッダーコンポーネントの読み込み
-            fetch('./components/header.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.body.insertAdjacentHTML('afterbegin', data);
-                });
+        async function loadComponents() {
+            try {
+                // ヘッダーを読み込み
+                const headerResponse = await fetch('./components/header.html');
+                const headerHTML = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHTML;
 
-            // サイドバーコンポーネントの読み込み
-            fetch('./components/sidebar.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.body.insertAdjacentHTML('afterbegin', data);
-                });
+                // サイドバーを読み込み
+                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarHTML = await sidebarResponse.text();
+                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
+
+                // マイページがアクティブになるようにサイドバーを更新
+                setTimeout(() => {
+                    updateSidebarActive();
+                }, 100);
+            } catch (error) {
+                console.error('コンポーネントの読み込みエラー:', error);
+            }
+        }
+
+        // サイドバーのアクティブ状態を更新
+        function updateSidebarActive() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.classList.remove('active');
+                // mypage.htmlの場合はマイページメニューをアクティブにする
+                if (item.href && (item.href.includes('/expert/mypage.html') || item.href.endsWith('mypage.html'))) {
+                    item.classList.add('active');
+                }
+            });
         }
 
         // ページ読み込み時にコンポーネントを読み込む

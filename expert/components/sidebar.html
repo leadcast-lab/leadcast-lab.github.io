@@ -1,17 +1,30 @@
 <!-- サイドバー -->
-<aside class="sidebar">
-    <nav>
-        <ul class="sidebar-nav">
-            <li><a href="./mypage" class="active">🏠 マイページ</a></li>
-            <li><a href="#">📊 ダッシュボード</a></li>
-            <li><a href="./movie">🔍 案件検索</a></li>
-            <li><a href="#">📝 案件管理</a></li>
-            <li><a href="#">💬 メッセージ</a></li>
-            <li><a href="#">📈 レポート</a></li>
-            <li><a href="#">⚙️ 設定</a></li>
-            <li><a href="./contact">📞 お問合せ</a></li>
-            <li><a href="#">❓ ヘルプ</a></li>
-        </ul>
+<aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+        <a href="./" class="sidebar-item">
+            <span class="sidebar-icon">🏠</span>
+            <span class="sidebar-text">ホーム</span>
+        </a>
+        <a href="./project" class="sidebar-item">
+            <span class="sidebar-icon">🔍</span>
+            <span class="sidebar-text">プロジェクト検索</span>
+        </a>
+        <a href="./mypage" class="sidebar-item">
+            <span class="sidebar-icon">👤</span>
+            <span class="sidebar-text">マイページ</span>
+        </a>
+        <a href="#" class="sidebar-item">
+            <span class="sidebar-icon">💬</span>
+            <span class="sidebar-text">チャット</span>
+        </a>
+        <a href="./contact" class="sidebar-item">
+            <span class="sidebar-icon">📞</span>
+            <span class="sidebar-text">お問合せ</span>
+        </a>
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <span class="sidebar-icon">☰</span>
+            <span class="sidebar-text">折りたたむ</span>
+        </button>
     </nav>
 </aside>
 
@@ -28,17 +41,20 @@
     padding: 20px 0;
     z-index: 99;
     overflow-y: auto;
+    transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-200px);
 }
 
 .sidebar-nav {
-    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.sidebar-nav li {
-    margin-bottom: 2px;
-}
-
-.sidebar-nav a {
+.sidebar-item {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -47,26 +63,102 @@
     text-decoration: none;
     transition: all 0.3s ease;
     font-size: 14px;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
 }
 
-.sidebar-nav a:hover,
-.sidebar-nav a.active {
+.sidebar-item:hover {
     background: #f0f0f0;
     color: #333;
+}
+
+.sidebar-item.active {
+    background: #007acc;
+    color: white;
+}
+
+.sidebar-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-text {
+    flex: 1;
+}
+
+.sidebar-toggle {
+    margin-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.sidebar-toggle:hover {
+    background: #f5f5f5;
+}
+
+/* メインコンテンツの調整 */
+.main-content {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.sidebar-collapsed {
+    margin-left: 50px;
 }
 
 @media (max-width: 1024px) {
     .sidebar {
         transform: translateX(-100%);
-        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
     }
 }
 </style>
 
 <script>
-// レスポンシブメニュー（必要に応じて追加）
+// サイドバー制御関数
 function toggleSidebar() {
-    const sidebar = document.querySelector('.sidebar');
-    sidebar.style.transform = sidebar.style.transform === 'translateX(0px)' ? 'translateX(-100%)' : 'translateX(0px)';
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.querySelector('.main-content');
+    
+    if (sidebar && mainContent) {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('sidebar-collapsed');
+    }
 }
+
+function toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('mobile-open');
+    }
+}
+
+// アクティブ状態の更新
+function updateSidebarActive() {
+    const currentPath = window.location.pathname;
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    
+    sidebarItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.href && currentPath.includes(item.href.split('/').pop())) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// ページ読み込み時にアクティブ状態を更新
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(updateSidebarActive, 100);
+});
 </script>

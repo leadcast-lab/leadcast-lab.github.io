@@ -17,156 +17,31 @@
             min-height: 100vh;
         }
 
-        /* ヘッダースタイル */
-        .header {
-            background-color: #000;
-            color: white;
-            padding: 0 20px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+        /* ヘッダー・サイドバー基本レイアウト */
+        .header-container, .sidebar-container {
+            position: relative;
             z-index: 1000;
         }
 
-        .logo-text {
-            font-size: 20px;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .company-name {
-            font-size: 14px;
-            color: #ccc;
-        }
-
-        .header-nav {
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav-item {
-            color: white;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .nav-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-icon {
-            font-size: 16px;
-        }
-
-        /* サイドバースタイル */
-        .sidebar {
-            position: fixed;
-            top: 60px;
-            left: 0;
-            width: 250px;
-            height: calc(100vh - 60px);
-            background-color: white;
-            border-right: 1px solid #e0e0e0;
-            padding: 20px 0;
-            z-index: 999;
-            transition: transform 0.3s ease;
-        }
-
-        .sidebar.collapsed {
-            transform: translateX(-250px);
-        }
-
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .sidebar-item {
-            color: #666;
-            text-decoration: none;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-item:hover {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-
-        .sidebar-item.active {
-            background-color: #007acc;
-            color: white;
-        }
-
-        .sidebar-icon {
-            font-size: 16px;
-            width: 20px;
-            text-align: center;
-        }
-
-        .sidebar-toggle {
-            background: none;
-            border: none;
-            color: #666;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-toggle:hover {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-
-        /* レイアウト */
-        .layout {
-            display: flex;
-            margin-top: 60px;
-            min-height: calc(100vh - 60px);
-        }
-
-        /* メインコンテンツ */
+        /* メインコンテンツのレイアウト調整 */
         .main-content {
             margin-left: 250px;
+            margin-top: 70px;
             padding: 30px;
-            width: calc(100% - 250px);
-            transition: margin-left 0.3s ease, width 0.3s ease;
+            min-height: calc(100vh - 70px);
+            transition: margin-left 0.3s ease;
         }
 
         .main-content.sidebar-collapsed {
-            margin-left: 0;
-            width: 100%;
+            margin-left: 50px;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 0;
+                margin-top: 70px;
+            }
         }
 
         .page-header {
@@ -608,97 +483,12 @@
                 document.getElementById('sidebar-container').innerHTML = sidebarHTML;
 
                 // 請求ページがアクティブになるようにサイドバーを更新
-                updateSidebarActive();
+                setTimeout(() => {
+                    updateSidebarActive();
+                }, 100);
             } catch (error) {
                 console.error('コンポーネントの読み込みエラー:', error);
-                // フォールバック: 直接HTMLを挿入
-                loadFallbackComponents();
             }
-        }
-
-        // フォールバック用のコンポーネント読み込み
-        function loadFallbackComponents() {
-            // ヘッダー
-            document.getElementById('header-container').innerHTML = `
-                <header class="header">
-                    <div class="header-left">
-                        <button class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</button>
-                        <div class="logo-text">LEADCAST</div>
-                    </div>
-                    <div class="header-right">
-                        <div class="user-info">
-                            <span class="company-name">株式会社トヨタ自動車 様</span>
-                        </div>
-                        <nav class="header-nav">
-                            <a href="#" class="nav-item" onclick="showDashboard()">
-                                <span class="nav-icon">📊</span>
-                                <span class="nav-text">ダッシュボード</span>
-                            </a>
-                            <a href="#" class="nav-item" onclick="showProjectSearch()">
-                                <span class="nav-icon">🔍</span>
-                                <span class="nav-text">プロジェクト検索</span>
-                            </a>
-                            <a href="#" class="nav-item" onclick="showSettings()">
-                                <span class="nav-icon">⚙️</span>
-                                <span class="nav-text">設定</span>
-                            </a>
-                            <a href="./invoice.html" class="nav-item active">
-                                <span class="nav-icon">💰</span>
-                                <span class="nav-text">請求</span>
-                            </a>
-                            <a href="./mypage.html" class="nav-item">
-                                <span class="nav-icon">👤</span>
-                                <span class="nav-text">マイページ</span>
-                            </a>
-                        </nav>
-                    </div>
-                </header>
-            `;
-
-            // サイドバー
-            document.getElementById('sidebar-container').innerHTML = `
-                <aside class="sidebar" id="sidebar">
-                    <nav class="sidebar-nav">
-                        <a href="#" class="sidebar-item" onclick="showDashboard()">
-                            <span class="sidebar-icon">📊</span>
-                            <span class="sidebar-text">ダッシュボード</span>
-                        </a>
-                        <a href="#" class="sidebar-item" onclick="showProjectSearch()">
-                            <span class="sidebar-icon">🔍</span>
-                            <span class="sidebar-text">プロジェクト検索</span>
-                        </a>
-                        <a href="./mypage.html" class="sidebar-item">
-                            <span class="sidebar-icon">👤</span>
-                            <span class="sidebar-text">マイページ</span>
-                        </a>
-                        <a href="./invoice.html" class="sidebar-item active">
-                            <span class="sidebar-icon">💰</span>
-                            <span class="sidebar-text">請求</span>
-                        </a>
-                        <a href="./contact.html" class="sidebar-item">
-                            <span class="sidebar-icon">📞</span>
-                            <span class="sidebar-text">お問合せ</span>
-                        </a>
-                        <a href="./login.html" class="sidebar-item logout-btn">
-                            <span class="sidebar-icon">🚪</span>
-                            <span class="sidebar-text">ログアウト</span>
-                        </a>
-                        <button class="sidebar-toggle" onclick="toggleSidebar()">
-                            <span class="sidebar-icon">☰</span>
-                            <span class="sidebar-text">折りたたむ</span>
-                        </button>
-                    </nav>
-                </aside>
-            `;
-        }
-
-        // サイドバーの開閉
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('sidebar-collapsed');
         }
 
         // サイドバーのアクティブ状態を更新
@@ -722,44 +512,9 @@
             alert(`請求書 ${invoiceId} をダウンロードします。\n\n実際の実装ではPDFファイルがダウンロードされます。`);
         }
 
-        // フィルター機能
-        function setupFilters() {
-            const statusFilter = document.getElementById('statusFilter');
-            const yearFilter = document.getElementById('yearFilter');
-
-            statusFilter.addEventListener('change', applyFilters);
-            yearFilter.addEventListener('change', applyFilters);
-        }
-
-        function applyFilters() {
-            const statusValue = document.getElementById('statusFilter').value;
-            const yearValue = document.getElementById('yearFilter').value;
-            
-            // 実際の実装では、ここでテーブルの行をフィルタリングする処理を行います
-            console.log('フィルター適用:', { status: statusValue, year: yearValue });
-        }
-
         // ページ読み込み時の初期化
         document.addEventListener('DOMContentLoaded', function() {
             loadComponents();
-            setupFilters();
-        });
-
-        // モバイルサイドバートグル (ヘッダーボタン用)
-        function toggleMobileSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            if (sidebar) {
-                const isHidden = sidebar.style.transform === 'translateX(-100%)';
-                sidebar.style.transform = isHidden ? 'translateX(0px)' : 'translateX(-100%)';
-            }
-        }
-
-        // ウィンドウリサイズ対応
-        window.addEventListener('resize', function() {
-            const sidebar = document.querySelector('.sidebar');
-            if (window.innerWidth > 1024 && sidebar) {
-                sidebar.style.transform = '';
-            }
         });
     </script>
 </body>
