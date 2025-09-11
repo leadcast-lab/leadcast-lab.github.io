@@ -288,7 +288,7 @@
     <div class="container">
         <div class="header">
             <!-- ロゴ画像がある場合は以下のコメントアウトを解除し、.logo-textを削除 -->
-            <!-- <img src="./resources/expert_logo_w.png" alt="LEADCAST Expert" class="logo"> -->
+            <!-- <img src="/sponsor/resources/expert_logo_w.png" alt="LEADCAST Expert" class="logo"> -->
             <div class="logo-text">LEADCAST</div>
         </div>
 
@@ -318,7 +318,7 @@
             </form>
 
             <div class="forgot-password">
-                <a href="./password/reset">パスワードを忘れた方はこちら</a>
+                <a href="/sponsor/password/reset">パスワードを忘れた方はこちら</a>
             </div>
 
             <div class="divider">
@@ -336,7 +336,7 @@
             </button>
 
             <div class="register-link">
-                アカウント登録をご希望の方は <a href="./contact">お問い合わせ</a>ください
+                アカウント登録をご希望の方は <a href="/sponsor/contact">お問い合わせ</a>ください
             </div>
         </div>
     </div>
@@ -347,12 +347,7 @@
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
-            // if (email && password) {
-            //     alert('ログインしました。マイページに移動します。');
-            //     window.location.href = './mypage'; // ログイン成功時はマイページへ
-            // }
-            window.location.href = './mypage'; // ログイン成功時はマイページへ
+            window.location.href = '/sponsor/'; // ログイン成功時はマイページへ
         });
 
         // Googleログイン処理

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規プロジェクト作成 | LEADCAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 30px;
+            min-height: calc(100vh - 70px);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .back-btn {
+            color: #007acc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1px solid #007acc;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #007acc;
+            color: white;
+        }
+
+        /* フォームコンテナ */
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .form-section {
+            padding: 30px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.1);
+        }
+
+        /* スキル選択 */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .skill-item:hover {
+            background: #f8f9fa;
+            border-color: #007acc;
+        }
+
+        .skill-item.selected {
+            background: #e3f2fd;
+            border-color: #007acc;
+        }
+
+        .skill-checkbox {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .skill-checkbox:checked {
+            background: #007acc;
+            border-color: #007acc;
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7.5 7.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 10.293l7.146-7.147a.5.5 0 0 1 .708.708z'/%3e%3c/svg%3e");
+        }
+
+        .skill-label {
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        /* 動画セクション */
+        .videos-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .video-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .video-number {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .remove-video-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .remove-video-btn:hover {
+            background: #c82333;
+        }
+
+        .add-video-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .add-video-btn:hover {
+            background: #218838;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            border: 2px dashed #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .file-label:hover {
+            border-color: #007acc;
+            background: #f8f9fa;
+        }
+
+        .file-label.dragover {
+            border-color: #007acc;
+            background: #e3f2fd;
+        }
+
+        .upload-text {
+            text-align: center;
+            color: #666;
+        }
+
+        .upload-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        /* アクションボタン */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #007acc;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0066aa;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: stretch;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .form-input,
+            .form-textarea {
+                font-size: 16px; /* iOS zoom prevention */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー読み込み -->
+    <div id="header-container"></div>
+
+    <!-- サイドバー読み込み -->
+    <div id="sidebar-container"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">新規プロジェクト作成</h1>
+            <a href="./index.html" class="back-btn">
+                ← プロジェクト一覧に戻る
+            </a>
+        </div>
+
+        <form class="form-container" id="newProjectForm">
+            <!-- 基本情報セクション -->
+            <div class="form-section">
+                <h2 class="section-title">📋 基本情報</h2>
+                
+                <div class="form-group">
+                    <label class="form-label" for="projectName">
+                        プロジェクト名 <span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="projectName" 
+                        class="form-input" 
+                        placeholder="プロジェクト名を入力してください"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="projectDescription">
+                        プロジェクト概要
+                    </label>
+                    <textarea 
+                        id="projectDescription" 
+                        class="form-textarea" 
+                        placeholder="プロジェクトの概要や目的を入力してください"
+                    ></textarea>
+                </div>
+            </div>
+
+            <!-- スキル属性セクション -->
+            <div class="form-section">
+                <h2 class="section-title">🎯 求めるスキル属性</h2>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        スキルカテゴリ <span class="required">*</span>
+                    </label>
+                    <div class="skills-grid" id="skillsGrid">
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="ai-ml" id="skill-ai-ml">
+                            <label class="skill-label" for="skill-ai-ml">AI・機械学習</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="web-dev" id="skill-web-dev">
+                            <label class="skill-label" for="skill-web-dev">Web開発</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="mobile-dev" id="skill-mobile-dev">
+                            <label class="skill-label" for="skill-mobile-dev">モバイル開発</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="data-science" id="skill-data-science">
+                            <label class="skill-label" for="skill-data-science">データサイエンス</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="cloud" id="skill-cloud">
+                            <label class="skill-label" for="skill-cloud">クラウド</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="security" id="skill-security">
+                            <label class="skill-label" for="skill-security">セキュリティ</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="blockchain" id="skill-blockchain">
+                            <label class="skill-label" for="skill-blockchain">ブロックチェーン</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="iot" id="skill-iot">
+                            <label class="skill-label" for="skill-iot">IoT</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="ui-ux" id="skill-ui-ux">
+                            <label class="skill-label" for="skill-ui-ux">UI/UXデザイン</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="project-mgmt" id="skill-project-mgmt">
+                            <label class="skill-label" for="skill-project-mgmt">プロジェクト管理</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="consulting" id="skill-consulting">
+                            <label class="skill-label" for="skill-consulting">コンサルティング</label>
+                        </div>
+                        <div class="skill-item" onclick="toggleSkill(this)">
+                            <input type="checkbox" class="skill-checkbox" value="marketing" id="skill-marketing">
+                            <label class="skill-label" for="skill-marketing">マーケティング</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 動画セクション -->
+            <div class="form-section">
+                <h2 class="section-title">🎥 プロジェクト動画</h2>
+                
+                <div class="videos-container" id="videosContainer">
+                    <div class="video-item" data-video-index="1">
+                        <div class="video-header">
+                            <span class="video-number">動画 1</span>
+                            <button type="button" class="remove-video-btn" onclick="removeVideo(this)" style="display: none;">削除</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">動画タイトル <span class="required">*</span></label>
+                            <input 
+                                type="text" 
+                                class="form-input video-title" 
+                                placeholder="動画のタイトルを入力してください"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">動画ファイル <span class="required">*</span></label>
+                            <div class="file-upload">
+                                <input 
+                                    type="file" 
+                                    class="file-input video-file" 
+                                    accept="video/*"
+                                    id="video-1"
+                                    required
+                                >
+                                <label for="video-1" class="file-label">
+                                    <div class="upload-text">
+                                        <div class="upload-icon">📹</div>
+                                        <div>動画ファイルをドラッグ&ドロップまたはクリックして選択</div>
+                                        <div style="font-size: 12px; color: #999; margin-top: 4px;">
+                                            対応形式: MP4, MOV, AVI (最大100MB)
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="add-video-btn" onclick="addVideo()">
+                    ➕ 動画を追加
+                </button>
+            </div>
+
+            <!-- アクションボタン -->
+            <div class="form-actions">
+                <a href="./index.html" class="btn btn-secondary">キャンセル</a>
+                <button type="submit" class="btn btn-primary">プロジェクトを作成</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        let videoCount = 1;
+
+        // ヘッダーとサイドバーを読み込む関数
+        async function loadComponent(elementId, filePath) {
+            try {
+                const response = await fetch(filePath);
+                const html = await response.text();
+                document.getElementById(elementId).innerHTML = html;
+            } catch (error) {
+                console.error(`Error loading ${filePath}:`, error);
+            }
+        }
+
+        // ページ読み込み時にコンポーネントを読み込み
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('header-container', '../components/header.html');
+            loadComponent('sidebar-container', '../components/sidebar.html');
+            
+            // フォーム送信イベントを設定
+            document.getElementById('newProjectForm').addEventListener('submit', handleFormSubmit);
+            
+            // ファイルドラッグ&ドロップの設定
+            setupFileDragDrop();
+        });
+
+        // スキル選択の切り替え
+        function toggleSkill(skillItem) {
+            const checkbox = skillItem.querySelector('.skill-checkbox');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                skillItem.classList.add('selected');
+            } else {
+                skillItem.classList.remove('selected');
+            }
+        }
+
+        // 動画を追加
+        function addVideo() {
+            videoCount++;
+            const videosContainer = document.getElementById('videosContainer');
+            
+            const videoItem = document.createElement('div');
+            videoItem.className = 'video-item';
+            videoItem.setAttribute('data-video-index', videoCount);
+            
+            videoItem.innerHTML = `
+                <div class="video-header">
+                    <span class="video-number">動画 ${videoCount}</span>
+                    <button type="button" class="remove-video-btn" onclick="removeVideo(this)">削除</button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">動画タイトル <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        class="form-input video-title" 
+                        placeholder="動画のタイトルを入力してください"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">動画ファイル <span class="required">*</span></label>
+                    <div class="file-upload">
+                        <input 
+                            type="file" 
+                            class="file-input video-file" 
+                            accept="video/*"
+                            id="video-${videoCount}"
+                            required
+                        >
+                        <label for="video-${videoCount}" class="file-label">
+                            <div class="upload-text">
+                                <div class="upload-icon">📹</div>
+                                <div>動画ファイルをドラッグ&ドロップまたはクリックして選択</div>
+                                <div style="font-size: 12px; color: #999; margin-top: 4px;">
+                                    対応形式: MP4, MOV, AVI (最大100MB)
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            `;
+            
+            videosContainer.appendChild(videoItem);
+            updateRemoveButtons();
+            setupFileDragDrop();
+        }
+
+        // 動画を削除
+        function removeVideo(button) {
+            const videoItem = button.closest('.video-item');
+            videoItem.remove();
+            updateVideoNumbers();
+            updateRemoveButtons();
+        }
+
+        // 動画番号を更新
+        function updateVideoNumbers() {
+            const videoItems = document.querySelectorAll('.video-item');
+            videoItems.forEach((item, index) => {
+                const videoNumber = item.querySelector('.video-number');
+                videoNumber.textContent = `動画 ${index + 1}`;
+                item.setAttribute('data-video-index', index + 1);
+            });
+            videoCount = videoItems.length;
+        }
+
+        // 削除ボタンの表示/非表示を更新
+        function updateRemoveButtons() {
+            const videoItems = document.querySelectorAll('.video-item');
+            const removeButtons = document.querySelectorAll('.remove-video-btn');
+            
+            removeButtons.forEach(button => {
+                if (videoItems.length > 1) {
+                    button.style.display = 'block';
+                } else {
+                    button.style.display = 'none';
+                }
+            });
+        }
+
+        // ファイルドラッグ&ドロップの設定
+        function setupFileDragDrop() {
+            const fileLabels = document.querySelectorAll('.file-label');
+            
+            fileLabels.forEach(label => {
+                label.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    label.classList.add('dragover');
+                });
+                
+                label.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    label.classList.remove('dragover');
+                });
+                
+                label.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    label.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const fileInput = label.previousElementSibling;
+                        fileInput.files = files;
+                        updateFileLabel(label, files[0]);
+                    }
+                });
+            });
+            
+            // ファイル選択時のラベル更新
+            const fileInputs = document.querySelectorAll('.file-input');
+            fileInputs.forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    const label = e.target.nextElementSibling;
+                    if (file) {
+                        updateFileLabel(label, file);
+                    }
+                });
+            });
+        }
+
+        // ファイルラベルを更新
+        function updateFileLabel(label, file) {
+            const uploadText = label.querySelector('.upload-text');
+            uploadText.innerHTML = `
+                <div class="upload-icon">✅</div>
+                <div>${file.name}</div>
+                <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                    ${(file.size / (1024 * 1024)).toFixed(2)} MB
+                </div>
+            `;
+        }
+
+        // フォーム送信処理
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // フォームデータの取得
+            const formData = new FormData();
+            
+            // 基本情報
+            const projectName = document.getElementById('projectName').value;
+            const projectDescription = document.getElementById('projectDescription').value;
+            
+            // 選択されたスキル
+            const selectedSkills = [];
+            document.querySelectorAll('.skill-checkbox:checked').forEach(checkbox => {
+                selectedSkills.push(checkbox.value);
+            });
+            
+            // 動画情報
+            const videos = [];
+            document.querySelectorAll('.video-item').forEach((item, index) => {
+                const title = item.querySelector('.video-title').value;
+                const fileInput = item.querySelector('.video-file');
+                const file = fileInput.files[0];
+                
+                if (title && file) {
+                    videos.push({
+                        title: title,
+                        file: file
+                    });
+                }
+            });
+            
+            // バリデーション
+            if (!projectName.trim()) {
+                alert('プロジェクト名を入力してください。');
+                return;
+            }
+            
+            if (selectedSkills.length === 0) {
+                alert('最低1つのスキル属性を選択してください。');
+                return;
+            }
+            
+            if (videos.length === 0) {
+                alert('最低1つの動画を追加してください。');
+                return;
+            }
+            
+            // プロジェクト作成処理（実際の実装では APIコールなど）
+            console.log('プロジェクトデータ:', {
+                name: projectName,
+                description: projectDescription,
+                skills: selectedSkills,
+                videos: videos
+            });
+            
+            alert('プロジェクトが正常に作成されました！');
+            window.location.href = './index.html';
+        }
+
+        // サイドバートグル機能
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            
+            if (sidebar && mainContent) {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '0';
+                } else {
+                    mainContent.style.marginLeft = '250px';
+                }
+            }
+        }
+
+        // グローバルに関数を登録
+        window.toggleSidebar = toggleSidebar;
+    </script>
+</body>
+</html>

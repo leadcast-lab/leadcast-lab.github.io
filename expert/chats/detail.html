@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャット詳細 | KNOWLEDGE CAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* メインコンテンツ */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 0;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* チャットヘッダー */
+        .chat-header {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .user-details h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .user-company {
+            font-size: 14px;
+            color: #666;
+            background: #f5f5f5;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+
+        .action-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .back-btn {
+            color: #007acc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: #f0f8ff;
+        }
+
+        /* チャットコンテンツ */
+        .chat-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 30px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .message.own {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message-avatar.sponsor {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+
+        .message-avatar.expert {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .message-content {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .message.own .message-content {
+            align-items: flex-end;
+        }
+
+        .message-bubble {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            line-height: 1.4;
+        }
+
+        .message.own .message-bubble {
+            background: #667eea;
+            color: white;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #999;
+            padding: 0 8px;
+        }
+
+        /* メッセージ入力エリア */
+        .message-input-area {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 20px 30px;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .message-input {
+            flex: 1;
+            min-height: 44px;
+            max-height: 120px;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 22px;
+            resize: none;
+            font-family: inherit;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-y: auto;
+        }
+
+        .message-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-btn {
+            width: 44px;
+            height: 44px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .send-btn:hover {
+            background: #5a67d8;
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .chat-header,
+            .messages-container,
+            .message-input-area {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .chat-user-info {
+                gap: 12px;
+            }
+
+            .chat-avatar {
+                width: 44px;
+                height: 44px;
+                font-size: 16px;
+            }
+
+            .user-details h2 {
+                font-size: 18px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .chat-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .chat-header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .chat-user-info {
+                width: 100%;
+            }
+
+            .chat-actions {
+                flex-direction: row;
+                justify-content: flex-end;
+                width: 100%;
+            }
+
+            .messages-container,
+            .message-input-area {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダー読み込み -->
+    <div id="header-container"></div>
+
+    <!-- サイドバー読み込み -->
+    <div id="sidebar-container"></div>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- チャットヘッダー -->
+        <div class="chat-header">
+            <div class="chat-user-info">
+                <div class="chat-avatar" id="chatAvatar">ト</div>
+                <div class="user-details">
+                    <h2 id="userName">トヨタ自動車株式会社</h2>
+                    <span class="user-company" id="userCompany">鈴木 花子様</span>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <a href="/expert/chats" class="back-btn">
+                    ← チャット一覧に戻る
+                </a>
+                <button class="action-btn">📞 通話</button>
+                <button class="action-btn">📎 ファイル</button>
+            </div>
+        </div>
+
+        <!-- チャットコンテンツ -->
+        <div class="chat-content">
+            <div class="messages-container" id="messagesContainer">
+                <!-- メッセージ履歴 -->
+                <div class="message">
+                    <div class="message-avatar sponsor">ト</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            お世話になっております。新しいEVプロジェクトについてご相談があります。
+                        </div>
+                        <div class="message-time">2時間前</div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar sponsor">ト</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            来週の会議でぜひ詳細をお聞かせください。
+                        </div>
+                        <div class="message-time">2時間前</div>
+                    </div>
+                </div>
+
+                <div class="message own">
+                    <div class="message-avatar expert">エ</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            お疲れ様です。EVプロジェクトのご相談の件、承知いたしました。
+                        </div>
+                        <div class="message-time">1時間前</div>
+                    </div>
+                </div>
+
+                <div class="message own">
+                    <div class="message-avatar expert">エ</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            来週でしたら、火曜日の午後または木曜日の午前中はいかがでしょうか？
+                        </div>
+                        <div class="message-time">1時間前</div>
+                    </div>
+                </div>
+
+                <div class="message">
+                    <div class="message-avatar sponsor">ト</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            火曜日の午後でお願いします。14:00からはいかがでしょうか？
+                        </div>
+                        <div class="message-time">30分前</div>
+                    </div>
+                </div>
+
+                <div class="message own">
+                    <div class="message-avatar expert">エ</div>
+                    <div class="message-content">
+                        <div class="message-bubble">
+                            火曜日14:00で承知いたします。事前資料をお送りしますね。
+                        </div>
+                        <div class="message-time">15分前</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- メッセージ入力エリア -->
+            <div class="message-input-area">
+                <div class="input-container">
+                    <textarea 
+                        class="message-input" 
+                        id="messageInput" 
+                        placeholder="メッセージを入力..."
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                        ➤
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ヘッダーとサイドバーを読み込む関数
+        async function loadComponent(elementId, filePath) {
+            try {
+                const response = await fetch(filePath);
+                const html = await response.text();
+                document.getElementById(elementId).innerHTML = html;
+            } catch (error) {
+                console.error(`Error loading ${filePath}:`, error);
+            }
+        }
+
+        // ページ読み込み時にコンポーネントを読み込み
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComponent('header-container', '/expert/components/header.html');
+            loadComponent('sidebar-container', '/expert/components/sidebar.html');
+            
+            // URLパラメータからチャットIDを取得して表示内容を切り替え（デモ用）
+            loadChatData();
+            
+            // メッセージ入力の自動リサイズ
+            const messageInput = document.getElementById('messageInput');
+            messageInput.addEventListener('input', autoResizeTextarea);
+            messageInput.addEventListener('keydown', handleKeyDown);
+        });
+
+        // チャットデータを読み込み（デモ用）
+        function loadChatData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const chatId = urlParams.get('id') || '1';
+            
+            const chatData = {
+                '1': { name: 'トヨタ自動車株式会社', company: '鈴木 花子様', avatar: 'ト' },
+                '2': { name: '株式会社ホンダ', company: '田中 太郎様', avatar: 'ホ' },
+                '3': { name: '日産自動車株式会社', company: '佐藤 次郎様', avatar: '日' },
+                '4': { name: 'マツダ株式会社', company: '山田 美香様', avatar: 'マ' },
+                '5': { name: 'スバル株式会社', company: '高橋 健一様', avatar: 'ス' },
+                '6': { name: '三菱自動車工業株式会社', company: '渡辺 智子様', avatar: '三' }
+            };
+            
+            const data = chatData[chatId] || chatData['1'];
+            document.getElementById('userName').textContent = data.name;
+            document.getElementById('userCompany').textContent = data.company;
+            document.getElementById('chatAvatar').textContent = data.avatar;
+            
+            // メッセージ内のアバターも更新
+            const sponsorAvatars = document.querySelectorAll('.message-avatar.sponsor');
+            sponsorAvatars.forEach(avatar => {
+                avatar.textContent = data.avatar;
+            });
+        }
+
+        // メッセージ送信
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // メッセージを追加
+            addMessage(message, true);
+            
+            // 入力をクリア
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // 送信ボタンを無効化（デモ用）
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            setTimeout(() => {
+                sendBtn.disabled = false;
+            }, 1000);
+        }
+
+        // メッセージを追加
+        function addMessage(text, isOwn = false) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isOwn ? 'own' : ''}`;
+            
+            const now = new Date();
+            const timeStr = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar ${isOwn ? 'expert' : 'sponsor'}">${isOwn ? 'エ' : document.getElementById('chatAvatar').textContent}</div>
+                <div class="message-content">
+                    <div class="message-bubble">${text}</div>
+                    <div class="message-time">今</div>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // テキストエリアの自動リサイズ
+        function autoResizeTextarea() {
+            const textarea = document.getElementById('messageInput');
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        // Enterキーでの送信
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // サイドバートグル機能
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            
+            if (sidebar && mainContent) {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '0';
+                } else {
+                    mainContent.style.marginLeft = '250px';
+                }
+            }
+        }
+
+        // グローバルに関数を登録
+        window.toggleSidebar = toggleSidebar;
+        window.sendMessage = sendMessage;
+    </script>
+</body>
+</html>

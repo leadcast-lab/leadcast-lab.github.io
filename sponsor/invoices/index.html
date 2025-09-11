@@ -388,7 +388,6 @@
                             <td>
                                 <div class="action-buttons">
                                     <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2025-001')">📄 詳細</a>
-                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2025-001')">📥 DL</a>
                                 </div>
                             </td>
                         </tr>
@@ -402,7 +401,6 @@
                             <td>
                                 <div class="action-buttons">
                                     <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2025-002')">📄 詳細</a>
-                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2025-002')">📥 DL</a>
                                 </div>
                             </td>
                         </tr>
@@ -416,7 +414,6 @@
                             <td>
                                 <div class="action-buttons">
                                     <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2025-003')">📄 詳細</a>
-                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2025-003')">📥 DL</a>
                                 </div>
                             </td>
                         </tr>
@@ -430,7 +427,6 @@
                             <td>
                                 <div class="action-buttons">
                                     <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2024-045')">📄 詳細</a>
-                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2024-045')">📥 DL</a>
                                 </div>
                             </td>
                         </tr>
@@ -444,7 +440,6 @@
                             <td>
                                 <div class="action-buttons">
                                     <a href="#" class="btn btn-primary" onclick="viewInvoice('INV-2024-044')">📄 詳細</a>
-                                    <a href="#" class="btn btn-secondary" onclick="downloadInvoice('INV-2024-044')">📥 DL</a>
                                 </div>
                             </td>
                         </tr>
@@ -473,12 +468,12 @@
         async function loadComponents() {
             try {
                 // ヘッダーを読み込み
-                const headerResponse = await fetch('./components/header.html');
+                const headerResponse = await fetch('/sponsor/components/header.html');
                 const headerHTML = await headerResponse.text();
                 document.getElementById('header-container').innerHTML = headerHTML;
 
                 // サイドバーを読み込み
-                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarResponse = await fetch('/sponsor/components/sidebar.html');
                 const sidebarHTML = await sidebarResponse.text();
                 document.getElementById('sidebar-container').innerHTML = sidebarHTML;
 
@@ -505,11 +500,6 @@
         // 請求書詳細表示
         function viewInvoice(invoiceId) {
             alert(`請求書 ${invoiceId} の詳細を表示します。\n\n実際の実装では詳細モーダルまたは詳細ページが開きます。`);
-        }
-
-        // 請求書ダウンロード
-        function downloadInvoice(invoiceId) {
-            alert(`請求書 ${invoiceId} をダウンロードします。\n\n実際の実装ではPDFファイルがダウンロードされます。`);
         }
 
         // ページ読み込み時の初期化

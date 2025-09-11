@@ -490,36 +490,6 @@
 
     <!-- メインコンテンツ -->
     <main class="main-content" id="mainContent">
-        <!-- ページヘッダー -->
-        <div class="page-header">
-            <h1 class="page-title">👥 ユーザ管理</h1>
-            <p class="page-subtitle">企業内ユーザーの管理・権限設定・アクティビティ監視</p>
-            
-            <!-- 統計情報 -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-icon">👤</span>
-                    <div class="stat-number">248</div>
-                    <div class="stat-label">総ユーザ数</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-icon">✅</span>
-                    <div class="stat-number">231</div>
-                    <div class="stat-label">アクティブユーザ</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-icon">🆕</span>
-                    <div class="stat-number">12</div>
-                    <div class="stat-label">今月の新規登録</div>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-icon">⏸️</span>
-                    <div class="stat-number">17</div>
-                    <div class="stat-label">一時停止ユーザ</div>
-                </div>
-            </div>
-        </div>
-
         <!-- ツールバー -->
         <div class="toolbar">
             <div class="search-filter-group">
@@ -668,12 +638,12 @@
         async function loadComponents() {
             try {
                 // ヘッダーを読み込み
-                const headerResponse = await fetch('./components/header.html');
+                const headerResponse = await fetch('/sponsor/components/header.html');
                 const headerHTML = await headerResponse.text();
                 document.getElementById('header-container').innerHTML = headerHTML;
 
                 // サイドバーを読み込み
-                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarResponse = await fetch('/sponsor/components/sidebar.html');
                 const sidebarHTML = await sidebarResponse.text();
                 document.getElementById('sidebar-container').innerHTML = sidebarHTML;
 
@@ -791,11 +761,11 @@
 
         // ユーザアクション
         function viewUser(userId) {
-            window.location.href = `user-detail?id=${userId}`;
+            window.location.href = `/sponsor/users/detail?id=${userId}`;
         }
 
         function editUser(userId) {
-            window.location.href = `user-detail?id=${userId}&edit=true`;
+            window.location.href = `/sponsor/users/detail?id=${userId}&edit=true`;
         }
 
         function deleteUser(userId) {
@@ -806,7 +776,7 @@
         }
 
         function createUser() {
-            window.location.href = 'user-detail?new=true';
+            window.location.href = '/sponsor/users/detail?new=true';
         }
 
         function exportUsers() {

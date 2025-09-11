@@ -446,14 +446,6 @@
         <div class="container">
             <h1 class="page-title">📞 お問合せ</h1>
 
-            <div class="contact-intro">
-                <h2>スポンサー様専用サポート</h2>
-                <p>
-                    LEADCASTスポンサー様向けの専用サポートです。キャンペーンの効果測定、専門家とのマッチング、
-                    プラットフォームの活用方法など、お気軽にご相談ください。専任の担当者がサポートいたします。
-                </p>
-            </div>
-
             <!-- お問合せフォーム -->
             <div class="content-section">
                 <form id="contactForm">
@@ -590,12 +582,12 @@
         async function loadComponents() {
             try {
                 // ヘッダーを読み込み
-                const headerResponse = await fetch('./components/header.html');
+                const headerResponse = await fetch('/sponsor/components/header.html');
                 const headerHTML = await headerResponse.text();
                 document.getElementById('header-container').innerHTML = headerHTML;
 
                 // サイドバーを読み込み
-                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarResponse = await fetch('/sponsor/components/sidebar.html');
                 const sidebarHTML = await sidebarResponse.text();
                 document.getElementById('sidebar-container').innerHTML = sidebarHTML;
 

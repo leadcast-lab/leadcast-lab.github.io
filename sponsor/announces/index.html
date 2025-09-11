@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お知らせ一覧 - LEADCAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 250px;
+            background: #f8f9fa;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .new { color: #e74c3c; }
+        .total { color: #3498db; }
+        .read { color: #27ae60; }
+        .important { color: #f39c12; }
+
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        .filter-select, .search-input {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .search-input {
+            min-width: 250px;
+        }
+
+        .announcements-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .announcement-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .announcement-item:hover {
+            background: #f8f9fa;
+        }
+
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-status {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .status-new { background: #e74c3c; }
+        .status-read { background: #27ae60; }
+        .status-important { background: #f39c12; }
+
+        .announcement-content {
+            flex: 1;
+        }
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .announcement-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .announcement-category {
+            background: #e9ecef;
+            color: #495057;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .category-system { background: #d1ecf1; color: #0c5460; }
+        .category-maintenance { background: #fff3cd; color: #856404; }
+        .category-feature { background: #d4edda; color: #155724; }
+        .category-important { background: #f8d7da; color: #721c24; }
+
+        .announcement-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .announcement-preview {
+            color: #6c757d;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .announcement-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .priority-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .priority-high { background: #f8d7da; color: #721c24; }
+        .priority-medium { background: #fff3cd; color: #856404; }
+        .priority-low { background: #d4edda; color: #155724; }
+
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .announcement-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- サイドバー読み込み -->
+        <div id="sidebar-container"></div>
+
+        <!-- メインコンテンツ -->
+        <div class="content">
+            <!-- ヘッダー読み込み -->
+            <div id="header-container"></div>
+
+            <div class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">📢 お知らせ一覧</h1>
+                    <a href="../" class="back-btn">
+                        ← ダッシュボードに戻る
+                    </a>
+                </div>
+
+                <!-- 統計情報 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number new">3</div>
+                        <div class="stat-label">未読</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number total">15</div>
+                        <div class="stat-label">全件数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number read">12</div>
+                        <div class="stat-label">既読</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number important">2</div>
+                        <div class="stat-label">重要</div>
+                    </div>
+                </div>
+
+                <!-- フィルター -->
+                <div class="filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">ステータス</label>
+                            <select class="filter-select" id="statusFilter">
+                                <option value="all">すべて</option>
+                                <option value="new">未読</option>
+                                <option value="read">既読</option>
+                                <option value="important">重要</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">カテゴリ</label>
+                            <select class="filter-select" id="categoryFilter">
+                                <option value="all">すべて</option>
+                                <option value="system">システム</option>
+                                <option value="maintenance">メンテナンス</option>
+                                <option value="feature">機能追加</option>
+                                <option value="important">重要</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">検索</label>
+                            <input type="text" class="search-input" placeholder="お知らせを検索..." id="searchInput">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- お知らせ一覧 -->
+                <div class="announcements-list">
+                    <div class="announcement-item" onclick="viewAnnouncement(1)">
+                        <div class="announcement-status status-new"></div>
+                        <div class="announcement-content">
+                            <div class="announcement-meta">
+                                <span class="announcement-date">2025年9月11日</span>
+                                <span class="announcement-category category-important">重要</span>
+                                <span class="priority-badge priority-high">高</span>
+                            </div>
+                            <div class="announcement-title">システムメンテナンスのお知らせ</div>
+                            <div class="announcement-preview">
+                                2025年9月15日（日）2:00-6:00の間、システムメンテナンスを実施いたします。この間、サービスをご利用いただけません...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="announcement-item" onclick="viewAnnouncement(2)">
+                        <div class="announcement-status status-new"></div>
+                        <div class="announcement-content">
+                            <div class="announcement-meta">
+                                <span class="announcement-date">2025年9月10日</span>
+                                <span class="announcement-category category-feature">機能追加</span>
+                                <span class="priority-badge priority-medium">中</span>
+                            </div>
+                            <div class="announcement-title">プロジェクト動画アップロード機能をリリースしました</div>
+                            <div class="announcement-preview">
+                                プロジェクト作成時に動画をアップロードできる機能をリリースいたしました。より詳細な案件説明が可能になります...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="announcement-item" onclick="viewAnnouncement(3)">
+                        <div class="announcement-status status-new"></div>
+                        <div class="announcement-content">
+                            <div class="announcement-meta">
+                                <span class="announcement-date">2025年9月9日</span>
+                                <span class="announcement-category category-system">システム</span>
+                                <span class="priority-badge priority-high">高</span>
+                            </div>
+                            <div class="announcement-title">セキュリティ強化に関するお知らせ</div>
+                            <div class="announcement-preview">
+                                より安全にサービスをご利用いただくため、セキュリティ機能を強化いたしました。2段階認証の設定をお勧めします...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="announcement-item" onclick="viewAnnouncement(4)">
+                        <div class="announcement-status status-read"></div>
+                        <div class="announcement-content">
+                            <div class="announcement-meta">
+                                <span class="announcement-date">2025年9月8日</span>
+                                <span class="announcement-category category-feature">機能追加</span>
+                                <span class="priority-badge priority-medium">中</span>
+                            </div>
+                            <div class="announcement-title">チャット機能の改善について</div>
+                            <div class="announcement-preview">
+                                エキスパートとのコミュニケーションをより円滑にするため、チャット機能を改善いたしました...
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="announcement-item" onclick="viewAnnouncement(5)">
+                        <div class="announcement-status status-read"></div>
+                        <div class="announcement-content">
+                            <div class="announcement-meta">
+                                <span class="announcement-date">2025年9月7日</span>
+                                <span class="announcement-category category-maintenance">メンテナンス</span>
+                                <span class="priority-badge priority-low">低</span>
+                            </div>
+                            <div class="announcement-title">定期メンテナンス完了のお知らせ</div>
+                            <div class="announcement-preview">
+                                9月6日に実施いたしました定期メンテナンスが正常に完了いたしました...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // サイドバーとヘッダーを読み込み
+        document.addEventListener('DOMContentLoaded', function() {
+            // サイドバー読み込み
+            fetch('../components/sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                })
+                .catch(error => console.error('サイドバー読み込みエラー:', error));
+
+            // ヘッダー読み込み
+            fetch('../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+                })
+                .catch(error => console.error('ヘッダー読み込みエラー:', error));
+        });
+
+        // お知らせ詳細表示
+        function viewAnnouncement(id) {
+            window.location.href = `./detail.html?id=${id}`;
+        }
+
+        // フィルター機能
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusFilter = document.getElementById('statusFilter');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const searchInput = document.getElementById('searchInput');
+
+            function applyFilters() {
+                const announcements = document.querySelectorAll('.announcement-item');
+                const statusValue = statusFilter.value;
+                const categoryValue = categoryFilter.value;
+                const searchValue = searchInput.value.toLowerCase();
+
+                announcements.forEach(item => {
+                    let shouldShow = true;
+
+                    // ステータスフィルター
+                    if (statusValue !== 'all') {
+                        const status = item.querySelector('.announcement-status');
+                        if (statusValue === 'new' && !status.classList.contains('status-new')) {
+                            shouldShow = false;
+                        } else if (statusValue === 'read' && !status.classList.contains('status-read')) {
+                            shouldShow = false;
+                        } else if (statusValue === 'important' && !status.classList.contains('status-important')) {
+                            shouldShow = false;
+                        }
+                    }
+
+                    // カテゴリフィルター
+                    if (categoryValue !== 'all' && shouldShow) {
+                        const category = item.querySelector('.announcement-category');
+                        if (!category.classList.contains(`category-${categoryValue}`)) {
+                            shouldShow = false;
+                        }
+                    }
+
+                    // 検索フィルター
+                    if (searchValue && shouldShow) {
+                        const title = item.querySelector('.announcement-title').textContent.toLowerCase();
+                        const preview = item.querySelector('.announcement-preview').textContent.toLowerCase();
+                        if (!title.includes(searchValue) && !preview.includes(searchValue)) {
+                            shouldShow = false;
+                        }
+                    }
+
+                    item.style.display = shouldShow ? 'flex' : 'none';
+                });
+            }
+
+            statusFilter.addEventListener('change', applyFilters);
+            categoryFilter.addEventListener('change', applyFilters);
+            searchInput.addEventListener('input', applyFilters);
+        });
+
+        // サイドバートグル機能
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.querySelector('.content');
+            
+            if (sidebar && content) {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    content.style.marginLeft = '0';
+                } else {
+                    content.style.marginLeft = '250px';
+                }
+            }
+        }
+
+        // グローバルに関数を登録
+        window.toggleSidebar = toggleSidebar;
+    </script>
+</body>
+</html>

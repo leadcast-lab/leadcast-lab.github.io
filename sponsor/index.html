@@ -393,7 +393,7 @@
         <section class="content-section">
             <div class="section-header">
                 <h2 class="section-title">お知らせ</h2>
-                <a href="#" class="view-all-link">一覧</a>
+                <a href="./announces/" class="view-all-link">一覧</a>
             </div>
             <div class="notification-list">
                 <div class="notification-item">
@@ -418,7 +418,7 @@
         <section class="content-section">
             <div class="section-header">
                 <h2 class="section-title">プロジェクト</h2>
-                <a href="#" class="view-all-link">一覧</a>
+                <a href="./project" class="view-all-link">一覧</a>
             </div>
             <table class="project-table">
                 <thead>
@@ -455,12 +455,12 @@
         async function loadComponents() {
             try {
                 // ヘッダーを読み込み
-                const headerResponse = await fetch('./components/header.html');
+                const headerResponse = await fetch('/sponsor/components/header.html');
                 const headerHTML = await headerResponse.text();
                 document.getElementById('header-container').innerHTML = headerHTML;
 
                 // サイドバーを読み込み
-                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarResponse = await fetch('/sponsor/components/sidebar.html');
                 const sidebarHTML = await sidebarResponse.text();
                 document.getElementById('sidebar-container').innerHTML = sidebarHTML;
 

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お知らせ詳細 - LEADCAST</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+            margin-left: 250px;
+            background: #f8f9fa;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .announcement-detail {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .announcement-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .announcement-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .announcement-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .announcement-category {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .category-system { background: #d1ecf1; color: #0c5460; }
+        .category-maintenance { background: #fff3cd; color: #856404; }
+        .category-feature { background: #d4edda; color: #155724; }
+        .category-important { background: #f8d7da; color: #721c24; }
+
+        .priority-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .priority-high { background: #f8d7da; color: #721c24; }
+        .priority-medium { background: #fff3cd; color: #856404; }
+        .priority-low { background: #d4edda; color: #155724; }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-new { background: #f8d7da; color: #721c24; }
+        .status-read { background: #d4edda; color: #155724; }
+
+        .announcement-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .announcement-content {
+            padding: 2rem;
+        }
+
+        .content-section {
+            margin-bottom: 2rem;
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .content-text {
+            color: #495057;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .content-text p {
+            margin-bottom: 1rem;
+        }
+
+        .content-text ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box.important {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .highlight-box.info {
+            background: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        .action-buttons {
+            padding: 2rem;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .confirm-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+
+        .confirm-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .secondary-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .secondary-btn:hover {
+            background: #f8f9fa;
+            border-color: #adb5bd;
+        }
+
+        .confirmation-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                margin-left: 0;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .announcement-header {
+                padding: 1.5rem;
+            }
+
+            .announcement-content {
+                padding: 1.5rem;
+            }
+
+            .action-buttons {
+                padding: 1.5rem;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .confirm-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .secondary-actions {
+                justify-content: center;
+            }
+
+            .announcement-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- サイドバー読み込み -->
+        <div id="sidebar-container"></div>
+
+        <!-- メインコンテンツ -->
+        <div class="content">
+            <!-- ヘッダー読み込み -->
+            <div id="header-container"></div>
+
+            <div class="main-content">
+                <div class="page-header">
+                    <h1 class="page-title">📄 お知らせ詳細</h1>
+                    <a href="./" class="back-btn">
+                        ← 一覧に戻る
+                    </a>
+                </div>
+
+                <div class="confirmation-message" id="confirmationMessage">
+                    ✓ このお知らせを確認済みとしてマークしました。
+                </div>
+
+                <div class="announcement-detail">
+                    <div class="announcement-header">
+                        <div class="announcement-meta">
+                            <span class="announcement-date">
+                                📅 2025年9月11日
+                            </span>
+                            <span class="announcement-category category-important">重要</span>
+                            <span class="priority-badge priority-high">高優先度</span>
+                            <span class="status-badge status-new" id="statusBadge">未読</span>
+                        </div>
+                        <h2 class="announcement-title" id="announcementTitle">
+                            システムメンテナンスのお知らせ
+                        </h2>
+                    </div>
+
+                    <div class="announcement-content">
+                        <div class="content-section">
+                            <h3 class="section-title">📋 概要</h3>
+                            <div class="content-text">
+                                <p>いつもLEADCASTをご利用いただき、ありがとうございます。</p>
+                                <p>システムの安定性向上とセキュリティ強化のため、下記の日程でメンテナンスを実施いたします。</p>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box important">
+                            <strong>⚠️ 重要:</strong> メンテナンス中はサービスをご利用いただけません。事前に作業を保存していただきますようお願いいたします。
+                        </div>
+
+                        <div class="content-section">
+                            <h3 class="section-title">📅 メンテナンス日時</h3>
+                            <div class="content-text">
+                                <p><strong>日時:</strong> 2025年9月15日（日） 午前2:00 ～ 午前6:00（予定）</p>
+                                <p><strong>所要時間:</strong> 約4時間</p>
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <h3 class="section-title">🔧 メンテナンス内容</h3>
+                            <div class="content-text">
+                                <ul>
+                                    <li>データベースサーバーのアップデート</li>
+                                    <li>セキュリティパッチの適用</li>
+                                    <li>システムパフォーマンスの最適化</li>
+                                    <li>バックアップシステムの強化</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="content-section">
+                            <h3 class="section-title">📝 ご利用への影響</h3>
+                            <div class="content-text">
+                                <p>メンテナンス期間中は以下のサービスがご利用いただけません：</p>
+                                <ul>
+                                    <li>プロジェクト管理機能</li>
+                                    <li>エキスパートとのチャット機能</li>
+                                    <li>ファイルのアップロード・ダウンロード</li>
+                                    <li>レポート機能</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="highlight-box info">
+                            <strong>💡 ヒント:</strong> メンテナンス完了後、ブラウザのキャッシュをクリアしていただくことで、より快適にご利用いただけます。
+                        </div>
+
+                        <div class="content-section">
+                            <h3 class="section-title">📞 お問い合わせ</h3>
+                            <div class="content-text">
+                                <p>メンテナンスに関するご質問やご不明な点がございましたら、お気軽にお問い合わせください。</p>
+                                <p><strong>サポートデスク:</strong> support@leadcast.com</p>
+                                <p><strong>受付時間:</strong> 平日 9:00-18:00</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="confirm-btn" onclick="markAsRead()" id="confirmBtn">
+                            ✓ 確認済みにする
+                        </button>
+                        <div class="secondary-actions">
+                            <a href="../contact.html" class="secondary-btn">
+                                📧 お問い合わせ
+                            </a>
+                            <button class="secondary-btn" onclick="window.print()">
+                                🖨️ 印刷
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL パラメータから ID を取得
+        const urlParams = new URLSearchParams(window.location.search);
+        const announcementId = urlParams.get('id');
+
+        // お知らせデータ（実際の実装では API から取得）
+        const announcements = {
+            1: {
+                title: "システムメンテナンスのお知らせ",
+                date: "2025年9月11日",
+                category: "important",
+                priority: "high",
+                status: "new",
+                content: "システムメンテナンスの詳細内容..."
+            },
+            2: {
+                title: "プロジェクト動画アップロード機能をリリースしました",
+                date: "2025年9月10日",
+                category: "feature",
+                priority: "medium",
+                status: "new",
+                content: "新機能のリリースについて..."
+            },
+            3: {
+                title: "セキュリティ強化に関するお知らせ",
+                date: "2025年9月9日",
+                category: "system",
+                priority: "high",
+                status: "new",
+                content: "セキュリティ強化の詳細..."
+            },
+            4: {
+                title: "チャット機能の改善について",
+                date: "2025年9月8日",
+                category: "feature",
+                priority: "medium",
+                status: "read",
+                content: "チャット機能改善の詳細..."
+            },
+            5: {
+                title: "定期メンテナンス完了のお知らせ",
+                date: "2025年9月7日",
+                category: "maintenance",
+                priority: "low",
+                status: "read",
+                content: "定期メンテナンス完了の詳細..."
+            }
+        };
+
+        // サイドバーとヘッダーを読み込み
+        document.addEventListener('DOMContentLoaded', function() {
+            // サイドバー読み込み
+            fetch('../components/sidebar.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('sidebar-container').innerHTML = data;
+                })
+                .catch(error => console.error('サイドバー読み込みエラー:', error));
+
+            // ヘッダー読み込み
+            fetch('../components/header.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('header-container').innerHTML = data;
+                })
+                .catch(error => console.error('ヘッダー読み込みエラー:', error));
+
+            // お知らせデータを表示
+            loadAnnouncementData();
+        });
+
+        // お知らせデータを読み込み
+        function loadAnnouncementData() {
+            if (announcementId && announcements[announcementId]) {
+                const announcement = announcements[announcementId];
+                
+                // ステータスバッジを更新
+                const statusBadge = document.getElementById('statusBadge');
+                statusBadge.textContent = announcement.status === 'new' ? '未読' : '既読';
+                statusBadge.className = `status-badge status-${announcement.status}`;
+                
+                // 確認済みボタンの状態を更新
+                const confirmBtn = document.getElementById('confirmBtn');
+                if (announcement.status === 'read') {
+                    confirmBtn.textContent = '✓ 確認済み';
+                    confirmBtn.disabled = true;
+                }
+            }
+        }
+
+        // 確認済みにマーク
+        function markAsRead() {
+            const confirmBtn = document.getElementById('confirmBtn');
+            const statusBadge = document.getElementById('statusBadge');
+            const confirmationMessage = document.getElementById('confirmationMessage');
+            
+            // ステータスを更新
+            statusBadge.textContent = '既読';
+            statusBadge.className = 'status-badge status-read';
+            
+            // ボタンを無効化
+            confirmBtn.textContent = '✓ 確認済み';
+            confirmBtn.disabled = true;
+            
+            // 確認メッセージを表示
+            confirmationMessage.style.display = 'block';
+            
+            // 実際の実装では API を呼び出してサーバーに保存
+            if (announcementId && announcements[announcementId]) {
+                announcements[announcementId].status = 'read';
+            }
+            
+            // 3秒後に一覧に戻る
+            setTimeout(() => {
+                window.location.href = './';
+            }, 2000);
+        }
+
+        // サイドバートグル機能
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.querySelector('.content');
+            
+            if (sidebar && content) {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    content.style.marginLeft = '0';
+                } else {
+                    content.style.marginLeft = '250px';
+                }
+            }
+        }
+
+        // グローバルに関数を登録
+        window.toggleSidebar = toggleSidebar;
+    </script>
+</body>
+</html>

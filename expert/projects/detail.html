@@ -583,13 +583,13 @@
                 console.log('コンポーネント読み込み開始');
                 
                 // ヘッダーを読み込み
-                const headerResponse = await fetch('./components/header.html');
+                const headerResponse = await fetch('/expert/components/header.html');
                 const headerHTML = await headerResponse.text();
                 document.getElementById('header-container').innerHTML = headerHTML;
                 console.log('ヘッダー読み込み完了');
 
                 // サイドバーを読み込み
-                const sidebarResponse = await fetch('./components/sidebar.html');
+                const sidebarResponse = await fetch('/expert/components/sidebar.html');
                 const sidebarHTML = await sidebarResponse.text();
                 document.getElementById('sidebar-container').innerHTML = sidebarHTML;
                 console.log('サイドバー読み込み完了');
@@ -609,7 +609,7 @@
             sidebarItems.forEach(item => {
                 item.classList.remove('active');
                 // project-detail.htmlの場合はプロジェクト検索メニューをアクティブにする
-                if (item.href && (item.href.includes('/expert/project') || item.href.includes('project.html'))) {
+                if (item.href && (item.href.includes('/expert/projects') || item.href.includes('projects.html'))) {
                     item.classList.add('active');
                 }
             });
@@ -669,15 +669,6 @@
             
             // フォームをリセット
             event.target.reset();
-        }
-
-        // ダミー関数
-        function showDashboard() {
-            alert('ダッシュボード画面に移動します。');
-        }
-
-        function showProjectSearch() {
-            alert('案件検索画面に移動します。');
         }
 
         // ページ読み込み時の初期化
