@@ -3,122 +3,455 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeadCast - エキスパートとスポンサーをつなぐプラットフォーム</title>
+    <title>LEADCAST - デモサイト一覧</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 2rem;
         }
 
         .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
             text-align: center;
-            background: white;
-            padding: 3rem 2rem;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 90%;
+            margin-bottom: 3rem;
         }
 
-        h1 {
-            color: #24292f;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .github-logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 2rem;
-            fill: #24292f;
-        }
-
-        p {
-            color: #656d76;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-        }
-
-        .github-link {
-            display: inline-block;
-            background: #24292f;
+        .main-title {
             color: white;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-
-        .github-link:hover {
-            background: #1c2128;
-        }
-
-        .features {
-            margin-top: 2rem;
-            text-align: left;
-        }
-
-        .features h3 {
-            color: #24292f;
+            font-size: 3.5rem;
+            font-weight: 700;
             margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        .features ul {
-            list-style: none;
-            padding: 0;
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3rem;
+            font-weight: 300;
         }
 
-        .features li {
-            padding: 0.5rem 0;
-            color: #656d76;
+        .sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
-        .features li:before {
-            content: "✓ ";
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-icon {
+            font-size: 3rem;
+            margin-right: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .section-description {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .page-card {
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .page-card:hover {
+            background: #e9ecef;
+            border-color: #007bff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+        }
+
+        .page-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .page-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .page-url {
+            color: #007bff;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            font-family: monospace;
+        }
+
+        .expert-section {
+            border-left: 5px solid #28a745;
+        }
+
+        .sponsor-section {
+            border-left: 5px solid #007bff;
+        }
+
+        .expert-section .section-icon {
             color: #28a745;
+        }
+
+        .sponsor-section .section-icon {
+            color: #007bff;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
             font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .sections {
+                grid-template-columns: 1fr;
+            }
+
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .page-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <svg class="github-logo" viewBox="0 0 24 24">
-            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-
-        <h1>Hello GitHub</h1>
-
-        <p>GitHub Pagesを使用したデモサイトへようこそ！<br>
-        このサイトはGitHubの静的サイトホスティング機能で動作しています。</p>
-
-        <a href="https://github.com/leadcast-lab/leadcast-demo" class="github-link">
-            GitHub リポジトリを見る
-        </a>
-
-        <div style="margin: 2rem 0;">
-            <a href="./expert/" class="github-link" style="margin: 0 10px;">Expert ページ</a>
-            <a href="./sponsor/" class="github-link" style="margin: 0 10px;">Sponsor ページ</a>
+        <div class="header">
+            <h1 class="main-title">🚀 LEADCAST</h1>
+            <p class="subtitle">エキスパートとスポンサーをつなぐプラットフォーム - デモサイト一覧</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Expert Pages</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">12</span>
+                    <span class="stat-label">Sponsor Pages</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">20</span>
+                    <span class="stat-label">Total Pages</span>
+                </div>
+            </div>
         </div>
 
-        <div class="features">
-            <h3>GitHub Pagesの特徴</h3>
-            <ul>
-                <li>無料でウェブサイトをホスティング</li>
-                <li>GitHubリポジトリから直接デプロイ</li>
-                <li>カスタムドメインサポート</li>
-                <li>HTTPS対応</li>
-                <li>Jekyll サポート</li>
-            </ul>
+        <div class="sections">
+            <!-- エキスパート向けページ -->
+            <div class="section expert-section">
+                <div class="section-header">
+                    <div class="section-icon">👨‍💼</div>
+                    <div>
+                        <h2 class="section-title">Expert Pages</h2>
+                    </div>
+                </div>
+                <p class="section-description">
+                    専門知識を活かしてプロジェクトに参加するエキスパート向けの画面一覧です。
+                    ログインからプロジェクト参加、コミュニケーションまでの機能を確認できます。
+                </p>
+
+                <div class="page-grid">
+                    <a href="./expert/login.html" class="page-card">
+                        <div class="page-title">🔐 ログイン</div>
+                        <div class="page-description">エキスパート用ログイン画面。ロゴ画像対応済み</div>
+                        <div class="page-url">./expert/login.html</div>
+                    </a>
+
+                    <a href="./expert/mypage.html" class="page-card">
+                        <div class="page-title">👤 マイページ</div>
+                        <div class="page-description">プロフィール管理、スキル設定、実績確認</div>
+                        <div class="page-url">./expert/mypage.html</div>
+                    </a>
+
+                    <a href="./expert/project.html" class="page-card">
+                        <div class="page-title">📋 プロジェクト一覧</div>
+                        <div class="page-description">参加可能なプロジェクトの一覧と検索機能</div>
+                        <div class="page-url">./expert/project.html</div>
+                    </a>
+
+                    <a href="./expert/project-detail.html" class="page-card">
+                        <div class="page-title">📄 プロジェクト詳細</div>
+                        <div class="page-description">個別プロジェクトの詳細情報と応募機能</div>
+                        <div class="page-url">./expert/project-detail.html</div>
+                    </a>
+
+                    <a href="./expert/chat.html" class="page-card">
+                        <div class="page-title">💬 チャット一覧</div>
+                        <div class="page-description">スポンサー企業とのコミュニケーション一覧</div>
+                        <div class="page-url">./expert/chat.html</div>
+                    </a>
+
+                    <a href="./expert/chat-detail.html" class="page-card">
+                        <div class="page-title">💭 チャット詳細</div>
+                        <div class="page-description">個別チャットルームでのリアルタイム会話</div>
+                        <div class="page-url">./expert/chat-detail.html</div>
+                    </a>
+
+                    <a href="./expert/contact.html" class="page-card">
+                        <div class="page-title">📧 お問い合わせ</div>
+                        <div class="page-description">サポートへの問い合わせフォーム</div>
+                        <div class="page-url">./expert/contact.html</div>
+                    </a>
+
+                    <a href="./expert/password/reset.html" class="page-card">
+                        <div class="page-title">🔑 パスワードリセット</div>
+                        <div class="page-description">パスワードを忘れた場合のリセット画面</div>
+                        <div class="page-url">./expert/password/reset.html</div>
+                    </a>
+
+                    <a href="./expert/password/valid.html" class="page-card">
+                        <div class="page-title">✅ パスワード認証</div>
+                        <div class="page-description">パスワードリセット用の認証画面</div>
+                        <div class="page-url">./expert/password/valid.html</div>
+                    </a>
+
+                    <a href="./expert/signup/index.html" class="page-card">
+                        <div class="page-title">📝 新規登録</div>
+                        <div class="page-description">エキスパート新規アカウント登録のトップ画面</div>
+                        <div class="page-url">./expert/signup/index.html</div>
+                    </a>
+
+                    <a href="./expert/signup/input.html" class="page-card">
+                        <div class="page-title">📝 登録情報入力</div>
+                        <div class="page-description">新規登録時の詳細情報入力フォーム</div>
+                        <div class="page-url">./expert/signup/input.html</div>
+                    </a>
+
+                    <a href="./expert/signup/confirm.html" class="page-card">
+                        <div class="page-title">🔍 登録情報確認</div>
+                        <div class="page-description">入力した登録情報の確認画面</div>
+                        <div class="page-url">./expert/signup/confirm.html</div>
+                    </a>
+
+                    <a href="./expert/signup/thanks.html" class="page-card">
+                        <div class="page-title">🎉 登録完了</div>
+                        <div class="page-description">新規登録完了後のお礼画面</div>
+                        <div class="page-url">./expert/signup/thanks.html</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- スポンサー向けページ -->
+            <div class="section sponsor-section">
+                <div class="section-header">
+                    <div class="section-icon">🏢</div>
+                    <div>
+                        <h2 class="section-title">Sponsor Pages</h2>
+                    </div>
+                </div>
+                <p class="section-description">
+                    プロジェクトを発注し、エキスパートを管理するスポンサー企業向けの画面一覧です。
+                    プロジェクト管理からエキスパートとの連携まで幅広い機能を提供します。
+                </p>
+                
+                <div class="page-grid">
+                    <a href="./sponsor/index.html" class="page-card">
+                        <div class="page-title">🏠 ダッシュボード</div>
+                        <div class="page-description">スポンサーのメイン画面。プロジェクト状況や統計を表示</div>
+                        <div class="page-url">./sponsor/index.html</div>
+                    </a>
+
+                    <a href="./sponsor/login.html" class="page-card">
+                        <div class="page-title">🔐 ログイン</div>
+                        <div class="page-description">スポンサー用ログイン画面</div>
+                        <div class="page-url">./sponsor/login.html</div>
+                    </a>
+
+                    <a href="./sponsor/contact.html" class="page-card">
+                        <div class="page-title">� お問い合わせ</div>
+                        <div class="page-description">サポートへの問い合わせフォーム</div>
+                        <div class="page-url">./sponsor/contact.html</div>
+                    </a>
+
+                    <a href="./sponsor/projects/index.html" class="page-card">
+                        <div class="page-title">📋 プロジェクト管理</div>
+                        <div class="page-description">プロジェクト一覧、フィルタリング、統計情報</div>
+                        <div class="page-url">./sponsor/projects/index.html</div>
+                    </a>
+
+                    <a href="./sponsor/projects/new.html" class="page-card">
+                        <div class="page-title">➕ プロジェクト作成</div>
+                        <div class="page-description">新規プロジェクト作成、動画アップロード対応</div>
+                        <div class="page-url">./sponsor/projects/new.html</div>
+                    </a>
+
+                    <a href="./sponsor/projects/detail.html" class="page-card">
+                        <div class="page-title">📄 プロジェクト詳細</div>
+                        <div class="page-description">動画表示、エキスパート応募管理</div>
+                        <div class="page-url">./sponsor/projects/detail.html</div>
+                    </a>
+
+                    <a href="./sponsor/users/index.html" class="page-card">
+                        <div class="page-title">👥 ユーザー管理</div>
+                        <div class="page-description">エキスパートの検索、評価、管理</div>
+                        <div class="page-url">./sponsor/users/index.html</div>
+                    </a>
+
+                    <a href="./sponsor/users/detail.html" class="page-card">
+                        <div class="page-title">👤 ユーザー詳細</div>
+                        <div class="page-description">個別エキスパートのプロフィール詳細</div>
+                        <div class="page-url">./sponsor/users/detail.html</div>
+                    </a>
+
+                    <a href="./sponsor/chats/index.html" class="page-card">
+                        <div class="page-title">💬 チャット一覧</div>
+                        <div class="page-description">顧客からの問い合わせ一覧</div>
+                        <div class="page-url">./sponsor/chats/index.html</div>
+                    </a>
+
+                    <a href="./sponsor/chats/detail.html" class="page-card">
+                        <div class="page-title">💭 チャット詳細</div>
+                        <div class="page-description">個別顧客とのチャット画面</div>
+                        <div class="page-url">./sponsor/chats/detail.html</div>
+                    </a>
+
+                    <a href="./sponsor/announces/index.html" class="page-card">
+                        <div class="page-title">📢 お知らせ一覧</div>
+                        <div class="page-description">システムからのお知らせ一覧、フィルタリング機能</div>
+                        <div class="page-url">./sponsor/announces/index.html</div>
+                    </a>
+
+                    <a href="./sponsor/announces/detail.html" class="page-card">
+                        <div class="page-title">📄 お知らせ詳細</div>
+                        <div class="page-description">個別お知らせの詳細、確認済み機能</div>
+                        <div class="page-url">./sponsor/announces/detail.html</div>
+                    </a>
+
+                    <a href="./sponsor/invoices/index.html" class="page-card">
+                        <div class="page-title">📊 請求書管理</div>
+                        <div class="page-description">請求書の発行、管理、履歴確認</div>
+                        <div class="page-url">./sponsor/invoices/index.html</div>
+                    </a>
+
+                    <a href="./sponsor/password/reset.html" class="page-card">
+                        <div class="page-title">� パスワードリセット</div>
+                        <div class="page-description">パスワードを忘れた場合のリセット画面</div>
+                        <div class="page-url">./sponsor/password/reset.html</div>
+                    </a>
+
+                    <a href="./sponsor/password/valid.html" class="page-card">
+                        <div class="page-title">✅ パスワード認証</div>
+                        <div class="page-description">パスワードリセット用の認証画面</div>
+                        <div class="page-url">./sponsor/password/valid.html</div>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+
+    <script>
+        // ページカードにホバーエフェクトを追加
+        document.addEventListener('DOMContentLoaded', function() {
+            const pageCards = document.querySelectorAll('.page-card');
+            
+            pageCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+
+        // 統計情報の更新
+        function updateStats() {
+            const expertPages = document.querySelectorAll('.expert-section .page-card').length;
+            const sponsorPages = document.querySelectorAll('.sponsor-section .page-card').length;
+            const totalPages = expertPages + sponsorPages;
+
+            document.querySelector('.stats .stat-item:nth-child(1) .stat-number').textContent = expertPages;
+            document.querySelector('.stats .stat-item:nth-child(2) .stat-number').textContent = sponsorPages;
+            document.querySelector('.stats .stat-item:nth-child(3) .stat-number').textContent = totalPages;
+        }
+
+        // ページ読み込み時に統計を更新
+        document.addEventListener('DOMContentLoaded', updateStats);
+    </script>
 </body>
 </html>
