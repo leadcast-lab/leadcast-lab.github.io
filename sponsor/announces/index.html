@@ -263,6 +263,97 @@
                 gap: 0.5rem;
             }
         }
+
+        /* サイドバーのスタイル */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            margin-left: -250px;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: #495057;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: #f8f9fa;
+            color: #007bff;
+            border-left-color: #007bff;
+        }
+
+        .sidebar-item.active {
+            background: #e3f2fd;
+            color: #007bff;
+            border-left-color: #007bff;
+        }
+
+        .sidebar-icon {
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .sidebar-text {
+            font-weight: 500;
+        }
+
+        /* ヘッダーのスタイル */
+        .header {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #495057;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #495057;
+        }
     </style>
 </head>
 <body>
@@ -418,19 +509,49 @@
         document.addEventListener('DOMContentLoaded', function() {
             // サイドバー読み込み
             fetch('../components/sidebar.html')
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
                 .then(data => {
                     document.getElementById('sidebar-container').innerHTML = data;
+                    // サイドバーのスクリプトを実行
+                    const scripts = document.getElementById('sidebar-container').querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const newScript = document.createElement('script');
+                        newScript.textContent = script.textContent;
+                        document.head.appendChild(newScript);
+                    });
                 })
-                .catch(error => console.error('サイドバー読み込みエラー:', error));
+                .catch(error => {
+                    console.error('サイドバー読み込みエラー:', error);
+                    console.log('サイドバーの読み込みに失敗しました。パス: ../components/sidebar.html');
+                });
 
             // ヘッダー読み込み
             fetch('../components/header.html')
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
                 .then(data => {
                     document.getElementById('header-container').innerHTML = data;
+                    // ヘッダーのスクリプトを実行
+                    const scripts = document.getElementById('header-container').querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const newScript = document.createElement('script');
+                        newScript.textContent = script.textContent;
+                        document.head.appendChild(newScript);
+                    });
                 })
-                .catch(error => console.error('ヘッダー読み込みエラー:', error));
+                .catch(error => {
+                    console.error('ヘッダー読み込みエラー:', error);
+                    console.log('ヘッダーの読み込みに失敗しました。パス: ../components/header.html');
+                });
         });
 
         // お知らせ詳細表示
