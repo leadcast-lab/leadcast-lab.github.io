@@ -1,0 +1,16 @@
+/* Authentication (login & signup index) */
+body.auth-center { background-color:#f8f8f8; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
+.container.auth { width:100%; max-width:480px; text-align:center; }
+.form-container.auth-box { background:#fff; border-radius:12px; box-shadow:0 4px 20px rgba(0,0,0,.08); padding:40px; margin-bottom:20px; }
+.btn-primary { width:100%; margin-bottom:16px; }
+.btn-google { width:100%; margin-bottom:24px; }
+.register-link, .forgot-password { text-align:center; font-size:14px; color:#666; }
+.register-link a, .forgot-password a { color:#007acc; text-decoration:none; }
+.register-link a:hover, .forgot-password a:hover { text-decoration:underline; }
+.back-link { color:#007acc; text-decoration:none; font-size:14px; padding:8px 16px; border:1px solid #007acc; border-radius:6px; transition:.3s; display:inline-block; margin-top:20px; }
+.back-link:hover { background:#007acc; color:#fff; }
+
+@media (max-width:600px){ .form-container.auth-box{ padding:30px 25px; margin:0 10px 20px;} }
+@media (max-width:480px){ body.auth-center{ padding:15px;} .form-container.auth-box{ padding:25px 20px; margin:0 5px 15px;} }
+@media (max-width:360px){ .form-container.auth-box{ padding:20px 15px;} }
+@media (min-width:768px){ body.auth-center{ padding:40px;} .container.auth{ max-width:520px;} .form-container.auth-box{ padding:50px;} .btn-primary,.btn-google{ padding:18px 24px; font-size:17px;} }

@@ -1,0 +1,171 @@
+/* signup.css - エキスパート会員登録フロー共通スタイル */
+
+/* ===== 基本レイアウト ===== */
+body.signup-flow {
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px; /* index は 480px, 他は 800px */
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ロゴ (ベースは common.css) */
+.knowledge-cast-logo.large-start { /* index の最初ページ用 余白多め */
+  margin-bottom: 60px;
+}
+
+/* 共通カード/コンテナ */
+.form-container, .main-container {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+.form-container { padding: 40px; }
+.main-container { overflow: hidden; text-align: left; }
+
+/* ヘッダー（input/confirm） */
+.header {
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 30px 20px;
+}
+.header h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+.header p { opacity: .9; font-size: 16px; }
+
+/* 完了ページ用ヘッダー上書き */
+.main-container .header.completion {
+  background: linear-gradient(135deg,#000 0%,#333 100%);
+  padding: 50px 20px;
+}
+.main-container .header.completion h1 { font-size: 32px; font-weight: 700; margin-bottom:12px; text-shadow:0 2px 4px rgba(0,0,0,.3); }
+.main-container .header.completion p { opacity:.95; font-size:18px; line-height:1.6; }
+
+/* 戻るリンク (スタイルは common.css, 余白のみ個別) */
+.back-link { text-align:left; margin-bottom:30px; }
+
+/* インデックス（メール入力 + Google） */
+.form-group { margin-bottom:24px; }
+
+/* Divider は common.css */
+
+/* ボタン: 共通スタイルは common.css。ここでは flow 固有 (secondary 等) のみ */
+.btn { width:100%; padding:16px; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; transition:.3s ease; display:flex; align-items:center; justify-content:center; gap:10px; }
+.btn-secondary { background:#fff; color:#333; border:2px solid #e0e0e0; }
+.btn-secondary:hover { background:#f9f9f9; border-color:#007acc; }
+
+/* 入力（詳細フォーム） */
+.section { background:#fff; border:2px solid #e0e0e0; border-radius:12px; padding:30px; margin-bottom:30px; }
+.section-header { display:flex; align-items:center; gap:12px; margin-bottom:24px; padding-bottom:12px; border-bottom:2px solid #f0f0f0; }
+.section-number { background:#000; color:#fff; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:16px; }
+.section-title { font-size:20px; font-weight:600; color:#333; }
+
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.form-group.flex-col { display:flex; flex-direction:column; }
+.form-group.full-width { grid-column:1 / -1; }
+.form-group label { font-weight:600; color:#333; margin-bottom:8px; display:flex; align-items:center; gap:4px; }
+.required { color:#e74c3c; font-size:14px; }
+
+.checkbox-group { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:8px; }
+.checkbox-item { display:flex; align-items:center; gap:8px; padding:12px 16px; background:#f9f9f9; border:1px solid #e0e0e0; border-radius:8px; cursor:pointer; transition:.3s; }
+.checkbox-item:hover { background:#e3f2fd; border-color:#007acc; }
+.checkbox-item.selected { background:#e3f2fd; border-color:#007acc; color:#1976d2; }
+.checkbox-item input[type=checkbox] { margin:0; cursor:pointer; }
+.checkbox-item label { margin:0; cursor:pointer; font-weight:500; }
+
+.terms { background:#f9f9f9; padding:20px; border-radius:8px; margin-bottom:20px; border-left:4px solid #000; }
+.terms p { color:#666; font-size:14px; line-height:1.6; }
+.terms a { color:#007acc; text-decoration:none; }
+.terms a:hover { text-decoration:underline; }
+
+/* 確認ページ */
+.confirm-row { display:grid; grid-template-columns:1fr 2fr; gap:20px; margin-bottom:20px; align-items:center; }
+.confirm-label { font-weight:600; color:#333; display:flex; align-items:center; gap:4px; }
+.confirm-value { padding:12px 16px; background:#f9f9f9; border:1px solid #e0e0e0; border-radius:8px; color:#333; font-size:16px; }
+.confirm-value.empty { color:#999; font-style:italic; }
+.responsibilities-list { display:flex; flex-wrap:wrap; gap:8px; }
+.responsibility-tag { background:#e3f2fd; color:#1976d2; padding:6px 12px; border-radius:20px; font-size:14px; font-weight:500; border:1px solid #007acc; }
+.button-group { display:grid; grid-template-columns:1fr 2fr; gap:15px; margin-top:30px; }
+
+/* 完了ページ */
+.success-icon { width:80px; height:80px; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; box-shadow:0 4px 20px rgba(0,0,0,.2); }
+.success-icon::before { content:"✓"; color:#4CAF50; font-size:48px; font-weight:bold; }
+.content { padding:50px 40px; }
+.welcome-message { background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%); border-radius:12px; padding:30px; margin-bottom:40px; border-left:5px solid #000; }
+.welcome-message h2 { font-size:24px; font-weight:600; color:#333; margin-bottom:16px; }
+.welcome-message p { color:#666; font-size:16px; line-height:1.7; margin-bottom:12px; }
+.next-steps { background:#fff; border:2px solid #e0e0e0; border-radius:12px; padding:30px; margin-bottom:40px; text-align:left; }
+.next-steps h3 { font-size:20px; font-weight:600; color:#333; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+.next-steps h3::before { content:"📋"; font-size:24px; }
+.steps-list { list-style:none; }
+.steps-list li { display:flex; align-items:flex-start; gap:15px; margin-bottom:15px; padding:15px; background:#f9f9f9; border-radius:8px; border-left:4px solid #007acc; }
+.step-number { background:#007acc; color:#fff; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px; flex-shrink:0; margin-top:2px; }
+.step-content { flex:1; }
+.step-title { font-weight:600; color:#333; margin-bottom:4px; }
+.step-description { color:#666; font-size:14px; line-height:1.5; }
+.contact-info { background:#fff3cd; border:1px solid #ffeaa7; border-radius:8px; padding:20px; margin-bottom:30px; }
+.contact-info h4 { color:#856404; font-size:16px; font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.contact-info h4::before { content:"📞"; font-size:18px; }
+.contact-info p { color:#856404; font-size:14px; line-height:1.6; }
+.contact-info a { color:#007acc; text-decoration:none; }
+.contact-info a:hover { text-decoration:underline; }
+.final-buttons.button-group { grid-template-columns:1fr 1fr; }
+.social-links { margin-top:40px; padding-top:30px; border-top:1px solid #e0e0e0; }
+.social-links h4 { font-size:16px; color:#333; margin-bottom:15px; }
+.social-buttons { display:flex; justify-content:center; gap:15px; flex-wrap:wrap; }
+.social-btn { padding:8px 16px; border:1px solid #ddd; border-radius:6px; color:#666; text-decoration:none; font-size:14px; transition:.3s; display:flex; align-items:center; gap:6px; }
+.social-btn:hover { background:#f0f0f0; border-color:#007acc; color:#007acc; }
+
+/* ===== レスポンシブ ===== */
+@media (max-width: 800px) {
+  .form-row { grid-template-columns:1fr; }
+  .form-container { padding:20px; }
+  .checkbox-group { grid-template-columns:1fr; }
+  .confirm-row { grid-template-columns:1fr; gap:8px; }
+  .button-group { grid-template-columns:1fr; }
+  .content { padding:30px 20px; }
+  .welcome-message, .next-steps { padding:20px; }
+}
+
+@media (max-width: 600px) {
+  body.signup-flow { padding:15px; }
+  .main-container { border-radius:8px; }
+  .header { padding:20px 15px; }
+  .header h1 { font-size:24px; }
+  .form-container { padding:15px; }
+  .success-icon { width:60px; height:60px; }
+  .success-icon::before { font-size:36px; }
+  .social-buttons { flex-direction:column; align-items:center; }
+  .social-btn { width:100%; max-width:200px; justify-content:center; }
+}
+
+@media (max-width: 480px) {
+  .section { padding:20px 15px; }
+  .confirm-value { padding:10px 12px; font-size:15px; }
+  .welcome-message { padding:15px; }
+  .next-steps { padding:15px; }
+  .steps-list li { padding:12px; }
+  .input-field, .form-control, .btn-primary, .btn-google { padding:14px 16px; font-size:15px; }
+}
+
+@media (max-width: 360px) {
+  .form-container { padding:20px 15px; }
+  .input-field, .btn-primary, .btn-google { padding:12px 14px; font-size:14px; }
+}
+
+@media (min-width: 768px) {
+  .container.narrow { max-width:520px; }
+  .form-container.wide-pad { padding:50px; }
+  .input-field, .btn-primary, .btn-google { padding:18px 24px; font-size:17px; }
+}
+
+@media (min-width: 1024px) {
+  .form-container.wide-pad { padding:50px; }
+  .content { padding:60px 50px; }
+}

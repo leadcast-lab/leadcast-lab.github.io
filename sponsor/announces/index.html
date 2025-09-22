@@ -505,65 +505,39 @@
     </div>
 
     <script>
-        // サイドバーとヘッダーを読み込み
-        document.addEventListener('DOMContentLoaded', function() {
-            // サイドバー読み込み
+        document.addEventListener('DOMContentLoaded', () => {
+            // サイドバー読み込み (detail.html と同じシンプル実装)
             fetch('../components/sidebar.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
+                .then(r => r.text())
+                .then(html => {
+                    const wrap = document.getElementById('sidebar-container');
+                    wrap.innerHTML = html;
+                    highlightActiveSidebar();
                 })
-                .then(data => {
-                    document.getElementById('sidebar-container').innerHTML = data;
-                    // サイドバーのスクリプトを実行
-                    const scripts = document.getElementById('sidebar-container').querySelectorAll('script');
-                    scripts.forEach(script => {
-                        const newScript = document.createElement('script');
-                        newScript.textContent = script.textContent;
-                        document.head.appendChild(newScript);
-                    });
-                })
-                .catch(error => {
-                    console.error('サイドバー読み込みエラー:', error);
-                    console.log('サイドバーの読み込みに失敗しました。パス: ../components/sidebar.html');
-                });
+                .catch(e => console.error('サイドバー読み込みエラー:', e));
 
             // ヘッダー読み込み
             fetch('../components/header.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('header-container').innerHTML = html;
                 })
-                .then(data => {
-                    document.getElementById('header-container').innerHTML = data;
-                    // ヘッダーのスクリプトを実行
-                    const scripts = document.getElementById('header-container').querySelectorAll('script');
-                    scripts.forEach(script => {
-                        const newScript = document.createElement('script');
-                        newScript.textContent = script.textContent;
-                        document.head.appendChild(newScript);
-                    });
-                })
-                .catch(error => {
-                    console.error('ヘッダー読み込みエラー:', error);
-                    console.log('ヘッダーの読み込みに失敗しました。パス: ../components/header.html');
-                });
+                .catch(e => console.error('ヘッダー読み込みエラー:', e));
+
+            initFilters();
         });
 
-        // お知らせ詳細表示
+        // お知らせ詳細へ遷移
         function viewAnnouncement(id) {
             window.location.href = `./detail.html?id=${id}`;
         }
 
-        // フィルター機能
-        document.addEventListener('DOMContentLoaded', function() {
+        // フィルター初期化
+        function initFilters() {
             const statusFilter = document.getElementById('statusFilter');
             const categoryFilter = document.getElementById('categoryFilter');
             const searchInput = document.getElementById('searchInput');
+            if (!statusFilter || !categoryFilter || !searchInput) return;
 
             function applyFilters() {
                 const announcements = document.querySelectorAll('.announcement-item');
@@ -572,62 +546,52 @@
                 const searchValue = searchInput.value.toLowerCase();
 
                 announcements.forEach(item => {
-                    let shouldShow = true;
+                    let show = true;
+                    const statusEl = item.querySelector('.announcement-status');
+                    const categoryEl = item.querySelector('.announcement-category');
+                    const title = item.querySelector('.announcement-title').textContent.toLowerCase();
+                    const preview = item.querySelector('.announcement-preview').textContent.toLowerCase();
 
-                    // ステータスフィルター
                     if (statusValue !== 'all') {
-                        const status = item.querySelector('.announcement-status');
-                        if (statusValue === 'new' && !status.classList.contains('status-new')) {
-                            shouldShow = false;
-                        } else if (statusValue === 'read' && !status.classList.contains('status-read')) {
-                            shouldShow = false;
-                        } else if (statusValue === 'important' && !status.classList.contains('status-important')) {
-                            shouldShow = false;
-                        }
+                        if (statusValue === 'new' && !statusEl.classList.contains('status-new')) show = false;
+                        else if (statusValue === 'read' && !statusEl.classList.contains('status-read')) show = false;
+                        else if (statusValue === 'important' && !statusEl.classList.contains('status-important')) show = false;
                     }
-
-                    // カテゴリフィルター
-                    if (categoryValue !== 'all' && shouldShow) {
-                        const category = item.querySelector('.announcement-category');
-                        if (!category.classList.contains(`category-${categoryValue}`)) {
-                            shouldShow = false;
-                        }
-                    }
-
-                    // 検索フィルター
-                    if (searchValue && shouldShow) {
-                        const title = item.querySelector('.announcement-title').textContent.toLowerCase();
-                        const preview = item.querySelector('.announcement-preview').textContent.toLowerCase();
-                        if (!title.includes(searchValue) && !preview.includes(searchValue)) {
-                            shouldShow = false;
-                        }
-                    }
-
-                    item.style.display = shouldShow ? 'flex' : 'none';
+                    if (show && categoryValue !== 'all' && !categoryEl.classList.contains(`category-${categoryValue}`)) show = false;
+                    if (show && searchValue && !title.includes(searchValue) && !preview.includes(searchValue)) show = false;
+                    item.style.display = show ? 'flex' : 'none';
                 });
             }
 
             statusFilter.addEventListener('change', applyFilters);
             categoryFilter.addEventListener('change', applyFilters);
             searchInput.addEventListener('input', applyFilters);
-        });
+        }
 
-        // サイドバートグル機能
+        // サイドバーアクティブ表示
+        function highlightActiveSidebar() {
+            const current = window.location.pathname.replace(/\\/g,'/');
+            const links = document.querySelectorAll('#sidebar-container a.sidebar-item');
+            links.forEach(a => {
+                const href = a.getAttribute('href');
+                if (!href) return;
+                // /sponsor/announces/ パスを含む場合アクティブ
+                if (current.endsWith('/sponsor/announces/') || current.endsWith('/sponsor/announces/index.html')) {
+                    if (href.includes('/sponsor/announces')) a.classList.add('active');
+                } else if (current.endsWith(href) || current === href) {
+                    a.classList.add('active');
+                }
+            });
+        }
+
+        // サイドバー開閉
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const content = document.querySelector('.content');
-            
-            if (sidebar && content) {
-                sidebar.classList.toggle('collapsed');
-                if (sidebar.classList.contains('collapsed')) {
-                    content.style.marginLeft = '0';
-                } else {
-                    content.style.marginLeft = '250px';
-                }
-            }
+            if (!sidebar || !content) return;
+            sidebar.classList.toggle('collapsed');
+            content.style.marginLeft = sidebar.classList.contains('collapsed') ? '0' : '250px';
         }
-
-        // グローバルに関数を登録
         window.toggleSidebar = toggleSidebar;
     </script>
 </body>
