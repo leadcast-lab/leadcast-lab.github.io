@@ -11,9 +11,7 @@ body.auth-center { background-color:#f8f8f8; min-height:100vh; display:flex; fle
 .back-link:hover { background:#007acc; color:#fff; }
 
 /* Image logo override (login page) */
-.knowledge-cast-logo { text-align:center; }
-.knowledge-cast-logo img { max-width:260px; width:100%; height:auto; display:block; margin:0 auto 40px; }
-@media (max-width:600px){ .knowledge-cast-logo img{ max-width:200px; } }
+/* logo sizing unified in common.css */
 
 @media (max-width:600px){ .form-container.auth-box{ padding:30px 25px; margin:0 10px 20px;} }
 @media (max-width:480px){ body.auth-center{ padding:15px;} .form-container.auth-box{ padding:25px 20px; margin:0 5px 15px;} }

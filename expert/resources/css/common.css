@@ -43,8 +43,9 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helve
 	============================================================= */
 
 /* Logo */
-.knowledge-cast-logo { color:var(--color-text); font-size:36px; font-weight:bold; letter-spacing:6px; line-height:1.3; margin-bottom:40px; }
-.knowledge-cast-logo .highlight { background:var(--color-primary); color:#fff; padding:2px 8px; display:inline-block; width:60px; height:20px; }
+/* Unified image logo block */
+.knowledge-cast-logo { text-align:center; margin-bottom:40px; }
+.knowledge-cast-logo img { max-width:260px; width:100%; height:auto; display:block; margin:0 auto 40px; }
 
 /* Inputs (base) */
 .input-field, .form-input, .form-control, .date-select { background:#f9f9f9; border:1px solid #e0e0e0; border-radius:var(--radius-md); font-size:16px; padding:16px 20px; transition:var(--transition-fast); color:var(--color-text); width:100%; display:block; }
@@ -84,24 +85,25 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helve
 
 /* Responsive breakpoints (empty scaffolds for overrides) */
 @media (max-width:800px) {
-	.knowledge-cast-logo { font-size:28px; letter-spacing:4px; margin-bottom:30px; }
-	.knowledge-cast-logo .highlight { padding:1px 6px; width:50px; height:18px; }
+	/* size adjustments no longer needed for text logo at <=1024px */
 }
 @media (max-width:600px) {
-	.knowledge-cast-logo { font-size:24px; letter-spacing:3px; margin-bottom:25px; }
 }
 @media (max-width:480px) {
-	.knowledge-cast-logo { font-size:20px; letter-spacing:2px; margin-bottom:20px; }
-	.knowledge-cast-logo .highlight { padding:1px 4px; width:40px; height:16px; }
+	/* deprecated text logo responsive rules removed */
 }
 @media (max-width:360px) {
-	.knowledge-cast-logo { font-size:20px; letter-spacing:2px; margin-bottom:30px; }
+	/* keep margin variant if needed */
 }
 @media (min-width:768px) {
-	.knowledge-cast-logo.large-start { font-size:42px; letter-spacing:8px; margin-bottom:70px; }
-	.knowledge-cast-logo.large-start .highlight { padding:3px 10px; width:70px; height:24px; }
+	.knowledge-cast-logo.large-start img { max-width:320px; margin-bottom:70px; }
 }
 @media (min-width:1024px) {
-	.knowledge-cast-logo { font-size:42px; letter-spacing:8px; margin-bottom:50px; }
-	.knowledge-cast-logo .highlight { padding:3px 10px; width:70px; height:24px; }
+	/* initial large size now handled by image sizing */
+	.knowledge-cast-logo img { margin-bottom:50px; }
+}
+
+@media (max-width:600px){
+  .knowledge-cast-logo img { max-width:200px; margin-bottom:30px; }
+  .knowledge-cast-logo.large-start img { max-width:240px; margin-bottom:50px; }
 }
