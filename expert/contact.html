@@ -127,84 +127,9 @@
         </div>
     </main>
 
-    <script>
-        // コンポーネントの読み込み
-        async function loadComponents() {
-            try {
-                // ヘッダーを読み込み
-                const headerResponse = await fetch('/expert/components/header.html');
-                const headerHTML = await headerResponse.text();
-                document.getElementById('header-container').innerHTML = headerHTML;
-
-                // サイドバーを読み込み
-                const sidebarResponse = await fetch('/expert/components/sidebar.html');
-                const sidebarHTML = await sidebarResponse.text();
-                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
-
-                // お問合せページがアクティブになるようにサイドバーを更新
-                setTimeout(() => {
-                    updateSidebarActive();
-                }, 100);
-            } catch (error) {
-                console.error('コンポーネントの読み込みエラー:', error);
-            }
-        }
-
-        // サイドバーのアクティブ状態を更新
-        function updateSidebarActive() {
-            const sidebarItems = document.querySelectorAll('.sidebar-item');
-            sidebarItems.forEach(item => {
-                item.classList.remove('active');
-                // contact.htmlの場合はお問合せメニューをアクティブにする
-                if (item.href && (item.href.includes('/expert/contact.html') || item.href.endsWith('contact.html'))) {
-                    item.classList.add('active');
-                }
-            });
-        }
-
-        // フォーム送信処理
-        document.getElementById('contactForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const submitBtn = document.querySelector('.submit-btn');
-            const originalText = submitBtn.innerHTML;
-            
-            // 送信中の表示
-            submitBtn.innerHTML = '📤 送信中...';
-            submitBtn.disabled = true;
-            
-            // 送信処理のシミュレーション
-            setTimeout(() => {
-                alert('お問合せを受け付けました。\n確認メールをお送りしましたのでご確認ください。\n24時間以内にご返信いたします。');
-                
-                // フォームをリセット
-                document.getElementById('contactForm').reset();
-                
-                // ボタンを元に戻す
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        });
-
-        // フォーム入力のリアルタイムバリデーション
-        document.querySelectorAll('.form-input, .form-textarea, .form-select').forEach(input => {
-            input.addEventListener('blur', (e) => {
-                if (e.target.hasAttribute('required') && !e.target.value.trim()) {
-                    e.target.style.borderColor = '#dc3545';
-                } else {
-                    e.target.style.borderColor = '#e0e0e0';
-                }
-            });
-
-            input.addEventListener('input', (e) => {
-                if (e.target.style.borderColor === 'rgb(220, 53, 69)' && e.target.value.trim()) {
-                    e.target.style.borderColor = '#e0e0e0';
-                }
-            });
-        });
-
-        // ページ読み込み時にコンポーネントを読み込む
-        document.addEventListener('DOMContentLoaded', loadComponents);
-    </script>
+    <script src="/expert/resources/js/components-loader.js" defer></script>
+    <script src="/expert/resources/js/header.js" defer></script>
+    <script src="/expert/resources/js/sidebar.js" defer></script>
+    <script src="/expert/resources/js/contact.js" defer></script>
 </body>
 </html>

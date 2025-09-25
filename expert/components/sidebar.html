@@ -1,64 +1,26 @@
 <!-- サイドバー -->
-<aside class="sidebar" id="sidebar">
-    <nav class="sidebar-nav">
-        <a href="/expert/projects" class="sidebar-item">
-            <span class="sidebar-icon">🔍</span>
-            <span class="sidebar-text">プロジェクト検索</span>
-        </a>
-        <a href="/expert/mypage" class="sidebar-item">
-            <span class="sidebar-icon">👤</span>
-            <span class="sidebar-text">マイページ</span>
-        </a>
-        <a href="/expert/chats" class="sidebar-item">
-            <span class="sidebar-icon">💬</span>
-            <span class="sidebar-text">チャット</span>
-        </a>
-        <a href="/expert/contact" class="sidebar-item">
-            <span class="sidebar-icon">📞</span>
-            <span class="sidebar-text">お問合せ</span>
-        </a>
-        <button class="sidebar-toggle" onclick="toggleSidebar()">
-            <span class="sidebar-icon">☰</span>
-            <span class="sidebar-text">折りたたむ</span>
-        </button>
+<aside class="sidebar" id="sidebar" aria-label="サイドナビゲーション">
+    <nav class="sidebar-nav" role="navigation">
+        <div class="sidebar-section" aria-label="メイン">
+            <a href="/expert/projects" class="sidebar-item" data-title="プロジェクト検索">
+                <span class="sidebar-icon">🔍</span>
+                <span class="sidebar-text">プロジェクト検索</span>
+            </a>
+            <a href="/expert/mypage" class="sidebar-item" data-title="マイページ">
+                <span class="sidebar-icon">👤</span>
+                <span class="sidebar-text">マイページ</span>
+            </a>
+            <a href="/expert/chats" class="sidebar-item" data-title="チャット">
+                <span class="sidebar-icon">💬</span>
+                <span class="sidebar-text">チャット</span>
+            </a>
+            <a href="/expert/contact" class="sidebar-item" data-title="お問合せ">
+                <span class="sidebar-icon">📞</span>
+                <span class="sidebar-text">お問合せ</span>
+            </a>
+        </div>
+        <!-- 下部ユーティリティ（幅切替ボタン削除済） -->
     </nav>
 </aside>
 <!-- Styles moved to /expert/resources/css/sidebar-header.css -->
-
-<script>
-// サイドバー制御関数
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.querySelector('.main-content');
-    
-    if (sidebar && mainContent) {
-        sidebar.classList.toggle('collapsed');
-        mainContent.classList.toggle('sidebar-collapsed');
-    }
-}
-
-function toggleMobileSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        sidebar.classList.toggle('mobile-open');
-    }
-}
-
-// アクティブ状態の更新
-function updateSidebarActive() {
-    const currentPath = window.location.pathname;
-    const sidebarItems = document.querySelectorAll('.sidebar-item');
-    
-    sidebarItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.href && currentPath.includes(item.href.split('/').pop())) {
-            item.classList.add('active');
-        }
-    });
-}
-
-// ページ読み込み時にアクティブ状態を更新
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(updateSidebarActive, 100);
-});
-</script>
+<script src="/expert/resources/js/sidebar.js" defer></script>

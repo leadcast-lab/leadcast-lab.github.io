@@ -9,69 +9,40 @@
     <link rel="stylesheet" href="/expert/resources/css/mypage.css">
 </head>
 <body>
-    <!-- ヘッダー -->
+    <!-- ヘッダー / サイドバー 挿入コンテナ -->
     <div id="header-container"></div>
-
-    <!-- サイドバー -->
     <div id="sidebar-container"></div>
 
-    <!-- メインコンテンツ -->
     <main class="main-content">
         <div class="container">
-            <h1 class="page-title">マイページ</h1>
+            <h1 class="page-title">👤 マイページ</h1>
 
-            <!-- 登録情報セクション -->
-            <section class="content-section">
-                <div class="user-profile">
-                    <div class="profile-info">
-                        <h2>登録情報</h2>
-                        <div class="profile-details">
-                            <div class="profile-detail-item">
-                                <span>👤 氏名：田中 太郎</span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span>📧 メールアドレス：tanaka@example.com</span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span>📞 電話番号：050-1234-5678</span>
-                            </div>
-                            <div class="profile-detail-item">
-                                <span>💼 専門分野：マーケティング, セールス</span>
-                            </div>
-                        </div>
+            <!-- プロフィールセクション -->
+            <section class="content-section user-profile">
+                <div class="profile-info">
+                    <h2>プロフィール情報</h2>
+                    <div class="profile-details">
+                        <div class="profile-detail-item">🏢 <span>所属: イノベーション株式会社</span></div>
+                        <div class="profile-detail-item">🧑 <span>氏名: 山田 太郎</span></div>
+                        <div class="profile-detail-item">📧 <span>メール: taro.yamada@example.com</span></div>
+                        <div class="profile-detail-item">📞 <span>電話: 090-1234-5678</span></div>
+                        <div class="profile-detail-item">💼 <span>役職: セールスコンサルタント</span></div>
+                        <div class="profile-detail-item">🎯 <span>専門領域: B2B 営業 / KPI 改善</span></div>
                     </div>
-                    <button class="edit-button">
-                        ✏️ 編集
-                    </button>
+                </div>
+                <div>
+                    <button class="edit-button" type="button">✏️ プロフィール編集</button>
                 </div>
             </section>
 
-            <!-- 案件レビューセクション -->
+            <!-- レビューセクション -->
             <section class="content-section">
-                <h2 class="section-title">📝 案件レビュー</h2>
-                
-                <div class="review-card">
-                    <div class="review-header">
-                        <div class="company-name">株式会社テックソリューション</div>
-                        <div class="review-meta">お客様のマーケティング担当者</div>
-                    </div>
-                    <div class="star-rating">
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="rating-text">5.0</span>
-                    </div>
-                    <p class="review-text">
-                        お客様の案件やコンサルいただき、すごく勉強になりました。また、参考になる「アクションプランの作成例」等、チーム全体で有効活用させていただいています。
-                    </p>
-                </div>
+                <h2 class="section-title">🌟 直近のレビュー</h2>
 
                 <div class="review-card">
                     <div class="review-header">
-                        <div class="company-name">株式会社イノベーション</div>
-                        <div class="review-meta">お客様の営業部長</div>
+                        <div class="company-name">株式会社テックソリューション</div>
+                        <div class="review-meta">プロダクトマーケ担当</div>
                     </div>
                     <div class="star-rating">
                         <span class="star">⭐</span>
@@ -89,7 +60,7 @@
                 <div class="review-card">
                     <div class="review-header">
                         <div class="company-name">株式会社グロースパートナーズ</div>
-                        <div class="review-meta">お客様の事業開発担当者</div>
+                        <div class="review-meta">事業開発担当</div>
                     </div>
                     <div class="star-rating">
                         <span class="star">⭐</span>
@@ -100,7 +71,7 @@
                         <span class="rating-text">5.0</span>
                     </div>
                     <p class="review-text">
-                        マーケティング戦略の立案から実行まで、段階的にサポートしていただきました。おかげで新規顧客の獲得数が大幅に改善されました。
+                        マーケティング戦略の立案から実行まで、段階的にサポートしていただきました。新規顧客の獲得数が大幅に改善されました。
                     </p>
                 </div>
             </section>
@@ -108,7 +79,6 @@
             <!-- 案件履歴セクション -->
             <section class="content-section">
                 <h2 class="section-title">📋 案件履歴</h2>
-                
                 <table class="history-table">
                     <thead>
                         <tr>
@@ -171,72 +141,9 @@
         </div>
     </main>
 
-    <script>
-        // 編集ボタンのクリックイベント
-        document.querySelector('.edit-button').addEventListener('click', () => {
-            alert('プロフィール編集機能は準備中です。');
-        });
-
-        // レビューカードのホバーエフェクト
-        document.querySelectorAll('.review-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-4px)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0)';
-            });
-        });
-
-        // テーブル行のホバーエフェクト
-        document.querySelectorAll('.history-table tbody tr').forEach(row => {
-            row.addEventListener('click', () => {
-                alert('案件詳細画面は準備中です。');
-            });
-        });
-
-        // レスポンシブメニュー（必要に応じて追加）
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.style.transform = sidebar.style.transform === 'translateX(0px)' ? 'translateX(-100%)' : 'translateX(0px)';
-        }
-
-        // コンポーネントの読み込み
-        async function loadComponents() {
-            try {
-                // ヘッダーを読み込み
-                const headerResponse = await fetch('/expert/components/header.html');
-                const headerHTML = await headerResponse.text();
-                document.getElementById('header-container').innerHTML = headerHTML;
-
-                // サイドバーを読み込み
-                const sidebarResponse = await fetch('/expert/components/sidebar.html');
-                const sidebarHTML = await sidebarResponse.text();
-                document.getElementById('sidebar-container').innerHTML = sidebarHTML;
-
-                // マイページがアクティブになるようにサイドバーを更新
-                setTimeout(() => {
-                    updateSidebarActive();
-                }, 100);
-            } catch (error) {
-                console.error('コンポーネントの読み込みエラー:', error);
-            }
-        }
-
-        // サイドバーのアクティブ状態を更新
-        function updateSidebarActive() {
-            const sidebarItems = document.querySelectorAll('.sidebar-item');
-            sidebarItems.forEach(item => {
-                item.classList.remove('active');
-                // mypage.htmlの場合はマイページメニューをアクティブにする
-                if (item.href && (item.href.includes('/expert/mypage.html') || item.href.endsWith('mypage.html'))) {
-                    item.classList.add('active');
-                }
-            });
-        }
-
-        // ページ読み込み時にコンポーネントを読み込む
-        document.addEventListener('DOMContentLoaded', loadComponents);
-    </script>
+    <script src="/expert/resources/js/components-loader.js" defer></script>
+    <script src="/expert/resources/js/header.js" defer></script>
+    <script src="/expert/resources/js/sidebar.js" defer></script>
+    <script src="/expert/resources/js/mypage.js" defer></script>
 </body>
 </html>

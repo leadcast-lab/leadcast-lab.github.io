@@ -1,18 +1,57 @@
 <!-- ヘッダー -->
-<header class="header">
+<header class="header" role="banner">
     <div class="header-content">
-        <a href="/expert/mypage" class="logo" aria-label="KNOWLEDGE CAST ホーム">
-            <picture>
-                <source srcset="/expert/resources/logo/knowledgecast_w.png" media="(prefers-color-scheme: dark)">
-                <img src="/expert/resources/logo/knowledgecast_b.png" alt="KNOWLEDGE CAST" class="logo-img" />
-            </picture>
-        </a>
-        <div class="user-menu">
-            <div class="user-info">
-                <span>👤 田中 太郎さん</span>
-            </div>
-            <a href="/login" class="logout-btn">ログアウト</a>
+        <div class="header-left">
+            <button class="menu-btn" id="menuToggle" aria-label="サイドバー切替" aria-controls="sidebar" aria-expanded="true" title="メニュー" type="button">
+                <span class="menu-icon" aria-hidden="true"></span>
+            </button>
+            <a href="/expert/mypage" class="logo" aria-label="KNOWLEDGE CAST ホーム">
+                <picture>
+                    <source srcset="/expert/resources/logo/knowledgecast_white.png" media="(prefers-color-scheme: dark)">
+                    <img src="/expert/resources/logo/knowledgecast_white.png" alt="KNOWLEDGE CAST" class="logo-img" width="160" height="44" />
+                </picture>
+            </a>
         </div>
+        <div class="header-search" role="search">
+            <form action="/expert/projects" class="search-form" id="globalSearchForm" method="get">
+                <input type="text" name="q" class="search-input" placeholder="プロジェクトを検索" aria-label="検索" />
+                <button type="submit" class="search-btn" aria-label="検索実行">
+                    <span class="icon-search" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="voice-btn" aria-label="音声検索 (デモ)" title="音声検索 (デモ)" disabled>
+                    <span class="icon-mic" aria-hidden="true"></span>
+                </button>
+            </form>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn notif-btn" type="button" aria-label="通知" title="通知">
+                <span class="icon-bell" aria-hidden="true"></span>
+                <span class="badge" aria-label="新しい通知 3 件">3</span>
+            </button>
+            <div class="user-menu dropdown" aria-label="ユーザーメニュー">
+                <button class="avatar-btn" id="userMenuBtn" type="button" aria-haspopup="true" aria-expanded="false">
+                    <span class="avatar-circle" aria-hidden="true">TT</span>
+                </button>
+                <div class="dropdown-menu" id="userDropdown" role="menu" aria-hidden="true">
+                    <a href="/expert/mypage" role="menuitem">マイページ</a>
+                    <a href="/expert/chats" role="menuitem">チャット</a>
+                    <a href="/expert/contact" role="menuitem">サポート</a>
+                    <div class="divider-line" role="separator"></div>
+                    <a href="/login" role="menuitem" class="logout-link">ログアウト</a>
+                </div>
+            </div>
+        </div>
+        <button class="icon-btn search-toggle" id="searchToggle" aria-label="検索" title="検索">
+            <span class="icon-search" aria-hidden="true"></span>
+        </button>
     </div>
+    <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+        <form action="/expert/projects" class="search-overlay-form" method="get">
+            <input type="text" name="q" class="search-overlay-input" placeholder="検索" aria-label="検索" />
+            <button type="submit" class="search-overlay-submit" aria-label="検索実行"><span class="icon-search" aria-hidden="true"></span></button>
+            <button type="button" class="search-overlay-close" id="closeSearchOverlay" aria-label="閉じる">✕</button>
+        </form>
+    </div>
+<!-- Styles in /expert/resources/css/sidebar-header.css -->
 </header>
-<!-- Styles moved to /expert/resources/css/sidebar-header.css -->
+<script src="/expert/resources/js/header.js" defer></script>

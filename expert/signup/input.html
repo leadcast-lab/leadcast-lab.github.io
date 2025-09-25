@@ -11,8 +11,8 @@
     <div class="container">
         <div class="knowledge-cast-logo" aria-label="KNOWLEDGE CAST ロゴ">
             <picture>
-                <source srcset="/expert/resources/logo/knowledgecast_w.png" media="(prefers-color-scheme: dark)">
-                <img src="/expert/resources/logo/knowledgecast_b.png" alt="KNOWLEDGE CAST" />
+                <source srcset="/expert/resources/logo/knowledgecast_white.png" media="(prefers-color-scheme: dark)">
+                <img src="/expert/resources/logo/knowledgecast_white.png" alt="KNOWLEDGE CAST" />
             </picture>
         </div>
 
@@ -158,85 +158,6 @@
         </div>
     </div>
 
-    <script>
-        // チェックボックスの視覚的なトグル
-        const toggleCheckbox = (id) => {
-            const checkbox = document.getElementById(id);
-            const item = checkbox.parentElement;
-
-            checkbox.checked = !checkbox.checked;
-
-            if (checkbox.checked) {
-                item.classList.add('selected');
-            } else {
-                item.classList.remove('selected');
-            }
-        };
-
-        // フォーム送信処理
-        document.getElementById('detailForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // 必須フィールドのチェック
-            const requiredFields = ['lastName', 'firstName', 'email', 'companyName', 'department', 'companyPhone'];
-            let isValid = true;
-
-            requiredFields.forEach(field => {
-                const input = document.getElementById(field);
-                if (!input.value.trim()) {
-                    input.style.borderColor = '#e74c3c';
-                    isValid = false;
-                } else {
-                    input.style.borderColor = '#e0e0e0';
-                }
-            });
-
-            // 担当業務の選択チェック
-            const responsibilities = document.querySelectorAll('input[name="responsibilities"]:checked');
-            if (responsibilities.length === 0) {
-                alert('担当業務を少なくとも1つ選択してください。');
-                isValid = false;
-            }
-
-            if (!isValid) {
-                return false;
-            }
-
-            // 確認画面へリダイレクト
-            window.location.href = './confirm.html';
-        });
-
-        // リアルタイムバリデーション
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('blur', () => {
-                if (input.hasAttribute('required') && !input.value.trim()) {
-                    input.style.borderColor = '#e74c3c';
-                } else {
-                    input.style.borderColor = '#e0e0e0';
-                }
-            });
-
-            input.addEventListener('input', () => {
-                if (input.value.trim()) {
-                    input.style.borderColor = '#007acc';
-                }
-            });
-        });
-
-        // ページ読み込み時の初期化
-        document.addEventListener('DOMContentLoaded', () => {
-            // チェックボックスの初期状態を設定
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', () => {
-                    const item = checkbox.parentElement;
-                    if (checkbox.checked) {
-                        item.classList.add('selected');
-                    } else {
-                        item.classList.remove('selected');
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="/expert/resources/js/signup-input.js" defer></script>
 </body>
 </html>

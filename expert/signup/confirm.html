@@ -11,8 +11,8 @@
     <div class="container">
         <div class="knowledge-cast-logo" aria-label="KNOWLEDGE CAST ロゴ">
             <picture>
-                <source srcset="/expert/resources/logo/knowledgecast_w.png" media="(prefers-color-scheme: dark)">
-                <img src="/expert/resources/logo/knowledgecast_b.png" alt="KNOWLEDGE CAST" />
+                <source srcset="/expert/resources/logo/knowledgecast_white.png" media="(prefers-color-scheme: dark)">
+                <img src="/expert/resources/logo/knowledgecast_white.png" alt="KNOWLEDGE CAST" />
             </picture>
         </div>
 
@@ -122,113 +122,6 @@
         </div>
     </div>
 
-    <script>
-        // URLパラメータまたはセッションストレージからデータを取得
-        function loadFormData() {
-            // 実際の実装では、前のページからのデータを取得
-            // ここではサンプルデータを使用
-            const data = {
-                lastName: getUrlParam('lastName') || '山田',
-                firstName: getUrlParam('firstName') || '太郎',
-                phone: getUrlParam('phone') || '090-1234-5678',
-                email: getUrlParam('email') || 'yamada@example.com',
-                companyName: getUrlParam('companyName') || '山田商事株式会社',
-                department: getUrlParam('department') || '経理部',
-                position: getUrlParam('position') || '課長',
-                companyPhone: getUrlParam('companyPhone') || '03-1234-5678',
-                responsibilities: getUrlParam('responsibilities') || '経理,購買,給与計算'
-            };
-
-            return data;
-        }
-
-        // URLパラメータを取得する関数
-        function getUrlParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        // データを表示する関数
-        function displayData() {
-            const data = loadFormData();
-
-            // 表示用データの設定
-            document.getElementById('displayFullName').textContent = `${data.lastName} ${data.firstName}`;
-            document.getElementById('displayPhone').textContent = data.phone || '未入力';
-            document.getElementById('displayEmail').textContent = data.email;
-            document.getElementById('displayCompanyName').textContent = data.companyName;
-            document.getElementById('displayDepartment').textContent = data.department;
-            document.getElementById('displayPosition').textContent = data.position || '未入力';
-            document.getElementById('displayCompanyPhone').textContent = data.companyPhone;
-
-            // 担当業務の表示
-            const responsibilitiesContainer = document.getElementById('displayResponsibilities');
-            if (data.responsibilities) {
-                const responsibilities = data.responsibilities.split(',');
-                responsibilitiesContainer.innerHTML = '';
-                responsibilities.forEach(responsibility => {
-                    if (responsibility.trim()) {
-                        const tag = document.createElement('span');
-                        tag.className = 'responsibility-tag';
-                        tag.textContent = responsibility.trim();
-                        responsibilitiesContainer.appendChild(tag);
-                    }
-                });
-            }
-
-            // 隠しフィールドに値を設定
-            document.getElementById('hiddenLastName').value = data.lastName;
-            document.getElementById('hiddenFirstName').value = data.firstName;
-            document.getElementById('hiddenPhone').value = data.phone;
-            document.getElementById('hiddenEmail').value = data.email;
-            document.getElementById('hiddenCompanyName').value = data.companyName;
-            document.getElementById('hiddenDepartment').value = data.department;
-            document.getElementById('hiddenPosition').value = data.position;
-            document.getElementById('hiddenCompanyPhone').value = data.companyPhone;
-            document.getElementById('hiddenResponsibilities').value = data.responsibilities;
-
-            // 空の値の表示調整
-            document.querySelectorAll('.confirm-value').forEach(element => {
-                if (element.textContent === '未入力' || element.textContent.trim() === '') {
-                    element.classList.add('empty');
-                    if (element.textContent.trim() === '') {
-                        element.textContent = '未入力';
-                    }
-                }
-            });
-        }
-
-        // 戻るボタンの処理
-        function goBack() {
-            const data = loadFormData();
-            const params = new URLSearchParams();
-
-            // データをURLパラメータに追加
-            Object.keys(data).forEach(key => {
-                if (data[key]) {
-                    params.append(key, data[key]);
-                }
-            });
-
-            // 入力画面に戻る
-            window.location.href = `./input.html?${params.toString()}`;
-        }
-
-        // フォーム送信処理
-        document.getElementById('confirmForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // 登録完了の処理
-            alert('会員登録が完了しました！\nありがとうございます。完了ページへ移動します。');
-
-            // 完了ページへリダイレクト
-            window.location.href = './thanks.html';
-        });
-
-        // ページ読み込み時の初期化
-        document.addEventListener('DOMContentLoaded', () => {
-            displayData();
-        });
-    </script>
+    <script src="/expert/resources/js/signup-confirm.js" defer></script>
 </body>
 </html>

@@ -11,8 +11,8 @@
     <div class="container">
         <div class="knowledge-cast-logo" aria-label="KNOWLEDGE CAST ロゴ">
             <picture>
-                <source srcset="/expert/resources/logo/knowledgecast_w.png" media="(prefers-color-scheme: dark)">
-                <img src="/expert/resources/logo/knowledgecast_b.png" alt="KNOWLEDGE CAST" />
+                <source srcset="/expert/resources/logo/knowledgecast_white.png" media="(prefers-color-scheme: dark)">
+                <img src="/expert/resources/logo/knowledgecast_white.png" alt="KNOWLEDGE CAST" />
             </picture>
         </div>
 
@@ -113,146 +113,6 @@
         </div>
     </div>
 
-    <script>
-        // 年の選択肢を生成
-        function generateYearOptions() {
-            const yearSelect = document.getElementById('birthYear');
-            const currentYear = new Date().getFullYear();
-            const startYear = currentYear - 80;
-            const endYear = currentYear - 13; // 13歳以上
-
-            for (let year = endYear; year >= startYear; year--) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year + '年';
-                yearSelect.appendChild(option);
-            }
-        }
-
-        // 日の選択肢を生成
-        function generateDayOptions() {
-            const daySelect = document.getElementById('birthDay');
-            const month = parseInt(document.getElementById('birthMonth').value);
-            const year = parseInt(document.getElementById('birthYear').value);
-
-            // 既存の日の選択肢をクリア（最初のoptionは残す）
-            while (daySelect.children.length > 1) {
-                daySelect.removeChild(daySelect.lastChild);
-            }
-
-            if (!month) return;
-
-            // その月の日数を計算
-            let daysInMonth = 31;
-            if (month === 2) {
-                // うるう年の判定
-                if (year && ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0)) {
-                    daysInMonth = 29;
-                } else {
-                    daysInMonth = 28;
-                }
-            } else if ([4, 6, 9, 11].includes(month)) {
-                daysInMonth = 30;
-            }
-
-            // 日の選択肢を追加
-            for (let day = 1; day <= daysInMonth; day++) {
-                const option = document.createElement('option');
-                option.value = day;
-                option.textContent = day + '日';
-                daySelect.appendChild(option);
-            }
-        }
-
-        // 入力値の検証
-        function validateForm() {
-            const email = document.getElementById('email');
-            const birthYear = document.getElementById('birthYear');
-            const birthMonth = document.getElementById('birthMonth');
-            const birthDay = document.getElementById('birthDay');
-            const submitBtn = document.getElementById('submitBtn');
-
-            let isValid = true;
-
-            // メールアドレスの検証
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email.value)) {
-                email.classList.add('error');
-                document.getElementById('emailError').style.display = 'block';
-                isValid = false;
-            } else {
-                email.classList.remove('error');
-                document.getElementById('emailError').style.display = 'none';
-            }
-
-            // 生年月日の検証
-            if (!birthYear.value || !birthMonth.value || !birthDay.value) {
-                [birthYear, birthMonth, birthDay].forEach(select => {
-                    if (!select.value) select.classList.add('error');
-                });
-                document.getElementById('birthdateError').style.display = 'block';
-                isValid = false;
-            } else {
-                [birthYear, birthMonth, birthDay].forEach(select => {
-                    select.classList.remove('error');
-                });
-                document.getElementById('birthdateError').style.display = 'none';
-            }
-
-            submitBtn.disabled = !isValid;
-            return isValid;
-        }
-
-        // フォーム送信処理
-        document.getElementById('resetForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            if (!validateForm()) return;
-
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.innerHTML;
-
-            // 送信中の表示
-            submitBtn.innerHTML = '📧 送信中...';
-            submitBtn.disabled = true;
-
-            // 送信処理のシミュレーション
-            setTimeout(() => {
-                alert('パスワードリセット用のメールを送信しました。\n\nメールボックスをご確認いただき、記載されたリンクからパスワードの再設定を行ってください。\n\n※メールが届かない場合は、迷惑メールフォルダもご確認ください。');
-
-                // 成功時はメール送信完了画面へ（実際の実装では画面遷移）
-                // window.location.href = './reset-sent';
-
-                // デモ用にボタンを元に戻す
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        });
-
-        // リアルタイム入力検証
-        document.getElementById('email').addEventListener('input', validateForm);
-        document.getElementById('birthYear').addEventListener('change', () => {
-            generateDayOptions();
-            validateForm();
-        });
-        document.getElementById('birthMonth').addEventListener('change', () => {
-            generateDayOptions();
-            validateForm();
-        });
-        document.getElementById('birthDay').addEventListener('change', validateForm);
-
-        // フォーカス時のエラー状態クリア
-        document.querySelectorAll('.form-input, .date-select').forEach(input => {
-            input.addEventListener('focus', (e) => {
-                e.target.classList.remove('error');
-            });
-        });
-
-        // ページ読み込み時の初期化
-        document.addEventListener('DOMContentLoaded', () => {
-            generateYearOptions();
-            validateForm();
-        });
-    </script>
+    <script src="/expert/resources/js/password-reset.js" defer></script>
 </body>
 </html>

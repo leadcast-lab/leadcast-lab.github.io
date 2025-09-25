@@ -11,8 +11,8 @@
     <div class="container auth">
         <div class="knowledge-cast-logo" aria-label="KNOWLEDGE CAST ロゴ">
             <picture>
-                <source srcset="/expert/resources/logo/knowledgecast_w.png" media="(prefers-color-scheme: dark)">
-                <img src="/expert/resources/logo/knowledgecast_b.png" alt="KNOWLEDGE CAST" />
+                <source srcset="/expert/resources/logo/knowledgecast_white.png" media="(prefers-color-scheme: dark)">
+                <img src="/expert/resources/logo/knowledgecast_white.png" alt="KNOWLEDGE CAST" />
             </picture>
         </div>
 
@@ -65,19 +65,6 @@
         </div>
     </div>
 
-    <script>
-        // フォーム送信処理
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            window.location.href = '/expert/mypage'; // ログイン成功時はマイページへ
-        });
-
-        // Googleログイン処理
-        function loginWithGoogle() {
-            alert('Google アカウントでのログイン機能は実装中です。');
-        }
-    </script>
+    <script src="/expert/resources/js/login.js" defer></script>
 </body>
 </html>

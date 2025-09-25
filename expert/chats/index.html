@@ -130,41 +130,9 @@
         </div>
     </main>
 
-    <script>
-        // ヘッダーとサイドバーを読み込む関数
-        async function loadComponent(elementId, filePath) {
-            try {
-                const response = await fetch(filePath);
-                const html = await response.text();
-                document.getElementById(elementId).innerHTML = html;
-            } catch (error) {
-                console.error(`Error loading ${filePath}:`, error);
-            }
-        }
-
-        // ページ読み込み時にコンポーネントを読み込み
-        document.addEventListener('DOMContentLoaded', function() {
-            loadComponent('header-container', '/expert/components/header.html');
-            loadComponent('sidebar-container', '/expert/components/sidebar.html');
-        });
-
-        // サイドバートグル機能
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.querySelector('.main-content');
-            
-            if (sidebar && mainContent) {
-                sidebar.classList.toggle('collapsed');
-                if (sidebar.classList.contains('collapsed')) {
-                    mainContent.style.marginLeft = '0';
-                } else {
-                    mainContent.style.marginLeft = '250px';
-                }
-            }
-        }
-
-        // グローバルに関数を登録
-        window.toggleSidebar = toggleSidebar;
-    </script>
+    <script src="/expert/resources/js/components-loader.js" defer></script>
+    <script src="/expert/resources/js/header.js" defer></script>
+    <script src="/expert/resources/js/sidebar.js" defer></script>
+    <script src="/expert/resources/js/chats-index.js" defer></script>
 </body>
 </html>

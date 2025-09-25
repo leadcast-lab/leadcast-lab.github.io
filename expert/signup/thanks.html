@@ -11,8 +11,8 @@
     <div class="container">
         <div class="knowledge-cast-logo" aria-label="KNOWLEDGE CAST ロゴ">
             <picture>
-                <source srcset="/expert/resources/logo/knowledgecast_w.png" media="(prefers-color-scheme: dark)">
-                <img src="/expert/resources/logo/knowledgecast_b.png" alt="KNOWLEDGE CAST" />
+                <source srcset="/expert/resources/logo/knowledgecast_white.png" media="(prefers-color-scheme: dark)">
+                <img src="/expert/resources/logo/knowledgecast_white.png" alt="KNOWLEDGE CAST" />
             </picture>
         </div>
 
@@ -107,44 +107,6 @@
         </div>
     </div>
 
-    <script>
-        // ページ読み込み時のアニメーション
-        document.addEventListener('DOMContentLoaded', () => {
-            // 成功アイコンのアニメーション
-            const successIcon = document.querySelector('.success-icon');
-            setTimeout(() => {
-                successIcon.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    successIcon.style.transform = 'scale(1)';
-                }, 200);
-            }, 500);
-
-            // ステップのアニメーション
-            const steps = document.querySelectorAll('.steps-list li');
-            steps.forEach((step, index) => {
-                setTimeout(() => {
-                    step.style.opacity = '0';
-                    step.style.transform = 'translateY(20px)';
-                    step.style.transition = 'all 0.5s ease';
-                    
-                    setTimeout(() => {
-                        step.style.opacity = '1';
-                        step.style.transform = 'translateY(0)';
-                    }, 100);
-                }, index * 150);
-            });
-        });
-
-        // ボタンクリック時の効果
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                // クリック効果
-                btn.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    btn.style.transform = '';
-                }, 150);
-            });
-        });
-    </script>
+    <script src="/expert/resources/js/signup-thanks.js" defer></script>
 </body>
 </html>
