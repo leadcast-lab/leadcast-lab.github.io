@@ -10,6 +10,11 @@ body.auth-center { background-color:#f8f8f8; min-height:100vh; display:flex; fle
 .back-link { color:#007acc; text-decoration:none; font-size:14px; padding:8px 16px; border:1px solid #007acc; border-radius:6px; transition:.3s; display:inline-block; margin-top:20px; }
 .back-link:hover { background:#007acc; color:#fff; }
 
+/* Image logo override (login page) */
+.knowledge-cast-logo { text-align:center; }
+.knowledge-cast-logo img { max-width:260px; width:100%; height:auto; display:block; margin:0 auto 40px; }
+@media (max-width:600px){ .knowledge-cast-logo img{ max-width:200px; } }
+
 @media (max-width:600px){ .form-container.auth-box{ padding:30px 25px; margin:0 10px 20px;} }
 @media (max-width:480px){ body.auth-center{ padding:15px;} .form-container.auth-box{ padding:25px 20px; margin:0 5px 15px;} }
 @media (max-width:360px){ .form-container.auth-box{ padding:20px 15px;} }

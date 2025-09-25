@@ -19,6 +19,8 @@ body.signup-flow {
 .knowledge-cast-logo.large-start { /* index の最初ページ用 余白多め */
   margin-bottom: 60px;
 }
+.knowledge-cast-logo img { max-width:260px; width:100%; height:auto; display:block; margin:0 auto 40px; }
+@media (max-width:600px){ .knowledge-cast-logo img { max-width:200px; margin-bottom:30px; } }
 
 /* 共通カード/コンテナ */
 .form-container, .main-container {
